@@ -1,29 +1,26 @@
 /******************************************************************
-#      NIH-AARP UVR- Reproductive Factors- Melanoma Study
+#      NIH-AARP UVR- NSAIDs- Melanoma Study
 *******************************************************************
 #
 # creates the melanoma file with cancer, smoking,
-# reproductive, hormonal, contraceptives, UVR variables
+# NSAID, UVR variables
 # !!!! for risk factors dataset !!!!!
 #
 # uses the uv_public, rout09jan14, rexp16feb15 datasets
 # note: using new rexp dataset above
 #
-# Created: April 03 2015
-# Updated: v20150410 WTL
+# Created: April 13 2015
+# Updated: v20151124TUE WTL
 # Used IMS: anchovy
 # Warning: original IMS datasets are in LINUX latin1 encoding
 *******************************************************************/
 
-ods html close;
-ods html;
 options nocenter yearcutoff=1900 errors=1;
-title1 'NIH-AARP UVR Melanoma Study _riskfactor';
+title1 'NIH-AARP NSAIDs UVR Melanoma Study';
 
-libname uvr 'C:\REB\AARP_HRTandMelanoma\Data\anchovy';
-libname conv 'C:\REB\AARP_HRTandMelanoma\Data\converted';
+libname conv 'C:\REB\NSAIDS melanoma AARP\Data\converted';
 
-filename uv_pub 'C:\REB\AARP_HRTandMelanoma\Data\anchovy\uv_public.v9x';
+filename uv_pub 'C:\REB\NSAIDS melanoma AARP\Data\uv_public.v9x';
 
 ** import the UVR with file extension v9x from the anchovy folder;
 proc cimport data=uv_pub1 infile=uv_pub; 
@@ -42,18 +39,21 @@ data conv.uv_pub1;
 	keep	westatid
 			exposure_jul_78_05;
 run;
-ods html close;
-ods html;
+
 proc contents data=conv.rout09jan14;
 	title 'risk exp';
 run;
 
 ** input: first primary cancer _risk; 
 ** output: analysis;
-** uses rexp05jun14, rout09jan14, uv_pub1;
+** uses rexp16feb15, rout09jan14, uv_pub1;
 ** riskfactor dataset;
-%include 'C:\REB\AARP_HRTandMelanoma\Analysis\anchovy\first.primary.analysis.risk.include.sas';
-	(keep=	westatid
+**%include 'C:\REB\AARP_HRTandMelanoma\Analysis\anchovy\first.primary.analysis.risk.include.sas';
+
+data ranalysis;  
+  merge conv.rout09jan14 (in=ino) conv.rexp16feb15 (in=ine);
+  by westatid;
+	keep	westatid
 			rf_entry_dt
 			rf_entry_age
 			f_dob
@@ -99,7 +99,7 @@ run;
 
 			
 			rel_1d_cancer			/* family history of cancer - any 1st degree relatives ever diagnosed with cancer (nnmsc)*/
-
+			FAM_CANCER				/* Any blood relatives diagnosed with cancer?*/
 
 			/* add more variables here */
 			BMI_CUR					/* current bmi kg/m2*/
@@ -121,6 +121,15 @@ run;
 			rf_q23_2_2a
 
 			/* add more variables here */
+			rf_Q44					/*mammogram*/
+			rf_Q15A					/*colonoscopy*/
+			rf_Q15B
+			rf_Q15C
+			rf_Q15D
+			rf_Q15E
+			HEART
+			DIABETES				/*self-report diabetes y/n*/
+			MARRIAGE
 			BMI_CUR					/* current bmi kg/m2*/
 			qp12b 					/* coffee drinking */
 			calories 				/* calories consumed */
@@ -174,9 +183,14 @@ run;
 			rf_Q11_2				/* How often? */
 			RF_ABNET_ASPIRIN		/*Ever take Aspirin during the past 12 months?*/
 			RF_ABNET_CAT_ASPIRIN	/*Frequency of Aspirin use during the past 12 months*/
-			RF_ABNET_IBUPROFEN		/*Ever take Ibuprofen during the past 12 months?*/		
-	);
+			RF_ABNET_IBUPROFEN		/*Ever take Ibuprofen during the past 12 months?*/
+			RF_ABNET_CAT_IBUPROFEN	/*Frequency of Ibuprofen use during the past 12 months*/
 
+;
+run;
+
+data ranalysis;
+	set ranalysis;
 	****  Create exit date, exit age, and person years for First Primary Cancer;
 	** with first primary cancer as skin cancer;
 	* Chooses the earliest of 4 possible exit dates for skin cancer;
@@ -185,16 +199,15 @@ run;
   	personyrs = round(((exit_dt-entry_dt)/365.25),.001);
 	rf_personyrs = round(((exit_dt-rf_entry_dt)/365.25),.001);
 run;
+
 /* check point for merging the exposure and outcome data */
 ** copy and save the analysis_use dataset to the converted folder;
 proc copy noclone in=Work out=conv;
 	select ranalysis;
 run;
-ods html close;
-ods html;
+
 proc contents data=conv.ranalysis;
 run;
-
 ** set value formats ; 
 proc format;
 	value sexfmt 0 = 'Male' 1 = 'Female';
@@ -207,20 +220,6 @@ proc format;
 	value physicfmt -9='missing' 0='rarely' 1='1-3 per month' 2='1-2 per week' 3='3-4 per week' 4='5+ per week';
 	value smokingfmt -9='missing' 0='never smoked' 1='ever smoke';
 
-	** menopause status recoded;
-	value fmenstrfmt 9='missing' 1='<=10' 2='11-12' 3='13-14' 4='>=15';
-	value menostatfmt -9='missing' 0='pre-menopausal' 1='natural menopause' 2='hysterectomy, both ovaries removed'
-						3='hysterectomy, other ovary surgery' 4='hysterectomy, both ovaries intact' 
-						5='hysterectomy, ovaries unknown' 6='other reason';
-	value menoagefmt -9='missing' 1='<45' 2='45-49' 0='50-54' 3='55+';
-	value hystagefmt -9='missing' 0='<45' 1='45-49' 2='50-54' 3='55+';
-	value flbagefmt -9='missing' 1='< 20 years old' 2='20s' 3='30s';
-	value parityfmt -9='missing' 0='nulliparous' 1='1-2 live children' 2='3-4 live children' 3='5+ live children';
-	value hormstatfmt -9='missing' 0='never' 1='former' 2='current';
-	value oralbcdurfmt -9='missing' 0='none' 1='1-4 years' 2='5-9 years' 3='10+ years';
-	value uvrqfmt -9='missing' 1='0 to 186.255' 2='186.255 to 215.622' 3='215.622 to 245.151' 
-					4='245.151 to 257.14' 5='>257.14';
-	value relativefmt 9='missing' 0='No' 1='Yes';
 /* :::risk factors::: */
 	** smoking;
 	value smokeformerfmt 9='missing' 0='never smoked' 1='former smoker' 2='current smoker';
@@ -233,6 +232,10 @@ proc format;
 	value coffeefmt -9='missing' 0='none' 1='<=1 cup/day' 2='2-3 cups/day' 3='>=4 cups/day';
 	value etohfmt -9='missing' 0='0' 1='>0 to 0.04' 2='>0.04 to 0.1' 3='>0.1 to 0.52' 4='>0.52 to 1.12' 5='>1.12';
 	value rfphysicfmt -9='missing' 0='never-rarely' 1='<1 hr/week' 2='1-3 hr/week' 3='4-7 hr/week' 4='>7 hr/week';
+	value rf_abnet_aspirinfmt 0='no' 1='yes';
+	value rf_abnet_ibuprofenfmt 0='no' 1='yes';
+	value rf_abnet_cat_aspirinfmt 0='no use' 1='monthly' 2='weekly' 3='daily';
+	value rf_abnet_cat_ibuprofenfmt 0='no use' 1='monthly' 2='weekly' 3='daily';
 
 run;
 
@@ -259,18 +262,6 @@ data melan_r; ** name the output of the first primary analysis include to melan_
 	else melanoma_agg = 0;
 run;
 
-*******************************************************;
-/* Check for exclusions from Loftfield Coffee paper;
-** total of n=566398;
-proc copy noclone in=Work out=conv;
-	select analysis;
-run;
-*/
-*******************************************************;
-
-ods html close;
-ods html;
-
 ** merge the melan_r dataset with the UV data;
 data melan_r;
 	merge melan_r (in=frodo) conv.uv_pub1 ;
@@ -282,6 +273,7 @@ run;
 proc copy noclone in=Work out=conv;
 	select melan_r;
 run;
+
 ** quick checks on the conv.melan file;
 ** especially for the seer ICD-O-3 codes;
 ** melanoma code is 25010;
@@ -291,47 +283,36 @@ proc freq data=conv.melan_r;
 	table cancer_siterec3*cancer_seergroup /nopercent norow nocol;
 run;
 
+proc freq data=melan_r;
+tables sex;
+run;
+
+** Check for missing NSAID response;
+** Both aspirin and nonaspirin;
+
 **** Exclusions risk macro;
-%include 'C:\REB\AARP_HRTandMelanoma\Analysis\anchovy\exclusions.first.primary.risk.macro.sas';
+
+*Start here to run macro to get exclusion;
+
+%include 'E:\NCI REB\AARP\Analysis\anchovy\exclusions.first.primary.risk.macro.sas';
 
 **** Outbox macro for use with outliers;
-%include 'C:\REB\AARP_HRTandMelanoma\Analysis\anchovy\outbox.macro.sas';
+%include 'E:\NCI REB\AARP\Analysis\anchovy\outbox.macro.sas';
 
 **** Use the exclusion macro to make "standard" exclusions and get counts of excluded subjects;
 
 %exclude(data            	= melan_r,
          ex_proxy        	= 1,
 		 ex_rf_proxy	 	= 1,
-         ex_sex          	= 0,
-         ex_rf_selfbreast   = 1,
+ 		 ex_sex          	= ,
+		 ex_selfother    	= 1,
+		 ex_rf_selfbreast   = 1,
 		 ex_rf_selfovary	= 1,
-         ex_selfother    	= 1,
          ex_health       	= ,
-         ex_prevcan      	= 1,
+		 ex_prevcan      	= 1,
          ex_deathcan     	= 1);
 
-/***************************************************************************************/ 
-/*   Exclude if low or high caloric consumption                                        */
-/***************************************************************************************/      
-* Define outliers for total energy;
-%outbox(data     = melan_r,
-        id       = westatid,
-        by       = ,
-        comb_by  = ,
-        var      = calories,
-        cutoff1  = 3,
-        cutoff2  = 2,
-        keepzero = N,
-        lambzero = Y,
-        print    = N,
-        step     = 0.01,
-        addlog   = 0);
 
-data melan_r excl_kcal;
-   set melan_r;
-   if noout_calories <= .z  then output excl_kcal;
-   else output melan_r;
-run;
 /***************************************************************************************/ 
 /*   Exclude if person-years = 0                                                       */
 /***************************************************************************************/      
@@ -341,6 +322,17 @@ data melan_r excl_py_zero;
    else output melan_r;
 run;
 
+/***************************************************************************************/ 
+/*   Exclude if not 'non-Hispanic White'                                               */
+/***************************************************************************************/      
+data melan_r excl_race;
+   set melan_r;
+   if racem in (2,3,4,9) then output excl_race;
+   else output melan_r;
+run;
+
+*END HERE for exclusion counts;
+
 ** copy and save the melan dataset to the converted folder;
 ** now work with melan data in conv library;
 proc copy noclone in=work out=conv;
@@ -348,49 +340,60 @@ proc copy noclone in=work out=conv;
 run;
 
 ** find the cutoffs for the percentiles of UVR- exposure_jul_78_05 mped_a_bev;
-proc univariate data=conv.melan_r;
-	var /*F_DOB; mped_a_bev; exposure_jul_78_05;*/ F_DOB; 
+/*proc univariate data=conv.melan_r;
+	var F_DOB; 
 	output 	out=bla 
 			pctlpts= 10 20 25 30 40 50 60 70 75 80 90 
 			pctlpre=p;
 run;
 proc print data=bla; 
-	*title 'UVR exposure percentiles';
 	title 'DOB exposure percentiles';
 run; 
+
+
 	** need to change the exposure percentiles after exclusions;
-	** uvr exposure;
-	** p10     p20     p25     p30     p40     p50     p60     p70     p75     p80    p90 ;
-	** 185.266 186.255 186.255 192.716 215.622 239.642 245.151 250.621 253.731 257.14 267.431 ;
 	** birth cohort;
 	** p10     p20     p25     p30     p40     p50     p60     p70     p75     p80   p90 ;
-	** -11897  -11330  -11040  -10760  -10194  -9583   -8920   -8203   -7834   -7431 -6408;
+	** -11931  -11392  -11113  -10843  -10316  -9711   -9047   -8327   -7950   -7544 -6578;
+
+** find the cutoffs for the percentiles of UVR- exposure_jul_78_05 mped_a_bev;
+proc univariate data=conv.melan_r;
+	var exposure_jul_78_05; 
+	output 	out=blu 
+			pctlpts= 20 40 60 80  
+			pctlpre=p;
+run;
+proc print data=blu; 
+	title 'UVR exposure percentiles';
+run; 
+
+	** need to change the exposure percentiles after exclusions;
+	** uvr exposure;
+	** Quantiles: Q1 <=186.225, Q2 236.805, Q3 253.731, Q4>253.731
+
 
 /******************************************************************************************/
 ** create the UVR, and confounder variables by quintile/categories;
 ** for both baseline and riskfactor questionnaire variables;
 /* cat=categorical ************************************************************************/
-data conv.melan_r;
+data conv.melan_use;
 	set conv.melan_r;
 
-/* for baseline */
-
-	** UVR TOMS quintile;
+	** UVR TOMS quartile;
 	UVRQ=.;
 	if      0       < exposure_jul_78_05 <= 186.255 then UVRQ=1;
-	else if 186.255 < exposure_jul_78_05 <= 215.622 then UVRQ=2;
-	else if 215.622 < exposure_jul_78_05 <= 245.151 then UVRQ=3;
-	else if 245.151 < exposure_jul_78_05 <= 257.14  then UVRQ=4;
-	else if 257.14  < exposure_jul_78_05            then UVRQ=5;
+	else if 186.255 < exposure_jul_78_05 <= 236.805 then UVRQ=2;
+	else if 236.805 < exposure_jul_78_05 <= 253.731 then UVRQ=3;
+	else if 253.731 < exposure_jul_78_05 			then UVRQ=4;
 	else UVRQ=-9;
 
-	** birth cohort date of birth quintile;
+	** birth cohort date of birth quintile-wayne did this, unsure?;
 	birth_cohort=.;
-	if      -12571 <= F_DOB <= -11330 then birth_cohort=1;
-	else if -11330 <= F_DOB < -10194  then birth_cohort=2;
-	else if -10194 <= F_DOB < -8920   then birth_cohort=3;
-	else if -8920  <= F_DOB < -7431   then birth_cohort=4;
-	else if -7431  <= F_DOB           then birth_cohort=5;
+	if      -11931 <= F_DOB <= -11392 then birth_cohort=1;
+	else if -11392 <= F_DOB < -10316  then birth_cohort=2;
+	else if -10316 <= F_DOB < -9047   then birth_cohort=3;
+	else if -9047  <= F_DOB < -7544   then birth_cohort=4;
+	else if -7544  <= F_DOB           then birth_cohort=5;
 
 	** physical exercise cat;
 	physic_c=.;
@@ -410,34 +413,6 @@ data conv.melan_r;
 	else if physic_1518=5	     	then physic_1518_c=4; /* 5+ per week */
 	else if physic_1518=9		 	then physic_1518_c=-9; /* missing */
 
-	** oral contraceptive duration cat;
-	oralbc_dur_c=.;
-	if      oralbc_yrs=0		then oralbc_dur_c=0; /* none */
-	else if oralbc_yrs=1		then oralbc_dur_c=1; /* 1-4 years */
-	else if oralbc_yrs=2		then oralbc_dur_c=2; /* 5-9 years */
-	else if oralbc_yrs=3 		then oralbc_dur_c=3; /* 10+ years */
-	else if oralbc_yrs in (8,9)	then oralbc_dur_c=-9; /* missing */
-
-	** oral contraceptive yes/no;
-	oralbc_yn_c=.;
-	if      oralbc_yrs=0 	then oralbc_yn_c=0; /* no oc */
-	else if 0<oralbc_yrs<8	then oralbc_yn_c=1; /* yes oc */
-	else if oralbc_yrs>7	then oralbc_yn_c=-9; /* missing */
-
-	** age at menarche cat;
-	menarche_c=.;
-	if      fmenstr=1	then menarche_c=0; /* <=10 years old */
-	else if fmenstr=2	then menarche_c=1; /* 11-12 years old */
-	else if fmenstr=3	then menarche_c=2; /* 13-14 years old */
-	else if fmenstr=4	then menarche_c=3; /* 15+ years old */
-	else if fmenstr>4	then menarche_c=-9; /* missing */
-
-	** age at menarche cat;
-	menarche_old_c=.;
-	if      menarche_c in (0,1)		then menarche_old_c=0; /* <=12 years old */
-	else if menarche_c in (2,3)		then menarche_old_c=1; /* >=13 years old */
-	else if menarche_c=-9			then menarche_old_c=-9; /* missing */
-
 	** education cat;
 	educ_c=.;
 	if 		educm in (1,2) 	then educ_c=0; /* highschool or less */
@@ -451,50 +426,7 @@ data conv.melan_r;
 	else if racem=2			then race_c=1; /* non hispanic black */
 	else if racem in (3,4) 	then race_c=2; /* hispanic, asian PI AIAN */
 	else if racem=9			then race_c=-9; /* missing */
-
-	** age at first live birth cat;
-	flb_age_c=.;
-	if      age_flb=0			then flb_age_c=0; /* no births */
-	else if age_flb in (1,2)	then flb_age_c=1; /* < 20 years old */
-	else if age_flb in (3,4)	then flb_age_c=2; /* 20s */
-	else if age_flb in (5,6,7)	then flb_age_c=3; /* 30s */
-	else if age_flb in (8,9)	then flb_age_c=-9; /* missing */
-
-*******************************************************************************************;
-/** recode menopause status to include hysterectomy and oophorectomy **/
-*******************************************************************************************;
-	** menopause status recoded;
-	** use the perstop_surgery (hyststat and ovarystat) and perstop_radchem;
-
-	menostat_c=.;
-	if 		perstop_nostop=1								then menostat_c=0; /* premenopausal */
-	else if perstop_menop=1									then menostat_c=1; /* natural menopause */
-	else if perstop_surg=1 & (hyststat=1 & ovarystat=1)		then menostat_c=2; /* hysterectomy, removed 2 ovaries */
-	else if perstop_surg=1 & (hyststat=1 & ovarystat=3) 	then menostat_c=3; /* hysterectomy, surgery to ovaries */
-	else if perstop_surg=1 & (hyststat=1 & ovarystat=2) 	then menostat_c=4; /* hysterectomy, ovaries intact */
-	else if perstop_surg=1 & (hyststat=1 & ovarystat=9) 	then menostat_c=5; /* hysterectomy, ovaries unknown */
-	else if perstop_menop=0 | (perstop_surg=9 | perstop_radchem in (0,1,9))	
-															then menostat_c=6; /* other reason */
-	else if perstop_nostop=9 | perstop_menop=9				then menostat_c=-9; /* missing */
-
-	** for natural menopause age; 
-	meno_age_c=.;
-	if      menostat_c=1 & menop_age=4			then meno_age_c=0; /* 50-54 */
-	else if menostat_c=1 & menop_age in (1,2)	then meno_age_c=1; /* less than 45 */
-	else if menostat_c=1 & menop_age=3			then meno_age_c=2; /* 45-49 */
-	else if menostat_c=1 & menop_age=5			then meno_age_c=3; /* 55+ */
-	else if menostat_c=1 & menop_age in (8,9)	then meno_age_c=-9; /* missing */
-	else 	meno_age_c=-9;
-
-	** hysterectomy age cat;
-	hyst_age_c=.;
-	if 		menostat_c in (2,3,4,5) & menop_age in (1,2)		then hyst_age_c=0; /* less than 45 */
-	else if menostat_c in (2,3,4,5) & menop_age=3				then hyst_age_c=1; /* 45-49 */
-	else if menostat_c in (2,3,4,5) & menop_age=4				then hyst_age_c=2; /* 50-54 */
-	else if menostat_c in (2,3,4,5) & menop_age=5				then hyst_age_c=3; /* 55+ */
-	else if menostat_c in (2,3,4,5) & menop_age in (8,9)		then hyst_age_c=-9; /* missing */
-	else	hyst_age_c=-9;
-
+	
 	** former smoker status cat;
 	smoke_f_c=.;
 	if      bf_smoke_former=0	then smoke_f_c=0; /* never smoke */
@@ -502,20 +434,6 @@ data conv.melan_r;
 	else if bf_smoke_former=2	then smoke_f_c=1; /* current smoker? (ever)*/
 	else if bf_smoke_former=9	then smoke_f_c=-9; /* missing */
 	else smoke_f_c=-9;
-
-	** hormonal status cat;
-	horm_c=.;
-	if      hormstat=0			then horm_c=0; /* never hormones */
-	else if hormstat=1			then horm_c=1; /* former */
-	else if hormstat=2			then horm_c=2; /* current */
-	else if hormstat in (8,9)	then horm_c=-9; /* missing */
-
-	** live child parity cat;
-	parity=.;
-	if livechild=0					then parity=0; /* no live children */
-	else if livechild in (1,2) 		then parity=1; /* 1 to 2 live children */
-	else if livechild in (3,4,5) 	then parity=2; /* 3 to 5+ live children */
-	else if livechild in (8,9)		then parity=-9; /* missing */
 
 	** cancer grade cat;
 	cancer_g_c=.;
@@ -525,17 +443,14 @@ data conv.melan_r;
 	else if cancer_grade=4		then cancer_g_c=3;
 	else if cancer_grade=9		then cancer_g_c=-9; /* missing */
 
-	*******************************************************************************************;
-	** bmi categories *************************************************************************;
-	*******************************************************************************************;
 	** bmi three categories;
-	if      18.5<=bmi_cur<25 	then bmi_c=1; /* low bmi */
-   	else if 25<=bmi_cur<30 		then bmi_c=2; /* higher bmi */
-   	else if 30<=bmi_cur<50 		then bmi_c=3; /* highest bmi */
+	bmi_c=.;
+	if		0<bmi_cur<18.5		then bmi_c=0; /*underweight*/
+	else if 18.5<=bmi_cur<25 	then bmi_c=1; /* normal */
+   	else if 25<=bmi_cur<30 		then bmi_c=2; /* overweight */
+   	else if 30<=bmi_cur 		then bmi_c=3; /* obese */
    	else if bmi_cur=. 			then bmi_c=-9; /* missing */
-   	else if bmi_cur<18.5 		then bmi_c=-9; /* less than lowest valid bmi */
-   	else if bmi_cur<=50 		then bmi_c=-9; /* more than highest valid bmi */
-
+      	
 	** bmi three categories standalone variables;
 	bmi_c1=0;
 	bmi_c2=0;
@@ -571,9 +486,6 @@ data conv.melan_r;
 	** continuous bmi;
 	bmi_cont=bmi_cur/5;
 
-	* finish bmi;
-	***************************************************************************;
-
 	** first primary cancer stage;
 	stage_c=.;
 	if      cancer_ss_stg=0 				then stage_c=0;
@@ -602,7 +514,6 @@ data conv.melan_r;
 	else if 	 mped_a_bev>1.12	then etoh_c=5;		/* 1.12-37.44 */
 	else 		 etoh_c=-9;								/* missing */
 
-/* for riskfactor */
 
 	** risk physical exercise ages 15..18 cat;
 	rphysic_1518_c=.;
@@ -624,56 +535,70 @@ data conv.melan_r;
 	else if rf_phys_modvig_curr=9			then rf_physic_c=-9; /* missing */
 	else rf_physic_c=-9;
 
-	*******************************************************************************************;
-	*************** HRT variables *************************************************************;
-	*******************************************************************************************;
+	alcohol=.;
+	if mped_a_bev=0							then alcohol=0;		/* none */
+	else if 0<mped_a_bev<=1					then alcohol=1;		/* 0-1 */
+	else if 1<mped_a_bev<=2 				then alcohol=2;		/* >1-<=2 drinks*/
+	else if 2< mped_a_bev<=3				then alcohol=3;		/* >2-<=3 drinks */
+	else if 3<mped_a_bev					then alcohol=4;		/* >3 drinks */
+	else 	alcohol=-9;											/* missing */
 
-	** Estrogen ***************;
+	white=.;
+	if race_c=0 							then white=1; /* non-Hispanic white */
+	else white=-9;
 
+	utilizer_m=.;
+	if rf_Q15A=1 | rf_Q15B=1 | rf_Q15C=1 | rf_Q15D=1 	then utilizer_m=1; /* yes sigmoidoscopy, colonoscopy, proctoscopy, rectum/colon exam in last 3 years */
+	else if rf_Q15E=1									then utilizer_m=0; /* no to above in last 3 years*/
+	else utilizer_m=0;
 
-	** Progestin **************;
+	utilizer_w=.;
+	if rf_Q44=1 | rf_Q44=2								then utilizer_w=1; /* yes mammogram in last 3 years*/
+	else utilizer_w=0;
 
+	aspirin_collapse=.;
+	if RF_ABNET_CAT_ASPIRIN=0				then aspirin_collapse=0; /* no use */
+	else if RF_ABNET_CAT_ASPIRIN=1			then aspirin_collapse=1; /* monthly use */
+	else if RF_ABNET_CAT_ASPIRIN>=2			then aspirin_collapse=2; /* >monthly use */
 
-	** both EP ****************;
+	ibu_collapse=.;
+	if RF_ABNET_CAT_IBUPROFEN=0				then ibu_collapse=0; /* no use */
+	else if RF_ABNET_CAT_IBUPROFEN=1		then ibu_collapse=1; /* monthly use */
+	else if RF_ABNET_CAT_IBUPROFEN>=2		then ibu_collapse=2; /* >monthly use */
 
+	melanoma_ins=.;
+	if 		melanoma_c=1 	 then melanoma_ins=1;
+	else if melanoma_c=0	 then melanoma_ins=0;
+	else if melanoma_c=2	 then melanoma_ins=0;
 
+	melanoma_mal=.;
+	if 		melanoma_c=2	 then melanoma_mal=1;
+	else if melanoma_c=0	 then melanoma_mal=0;
+	else if melanoma_c=1	 then melanoma_mal=0;
 
-
-	** finished HRT variables;
-	*******************************************************************************************;
 run;
 
-ods html close;
-ods html;
+** check melanoma variables;
 proc freq data=conv.melan_r;
-	table menostat_c;
+	table melanoma_c*melanoma_ins;
 run;
+
 ** add labels;
 proc datasets library=conv;
-	modify melan_r;
+	modify melan_use;
 	
 	** set variable labels;
 	label 	/* melanoma outcomes */
 			melanoma_agg = "Melanoma indicator"
 			melanoma_c = "Melanoma indicator by type"
+			melanoma_ins= "Melanoma in situ indicator"
+			melanoma_mal= "Malignant melanoma indicator"
 
 			/* for baseline */
-			uvrq = "TOMS AVGLO-UVR measures in quintiles"
-			oralbc_dur_c = "birth control duration"
-			oralbc_yn_c = "birth control yes/no"
-			menarche_old_c = "menarche 2 split"
-			menarche_c = "menarche age"
+			uvrq = "TOMS UVR measures in quintiles"
 			educ_c = "education level"
 			race_c = "race split into 3"
-			flb_age_c = "Age at first live birth among parous women"
-			fmenstr = "Age at menarche"
-			menostat_c = "menopause status"
-			meno_age_c ="age at natural menopause"
-			hyst_age_c ="age at hysterectomy"
-			menostat_c ="menopause status"
 			physic_c = "level of physical activity"	
-			horm_c = "hormone usage status"
-			parity = "total number of live births"
 			cancer_g_c = "cancer grade"
 			bmi_c = "bmi, rough"
 			bmi_fc = "bmi, 5"
@@ -685,7 +610,6 @@ proc datasets library=conv;
 			smoke_quit = 'Quit smoking status'
 			smoke_dose = 'Smoking dose'
 			smoke_quit_dose = 'Smoking status and dose combined'
-			rel_1d_cancer = 'Family History of Cancer'
 			coffee_c = 'Coffee drinking'
 			etoh_c = 'Total alchohol per day including food sources'
 
@@ -698,58 +622,21 @@ proc datasets library=conv;
 	format	/* for outcomes */
 			melanoma_c melanfmt. melanoma_agg melanomafmt. 
 
-			/* for baseline*/
-			uvrq uvrqfmt. oralbc_dur_c oralbcdurfmt. educ_c educfmt. race_c racefmt. 
-			flb_age_c flbagefmt. fmenstr fmenstrfmt. meno_age_c menoagefmt. menostat_c menostatfmt. hyst_age_c hystagefmt.
-			physic_c physic_1518_c physicfmt. smoke_f_c smokingfmt. horm_c hormstatfmt. parity parityfmt. 
-			bmi_fc bmifmt. PERSTOP_SURG hysterectomyfmt. agecat agecatfmt.
+		
+			educ_c educfmt. race_c racefmt. 
+			physic_c physic_1518_c physicfmt. smoke_f_c smokingfmt. 
+			bmi_fc bmifmt. agecat agecatfmt.
 			smoke_former smokeformerfmt. smoke_quit smokequitfmt. smoke_dose smokedosefmt. 
 			smoke_quit_dose smokequitdosefmt.
-			rel_1d_cancer relativefmt. coffee_c coffeefmt. etoh_c etohfmt.
-
-			/* for riskfactor */
-			rf_physic_1518_c rfphysicfmt. rf_physic_c rfphysicfmt. rf_1d_cancer relativefmt.
+			coffee_c coffeefmt. etoh_c etohfmt. rf_abnet_aspirin rf_abnet_aspirinfmt.
+			rf_abnet_ibuprofen rf_abnet_ibuprofenfmt. rf_abnet_cat_aspirin rf_abnet_cat_aspirinfmt.
+            rf_abnet_cat_ibuprofen rf_abnet_cat_ibuprofenfmt.
+			rf_physic_1518_c rfphysicfmt. rf_physic_c rfphysicfmt.
 	;
 run;
-/******************************************************************************************/
-ods html close;
-ods html;
-** check the contents of the created melan other;
-proc contents data=conv.melan_r;
-	title 'melanoma risk content';
+
+
+proc freq data=conv.melan_use;
+tables melanoma_c*melanoma_ins;
 run;
 
-** check that the melanoma cases were properly created;
-proc freq data=conv.melan_r;
-	title 'melanoma frequencies risk';
-	table cancer_siterec3*melanoma_c /nopercent norow nocol;
-	table cancer_seergroup /nopercent norow nocol;
-	table agecat UVRQ birth_cohort UVRQ*birth_cohort UVRQ*agecat /nopercent norow;
-	table melanoma_c*sex /nopercent norow; * verify only females;
-run;
-
-** check the repro and hormone vars ;
-proc freq data=conv.melan_r;
-	title 'hormone frequencies';
-	*table DAUGH_ESTONLY_CALC_MO_2002 DAUGH_ESTPRG_CALC_MO_2002 DAUGH_EST_CALC_MO_2002 DAUGH_PRGONLY_CALC_MO_2002 DAUGH_PRG_CALC_MO_2002;
-	table FMENSTR HORMEVER*HORMSTAT melanoma_c*HORM_CUR melanoma_c*HORMSTAT HORM_YRS;
-run;
-
-** check coffee and alcohol variables;
-ods html close;
-ods html;
-proc freq data=conv.melan;
-	title 'coffee, alchohol, meno_age, hyst_age';
-	table coffee_c etoh_c meno_age_c hyst_age_c;
-run;
-ods html close;
-/*****************************************************
-#
-#
-proc phreg data=conv.melan_r;
-	title 'melanoma HR with UVR quintiles';
-	class agecat(ref='1') UVRQ(ref='1');
-	model (entry_age, exit_age)*melan_case(0) = agecat UVRQ /rl;
-
-run;
-*****************************************************/
