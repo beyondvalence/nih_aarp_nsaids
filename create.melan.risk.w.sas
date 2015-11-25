@@ -194,7 +194,7 @@ data ranalysis;
 	****  Create exit date, exit age, and person years for First Primary Cancer;
 	** with first primary cancer as skin cancer;
 	* Chooses the earliest of 4 possible exit dates for skin cancer;
-  	exit_dt = min(mdy(12,31,2006), skin_dxdt, dod, raadate); 
+  	exit_dt = min(mdy(12,31,2006), cancer_dxdt, dod, raadate); 
   	exit_age = round(((exit_dt-f_dob)/365.25),.001);
   	personyrs = round(((exit_dt-entry_dt)/365.25),.001);
 	rf_personyrs = round(((exit_dt-rf_entry_dt)/365.25),.001);
