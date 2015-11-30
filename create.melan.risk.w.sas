@@ -333,21 +333,21 @@ run;
 	** birth cohort;
 	** p10     p20     p25     p30     p40     p50     p60     p70     p75     p80   p90 ;
 	** -11931  -11392  -11113  -10843  -10316  -9711   -9047   -8327   -7950   -7544 -6578;
-
+*/
 ** find the cutoffs for the percentiles of UVR- exposure_jul_78_05 mped_a_bev;
-proc univariate data=conv.melan_r;
+/*proc univariate data=conv.melan_r;
 	var exposure_jul_78_05; 
 	output 	out=blu 
-			pctlpts= 20 40 60 80  
+			pctlpts= 0 20 40 60 80 100
 			pctlpre=p;
 run;
 proc print data=blu; 
 	title 'UVR exposure percentiles';
-run; 
+run; */
 
 	** need to change the exposure percentiles after exclusions;
 	** uvr exposure;
-	** Quantiles: Q1 <=186.225, Q2 236.805, Q3 253.731, Q4>253.731
+	** Quartiles: 176.095 <= Q1 <= 186.255 < Q2 <= 236.805 < Q3 <= 253.731 < Q4 <= 289.463
 
 
 /******************************************************************************************/
@@ -359,13 +359,13 @@ data conv.melan_use;
 
 	** UVR TOMS quartile;
 	UVRQ=.;
-	if      0       < exposure_jul_78_05 <= 186.255 then UVRQ=1;
+	if      176.000 < exposure_jul_78_05 <= 186.255 then UVRQ=1;
 	else if 186.255 < exposure_jul_78_05 <= 236.805 then UVRQ=2;
 	else if 236.805 < exposure_jul_78_05 <= 253.731 then UVRQ=3;
-	else if 253.731 < exposure_jul_78_05 			then UVRQ=4;
+	else if 253.731 < exposure_jul_78_05 <= 289.463	then UVRQ=4;
 	else UVRQ=-9;
 
-	** birth cohort date of birth quintile-wayne did this, unsure?;
+	** birth cohort date of birth quintile;
 	birth_cohort=.;
 	if      -11931 <= F_DOB <= -11392 then birth_cohort=1;
 	else if -11392 <= F_DOB < -10316  then birth_cohort=2;
