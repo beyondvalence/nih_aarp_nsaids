@@ -63,6 +63,7 @@ data ranalysis;
 			raadate /* date moved outside of Registry Ascertainment Area */
 			entry_age
 			entry_dt
+			cancer
 			cancer_dxdt
 			cancer_seergroup
 			cancer_ss_stg /* summary stage: first cancer */
@@ -215,7 +216,7 @@ run;
 /* start2 */
 /**********/
 %include 'C:\REB\NSAIDS melanoma AARP\Analysis\format.risk.w.sas';
-
+libname conv 'C:\REB\NSAIDS melanoma AARP\Data\converted';
 ** uses the pre-created analysis_use from above checkpoint;
 data melan_r; ** name the output of the first primary analysis include to melan_r;
 	set conv.ranalysis;
@@ -255,14 +256,14 @@ run;
 ** especially for the seer ICD-O-3 codes;
 ** melanoma code is 25010;
 ** check to see if the melanoma was coded correctly;
-proc freq data=conv.melan_r;
+/*proc freq data=conv.melan_r;
 	table cancer_siterec3*sex;
 	table cancer_siterec3*cancer_seergroup /nopercent norow nocol;
 run;
-
-proc freq data=melan_r;
+*/
+/*proc freq data=melan_r;
 tables sex;
-run;
+run;*/
 
 ** Check for missing NSAID response;
 ** Both aspirin and nonaspirin;
