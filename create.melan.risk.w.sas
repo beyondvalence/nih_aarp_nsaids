@@ -215,7 +215,7 @@ run;
 /**********/
 /* start2 */
 /**********/
-ods close _all_; ods html;
+ods _all_ close; ods html;
 %include 'C:\REB\NSAIDS melanoma AARP\Analysis\format.risk.w.sas';
 libname conv 'C:\REB\NSAIDS melanoma AARP\Data\converted';
 ** uses the pre-created analysis_use from above checkpoint;
@@ -272,14 +272,14 @@ run;*/
 **** Exclusions risk macro;
 
 *Start here to run macro to get exclusion;
-ods close _all_; ods html;
+ods _all_ close; ods html;
 %include 'C:\REB\NSAIDS melanoma AARP\Analysis\anchovy\exclusions.first.primary.risk.macro.sas';
 
 **** Outbox macro for use with outliers;
 *%include 'E:\NCI REB\AARP\Analysis\anchovy\outbox.macro.sas';
 
 **** Use the exclusion macro to make "standard" exclusions and get counts of excluded subjects;
-title 'exclusion macro';
+title 'exclusion macro, rfq';
 %exclude(data            	= melan_r,
          ex_proxy        	= 1,
 		 ex_rf_proxy	 	= 1,
