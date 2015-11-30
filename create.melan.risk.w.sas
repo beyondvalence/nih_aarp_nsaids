@@ -370,7 +370,7 @@ run; */
 
 
 /******************************************************************************************/
-** create the UVR, and confounder variables by quintile/categories;
+** create the UVR, and confounder variables by quartile/categories;
 ** for both baseline and riskfactor questionnaire variables;
 /* cat=categorical ************************************************************************/
 data conv.melan_use;
@@ -378,11 +378,11 @@ data conv.melan_use;
 
 	** UVR TOMS quartile;
 	UVRQ=.;
-	if      176.000 < exposure_jul_78_05 <= 186.255 then UVRQ=1;
-	else if 186.255 < exposure_jul_78_05 <= 236.805 then UVRQ=2;
-	else if 236.805 < exposure_jul_78_05 <= 253.731 then UVRQ=3;
-	else if 253.731 < exposure_jul_78_05 <= 289.463	then UVRQ=4;
-	else UVRQ=-9;
+	if      176.000 < exposure_jul_78_05 <= 186.255 	then UVRQ=1;
+	else if 186.255 < exposure_jul_78_05 <= 236.805 	then UVRQ=2;
+	else if 236.805 < exposure_jul_78_05 <= 253.731 	then UVRQ=3;
+	else if 253.731 < exposure_jul_78_05 <= 289.463		then UVRQ=4;
+	else 												UVRQ=-9;
 
 	** birth cohort date of birth quintile;
 	birth_cohort=.;
@@ -394,12 +394,12 @@ data conv.melan_use;
 
 	** physical exercise cat;
 	physic_c=.;
-	if      physic in (0,1)	then physic_c=0; /* rarely */
-	else if physic=2 	 	then physic_c=1; /* 1-3 per month */
-	else if physic=3 	 	then physic_c=2; /* 1-2 per week */
-	else if physic=4     	then physic_c=3; /* 3-4 per week */
-	else if physic=5     	then physic_c=4; /* 5+ per week */
-	else if physic=9	 	then physic_c=-9; /* missing */
+	if      physic in (0,1)		then physic_c=0; /* rarely */
+	else if physic=2 	 		then physic_c=1; /* 1-3 per month */
+	else if physic=3 	 		then physic_c=2; /* 1-2 per week */
+	else if physic=4     		then physic_c=3; /* 3-4 per week */
+	else if physic=5     		then physic_c=4; /* 5+ per week */
+	else if physic=9	 		then physic_c=-9; /* missing */
 
 	** physical exercise ages 15..18 cat;
 	physic_1518_c=.;
@@ -412,33 +412,33 @@ data conv.melan_use;
 
 	** education cat;
 	educ_c=.;
-	if 		educm in (1,2) 	then educ_c=0; /* highschool or less */
-	else if educm in (3,4)	then educ_c=1; /* some college */
-	else if educm=5			then educ_c=2; /* college and grad */
-	else if educm=9			then educ_c=-9; /* missing */
+	if 		educm in (1,2) 		then educ_c=0; /* highschool or less */
+	else if educm in (3,4)		then educ_c=1; /* some college */
+	else if educm=5				then educ_c=2; /* college and grad */
+	else if educm=9				then educ_c=-9; /* missing */
 
 	** race cat;
 	race_c=.;
-	if      racem=1			then race_c=0; /* non hispanic white */
-	else if racem=2			then race_c=1; /* non hispanic black */
-	else if racem in (3,4) 	then race_c=2; /* hispanic, asian PI AIAN */
-	else if racem=9			then race_c=-9; /* missing */
+	if      racem=1				then race_c=0; /* non hispanic white */
+	else if racem=2				then race_c=1; /* non hispanic black */
+	else if racem in (3,4) 		then race_c=2; /* hispanic, asian PI AIAN */
+	else if racem=9				then race_c=-9; /* missing */
 	
 	** former smoker status cat;
 	smoke_f_c=.;
-	if      bf_smoke_former=0	then smoke_f_c=0; /* never smoke */
-	else if bf_smoke_former=1	then smoke_f_c=1; /* former smoker (ever)*/
-	else if bf_smoke_former=2	then smoke_f_c=1; /* current smoker? (ever)*/
-	else if bf_smoke_former=9	then smoke_f_c=-9; /* missing */
-	else smoke_f_c=-9;
+	if      bf_smoke_former=0		then smoke_f_c=0; /* never smoke */
+	else if bf_smoke_former=1		then smoke_f_c=1; /* former smoker (ever)*/
+	else if bf_smoke_former=2		then smoke_f_c=1; /* current smoker? (ever)*/
+	else if bf_smoke_former=9		then smoke_f_c=-9; /* missing */
+	else 							smoke_f_c=-9;
 
 	** cancer grade cat;
 	cancer_g_c=.;
-	if 	    cancer_grade=1		then cancer_g_c=0; 
-	else if cancer_grade=2		then cancer_g_c=1;
-	else if cancer_grade=3		then cancer_g_c=2;
-	else if cancer_grade=4		then cancer_g_c=3;
-	else if cancer_grade=9		then cancer_g_c=-9; /* missing */
+	if 	    cancer_grade='1'		then cancer_g_c=0; 
+	else if cancer_grade='2'		then cancer_g_c=1;
+	else if cancer_grade='3'		then cancer_g_c=2;
+	else if cancer_grade='4'		then cancer_g_c=3;
+	else if cancer_grade='9'		then cancer_g_c=-9; /* missing */
 
 	** bmi three categories;
 	bmi_c=.;
@@ -480,47 +480,44 @@ data conv.melan_use;
 	else if bmi_fc=4 	then bmi_fc4=1;
 	else if bmi_fc=5 	then bmi_fc5=1;
 
-	** continuous bmi;
-	bmi_cont=bmi_cur/5;
-
 	** first primary cancer stage;
 	stage_c=.;
-	if      cancer_ss_stg=0 				then stage_c=0;
-	else if cancer_ss_stg=1 				then stage_c=1;
-	else if cancer_ss_stg in (2,3,4,5)		then stage_c=2;
-	else if cancer_ss_stg=7					then stage_c=3;
-	else if cancer_ss_stg in (8,9)			then stage_c=4;
-	else if cancer_ss_stg=. 				then stage_c=-9;	
+	if      cancer_ss_stg='0' 					then stage_c=0;
+	else if cancer_ss_stg='1' 					then stage_c=1;
+	else if cancer_ss_stg in ('2','3','4','5')	then stage_c=2;
+	else if cancer_ss_stg='7'					then stage_c=3;
+	else if cancer_ss_stg in ('8','9')			then stage_c=4;
+	else if cancer_ss_stg=. 					then stage_c=-9;	
 
 	** coffee drinking;
 	coffee_c=.;
-	if		qp12b=0					then coffee_c=0; 	/* none */
-	else if qp12b in (1,2,3,4,5,6)	then coffee_c=1; 	/* <=1/day */
-	else if qp12b=7					then coffee_c=2; 	/* 2-3/day */
-	else if qp12b in (8,9)			then coffee_c=3; 	/* >=4/day */
-	else if qp12b in ('M', 'E')		then coffee_c=-9;	/* missing */
-	else	coffee_c=-9; 								/* missing */
+	if		qp12b='0'							then coffee_c=0; 	/* none */
+	else if qp12b in ('1','2','3','4','5','6')	then coffee_c=1; 	/* <=1/day */
+	else if qp12b='7'							then coffee_c=2; 	/* 2-3/day */
+	else if qp12b in ('8','9')					then coffee_c=3; 	/* >=4/day */
+	else if qp12b in ('E','M')					then coffee_c=-9;	/* missing */
+	else										coffee_c=-9; 		/* missing */
 
-	** total alcohol per day;
+	** total alcohol per day; /* CHECKME */
 	etoh_c=.;
 	if mped_a_bev=0					then etoh_c=0;		/* none */
-	else if 0<mped_a_bev<=0.04		then etoh_c=1;		/* 0-0.04 */
+	else if 0   <mped_a_bev<=0.04	then etoh_c=1;		/* 0-0.04 */
 	else if 0.04<mped_a_bev<=0.1 	then etoh_c=2;		/* 0.04-0.1 */
-	else if 0.1< mped_a_bev<=0.52	then etoh_c=3;		/* 0.1-0.52 */
+	else if 0.1 <mped_a_bev<=0.52	then etoh_c=3;		/* 0.1-0.52 */
 	else if 0.52<mped_a_bev<=1.12	then etoh_c=4;		/* 0.52-1.12 */
-	else if 	 mped_a_bev>1.12	then etoh_c=5;		/* 1.12-37.44 */
-	else 		 etoh_c=-9;								/* missing */
+	else if 	 mped_a_bev> 1.12	then etoh_c=5;		/* 1.12-37.44 */
+	else 		 					etoh_c=-9;			/* missing */
 
 
 	** risk physical exercise ages 15..18 cat;
-	rphysic_1518_c=.;
+	rf_physic_1518_c=.;
 	if      rf_phys_modvig_15_18 in (0,1)	then rf_physic_1518_c=0; /* rarely */
 	else if rf_phys_modvig_15_18=2 	 		then rf_physic_1518_c=1; /* <1 hour/week */
 	else if rf_phys_modvig_15_18=3 	 		then rf_physic_1518_c=2; /* 1-3 hours/week */
 	else if rf_phys_modvig_15_18=4     		then rf_physic_1518_c=3; /* 4-7 hours/week */
 	else if rf_phys_modvig_15_18=5     		then rf_physic_1518_c=4; /* >7 hours/week */
 	else if rf_phys_modvig_15_18=9	 		then rf_physic_1518_c=-9; /* missing */
-	else rphysic_1518=-9;
+	else 									rf_physic_1518_c=-9;
 
 	** (rf) physical exercise how often participate mod-vig activites in past 10 years;
 	rf_physic_c=.;
@@ -530,7 +527,7 @@ data conv.melan_use;
 	else if rf_phys_modvig_curr=4			then rf_physic_c=3; /* 4-7 hr/week */
 	else if rf_phys_modvig_curr=5			then rf_physic_c=4; /* >7 hr/week */
 	else if rf_phys_modvig_curr=9			then rf_physic_c=-9; /* missing */
-	else rf_physic_c=-9;
+	else 									rf_physic_c=-9;
 
 	alcohol=.;
 	if mped_a_bev=0							then alcohol=0;		/* none */
@@ -538,19 +535,20 @@ data conv.melan_use;
 	else if 1<mped_a_bev<=2 				then alcohol=2;		/* >1-<=2 drinks*/
 	else if 2< mped_a_bev<=3				then alcohol=3;		/* >2-<=3 drinks */
 	else if 3<mped_a_bev					then alcohol=4;		/* >3 drinks */
-	else 	alcohol=-9;											/* missing */
+	else 									alcohol=-9;			/* missing */
 
 	white=.;
 	if race_c=0 							then white=1; /* non-Hispanic white */
 	else white=-9;
 
-	utilizer_m=.;
-	if rf_Q15A=1 | rf_Q15B=1 | rf_Q15C=1 | rf_Q15D=1 	then utilizer_m=1; /* yes sigmoidoscopy, colonoscopy, proctoscopy, rectum/colon exam in last 3 years */
-	else if rf_Q15E=1									then utilizer_m=0; /* no to above in last 3 years*/
+	utilizer_m=.; /* CHECK */
+	if rf_Q15A='1' | rf_Q15B='1' | 
+		rf_Q15C='1' | rf_Q15D='1' 			then utilizer_m=1; /* yes sigmoidoscopy, colonoscopy, proctoscopy, rectum/colon exam in last 3 years */
+	else if rf_Q15E='1'						then utilizer_m=0; /* no to above in last 3 years*/
 	else utilizer_m=0;
 
-	utilizer_w=.;
-	if rf_Q44=1 | rf_Q44=2								then utilizer_w=1; /* yes mammogram in last 3 years*/
+	utilizer_w=.; /* CHECK */
+	if rf_Q44='1' | rf_Q44='2'				then utilizer_w=1; /* yes mammogram in last 3 years*/
 	else utilizer_w=0;
 
 	aspirin_collapse=.;
@@ -577,7 +575,7 @@ run;
 
 ** check melanoma variables;
 proc freq data=conv.melan_r;
-	table melanoma_c*melanoma_ins;
+	table rf_Q44;
 run;
 
 ** add labels;
