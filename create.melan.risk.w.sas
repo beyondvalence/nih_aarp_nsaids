@@ -215,6 +215,7 @@ run;
 /**********/
 /* start2 */
 /**********/
+ods close _all_; ods html;
 %include 'C:\REB\NSAIDS melanoma AARP\Analysis\format.risk.w.sas';
 libname conv 'C:\REB\NSAIDS melanoma AARP\Data\converted';
 ** uses the pre-created analysis_use from above checkpoint;
@@ -271,14 +272,14 @@ run;*/
 **** Exclusions risk macro;
 
 *Start here to run macro to get exclusion;
-
+ods close _all_; ods html;
 %include 'C:\REB\NSAIDS melanoma AARP\Analysis\anchovy\exclusions.first.primary.risk.macro.sas';
 
 **** Outbox macro for use with outliers;
 *%include 'E:\NCI REB\AARP\Analysis\anchovy\outbox.macro.sas';
 
 **** Use the exclusion macro to make "standard" exclusions and get counts of excluded subjects;
-
+title 'exclusion macro';
 %exclude(data            	= melan_r,
          ex_proxy        	= 1,
 		 ex_rf_proxy	 	= 1,
@@ -294,19 +295,37 @@ run;*/
 /***************************************************************************************/ 
 /*   Exclude if person-years = 0                                                       */
 /***************************************************************************************/      
-data melan_r excl_py_zero;
+data melan_r;
    set melan_r;
-   if rf_personyrs <= 0 then output excl_py_zero;
-   else output melan_r;
+   excl_1_pyr=0;
+   if rf_personyrs <= 0 then excl_1_pyr=1;
+run;
+proc freq data= melan_r ;
+	title 'excl_1_pyr: exclude 0 or negative person years';
+	tables excl_1_pyr
+			excl_1_pyr*melanoma_c /missing;
+run;
+data melan_r;
+	set melan_r;
+	where excl_1_pyr=0;
 run;
 
 /***************************************************************************************/ 
 /*   Exclude if not 'non-Hispanic White'                                               */
 /***************************************************************************************/      
-data melan_r excl_race;
+data melan_r;
    set melan_r;
-   if racem in (2,3,4,9) then output excl_race;
-   else output melan_r;
+   excl_2_race=0;
+   if racem in (2,3,4,9) then excl_2_race=1;
+run;
+proc freq data= melan_r;
+	title 'excl_2_race: exclude non-whites';
+	tables excl_2_race
+			excl_2_race*melanoma_c /missing;
+run;
+data melan_r;
+	set melan_r;
+	where excl_2_race=0;
 run;
 
 *END HERE for exclusion counts;
