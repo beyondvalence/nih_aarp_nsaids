@@ -13,12 +13,13 @@
 #
 *******************************************************************/
 
-libname conv 'E:\NCI REB\AARP\Data\converted';
-libname Results 'E:\NCI REB\AARP\Results';
+libname conv 'C:\REB\NSAIDS melanoma AARP\Data\converted';
 
 %include 'C:\REB\NSAIDS melanoma AARP\Analysis\format.risk.w.sas';
 
-data melan_use; set conv.melan_use; run;
+data melan_use; 
+	set conv.melan_use; 
+run;
 proc contents data=melan_use;
 run;
 
