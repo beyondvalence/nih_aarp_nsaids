@@ -16,37 +16,7 @@
 libname conv 'E:\NCI REB\AARP\Data\converted';
 libname Results 'E:\NCI REB\AARP\Results';
 
-proc format;
-	value sexfmt 0 = 'Male' 1 = 'Female';
-	value melanfmt 0 = 'no melanoma' 1 = 'in situ melanoma' 2 = 'malignant melanoma';
-	value melanomafmt 0 = 'no melanoma' 1 = 'melanoma';
-	value agecatfmt 1 = '<55 years' 2 = '55-59 years' 3 = '60-64 years' 4 = '65-69 years' 5 = '>=70 years';
-	value racefmt -9='missing' 0='non-Hispanic white' 1='non-Hispanic black' 2='Hispanic, Asian, PI, AIAN';
-	value educfmt -9='missing' 0='highschool or less' 1='some college' 2='college or graduate school';
-	value bmifmt -9='missing' 1='18.5 to 25' 2='25 to 30' 3='30 to 35' 4='35 to 40' 5='>=40';
-	value physicfmt -9='missing' 0='rarely' 1='1-3 per month' 2='1-2 per week' 3='3-4 per week' 4='5+ per week';
-	value smokingfmt -9='missing' 0='never smoked' 1='ever smoke';
-
-/* :::risk factors::: */
-	** smoking;
-	value smokeformerfmt 9='missing' 0='never smoked' 1='former smoker' 2='current smoker';
-	value smokequitfmt 9='missing' 0='never smoked' 1='stopped 10+ years ago' 2='stopped 5-9 years ago'
-						3='stopped 1-4 years ago' 4='stopped within last year' 5='currently smoking';
-	value smokedosefmt 9='missing' 0='never smoked' 1='1-10 cigs a day' 2='11-20 cigs a day' 3='21=30 cigs a day'
-						4='31-40 cigs a day' 5='41-60 cigs a day' 6='60+ cigs a day';
-	value smokequitdosefmt 9='missing' 0='never smoked' 1='quit, <=20 cigs/day' 2='quit, >20 cigs/day'
-							3='currently smoking, <=20 cigs/day' 4='currently smoking, >20 cigs/day';
-	value coffeefmt -9='missing' 0='none' 1='<=1 cup/day' 2='2-3 cups/day' 3='>=4 cups/day';
-	value etohfmt -9='missing' 0='0' 1='>0 to 0.04' 2='>0.04 to 0.1' 3='>0.1 to 0.52' 4='>0.52 to 1.12' 5='>1.12';
-	value rfphysicfmt -9='missing' 0='never-rarely' 1='<1 hr/week' 2='1-3 hr/week' 3='4-7 hr/week' 4='>7 hr/week';
-	value rf_abnet_aspirinfmt 0='no' 1='yes';
-	value rf_abnet_ibuprofenfmt 0='no' 1='yes';
-	value rf_abnet_cat_aspirinfmt 0='no use' 1='monthly' 2='weekly' 3='daily';
-	value rf_abnet_cat_ibuprofenfmt 0='no use' 1='monthly' 2='weekly' 3='daily';
-	value aspirin_collapse_fmt 0='no use' 1='monthly' 2='weekly/daily' -9='missing';
-	value ibu_collapse_fmt 0='no use' 1='monthly' 2='weekly/daily' -9='missing';
-
-run;
+%include 'C:\REB\NSAIDS melanoma AARP\Analysis\format.risk.w.sas';
 
 data melan_use; set conv.melan_use; run;
 proc contents data=melan_use;
