@@ -20,9 +20,6 @@ libname conv 'C:\REB\NSAIDS melanoma AARP\Data\converted';
 data melan_use; 
 	set conv.melan_use; 
 run;
-proc contents data=melan_use;
-run;
-
 
 ***************************************;
 **** Combine variables for Table 1 ****;
@@ -110,10 +107,10 @@ run;
 ***************************************;
 
 proc tabulate data=melan_use;
-class race_c;
-var exit_age entry_age;
-table (exit_age entry_age),
-(race_c)* (mean='Mean' stddev='SD');
+	class race_c;
+	var exit_age entry_age;
+	table (exit_age entry_age),
+	(race_c)* (mean='Mean' stddev='SD');
 run; 
 
 ****************************;
@@ -125,7 +122,7 @@ run;
 **************************;
 
 **** Categorical ****;
-ods html body= 'E:\NCI REB\AARP\Results\Table_1\Supp_Table1_a.xls' style=minimal;
+ods html body= 'C:\REB\NSAIDS melanoma AARP\Results\Table_1\Supp_Table1_a.xls' style=minimal;
 proc tabulate data=melan_use missing;
 class 	melanoma_c  
 		SEX 
@@ -259,7 +256,7 @@ proc sort data=Table1Trd;
 	by Table; run;
 data Table1ap; 
 	set Table1Chi Table1Trd ; by Table; run;
-ods html file='E:\NCI REB\AARP\Results\Table_1\Supp_Table1ap_mal.xls' style=minimal;
+ods html file='C:\REB\NSAIDS melanoma AARP\Results\Table_1\Supp_Table1ap_mal.xls' style=minimal;
 proc print data= Table1ap;
 	title 'print chi2 and trend for melanoma_mal';
 run; 
