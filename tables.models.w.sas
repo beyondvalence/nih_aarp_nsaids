@@ -124,40 +124,41 @@ run;
 **** Categorical ****;
 ods html body= 'C:\REB\NSAIDS melanoma AARP\Results\Table_1\Supp_Table1_a.xls' style=minimal;
 proc tabulate data=melan_use missing;
-class 	melanoma_c  
-		SEX 
-		UVRQ
-	  	RF_ABNET_ASPIRIN RF_ABNET_CAT_ASPIRIN RF_ABNET_CAT_IBUPROFEN RF_ABNET_IBUPROFEN  
-		alcohol_comb
-		SMOKE_FORMER 
-		physic_c 
-		RF_PHYS_MODVIG_CURR
-		TV_comb 
-		nap_comb 
-		marriage_comb
-		educm_comb
-		HEART
-		utilizer_m 
-		utilizer_w
-		;
+	
+	class 	melanoma_c  
+			SEX 
+			UVRQ
+		  	RF_ABNET_ASPIRIN RF_ABNET_CAT_ASPIRIN RF_ABNET_CAT_IBUPROFEN RF_ABNET_IBUPROFEN  
+			alcohol_comb
+			SMOKE_FORMER 
+			physic_c 
+			RF_PHYS_MODVIG_CURR
+			TV_comb 
+			nap_comb 
+			marriage_comb
+			educm_comb
+			HEART
+			utilizer_m 
+			utilizer_w
+			;
 
-table   
-		SEX 
-		UVRQ
-	  	RF_ABNET_ASPIRIN RF_ABNET_CAT_ASPIRIN RF_ABNET_CAT_IBUPROFEN RF_ABNET_IBUPROFEN  
-		alcohol_comb
-		SMOKE_FORMER 
-		physic_c 
-		RF_PHYS_MODVIG_CURR
-		TV_comb 
-		nap_comb 
-		marriage_comb
-		educm_comb
-		HEART
-		utilizer_m 
-		utilizer_w ,
+	table   
+			SEX 
+			UVRQ
+		  	RF_ABNET_ASPIRIN RF_ABNET_CAT_ASPIRIN RF_ABNET_CAT_IBUPROFEN RF_ABNET_IBUPROFEN  
+			alcohol_comb
+			SMOKE_FORMER 
+			physic_c 
+			RF_PHYS_MODVIG_CURR
+			TV_comb 
+			nap_comb 
+			marriage_comb
+			educm_comb
+			HEART
+			utilizer_m 
+			utilizer_w ,
 
-		(melanoma_c)* (N colpctn='Percent') /nocellmerge; 
+			(melanoma_c)* (N colpctn='Percent') /nocellmerge; 
 run; 
 
 *categorical chi-squared and trend for in situ;
