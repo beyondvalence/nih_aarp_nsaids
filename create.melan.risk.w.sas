@@ -487,7 +487,7 @@ data conv.melan_use;
 	else if cancer_ss_stg in ('2','3','4','5')	then stage_c=2;
 	else if cancer_ss_stg='7'					then stage_c=3;
 	else if cancer_ss_stg in ('8','9')			then stage_c=4;
-	else if cancer_ss_stg=. 					then stage_c=-9;	
+	else  										stage_c=-9;	
 
 	** coffee drinking;
 	coffee_c=.;
@@ -541,7 +541,7 @@ data conv.melan_use;
 	if race_c=0 							then white=1; /* non-Hispanic white */
 	else white=-9;
 
-	utilizer_m=.; /* CHECK */
+	utilizer_m=-9; /* CHECK */
 	if rf_Q15A='1' | rf_Q15B='1' | 
 		rf_Q15C='1' | rf_Q15D='1' 			then utilizer_m=1; /* yes sigmoidoscopy, colonoscopy, proctoscopy, rectum/colon exam in last 3 years */
 	else if rf_Q15E='1'						then utilizer_m=0; /* no to above in last 3 years*/
