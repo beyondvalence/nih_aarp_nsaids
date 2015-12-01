@@ -587,6 +587,7 @@ run;
 
 ** add labels;
 proc datasets library=conv;
+	title;
 	modify melan_use;
 	
 	** set variable labels;
@@ -597,9 +598,8 @@ proc datasets library=conv;
 			melanoma_mal= "Malignant melanoma indicator"
 
 			/* for baseline */
-			uvrq = "TOMS UVR measures in quintiles"
+			uvrq = "TOMS UVR measures in quartiles"
 			educ_c = "education level"
-			race_c = "race split into 3"
 			physic_c = "level of physical activity"	
 			cancer_g_c = "cancer grade"
 			bmi_c = "bmi, rough"
@@ -624,7 +624,6 @@ proc datasets library=conv;
 	format	/* for outcomes */
 			melanoma_c melanfmt. melanoma_agg melanomafmt. 
 
-		
 			educ_c educfmt. race_c racefmt. 
 			physic_c physic_1518_c physicfmt. smoke_f_c smokingfmt. 
 			bmi_fc bmifmt. agecat agecatfmt.
@@ -634,11 +633,11 @@ proc datasets library=conv;
 			rf_abnet_ibuprofen rf_abnet_ibuprofenfmt. rf_abnet_cat_aspirin rf_abnet_cat_aspirinfmt.
             rf_abnet_cat_ibuprofen rf_abnet_cat_ibuprofenfmt.
 			rf_physic_1518_c rfphysicfmt. rf_physic_c rfphysicfmt.
-	;
+;
 run;
 
 
 proc freq data=conv.melan_use;
-tables melanoma_c*melanoma_ins;
+	tables melanoma_c*melanoma_ins;
 run;
 
