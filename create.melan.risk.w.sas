@@ -508,7 +508,6 @@ data conv.melan_use;
 	else if 	 mped_a_bev> 1.12	then etoh_c=5;		/* 1.12-37.44 */
 	else 		 					etoh_c=-9;			/* missing */
 
-
 	** risk physical exercise ages 15..18 cat;
 	rf_physic_1518_c=.;
 	if      rf_phys_modvig_15_18 in (0,1)	then rf_physic_1518_c=0; /* rarely */
@@ -541,14 +540,22 @@ data conv.melan_use;
 	if race_c=0 							then white=1; /* non-Hispanic white */
 	else white=-9;
 
-	utilizer_m=-9; /* CHECK */
+	/* checked 20151201TUE wtl */
+	/*utilizer_m=-9; 
 	if rf_Q15A='1' | rf_Q15B='1' | 
-		rf_Q15C='1' | rf_Q15D='1' 			then utilizer_m=1; /* yes sigmoidoscopy, colonoscopy, proctoscopy, rectum/colon exam in last 3 years */
-	else if rf_Q15E='1'						then utilizer_m=0; /* no to above in last 3 years*/
-	else utilizer_m=0;
+		rf_Q15C='1' | rf_Q15D='1' 			then utilizer_m=1;
+	else if rf_Q15E='1'						then utilizer_m=0; 
+	else utilizer_m=0;*/
+
+	utilizer_m=-9;
+	if rf_Q15E='1'			then utilizer_m=0;
+	else if rf_Q15A='1'		then utilizer_m=1;
+	else if rf_Q15B='1'		then utilizer_m=1;
+	else if rf_Q15C='1'		then utilizer_m=1;
+	else if rf_Q15D='1'		then utilizer_m=1;
 
 	utilizer_w=.; /* CHECK */
-	if rf_Q44='1' | rf_Q44='2'				then utilizer_w=1; /* yes mammogram in last 3 years*/
+	if rf_Q44='1' | rf_Q44='2'				then utilizer_w=1; /* yes once and more mammograms in last 3 years*/
 	else utilizer_w=0;
 
 	aspirin_collapse=.;
@@ -574,8 +581,8 @@ data conv.melan_use;
 run;
 
 ** check melanoma variables;
-proc freq data=conv.melan_r;
-	table rf_Q44;
+proc freq data=conv.melan_use;
+	table rf_Q44*utilizer_w utilizer_m /missing;
 run;
 
 ** add labels;
