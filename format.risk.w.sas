@@ -32,6 +32,8 @@ proc format;
 	value rf_abnet_ibuprofenfmt 0='No' 1='Yes';
 	value rf_abnet_cat_aspirinfmt 0='No use' 1='Monthly' 2='Weekly' 3='Daily';
 	value rf_abnet_cat_ibuprofenfmt 0='No use' 1='Monthly' 2='Weekly' 3='Daily';
+	value aspirin_collapse_fmt 0='no use' 1='monthly' 2='weekly/daily' -9='missing';
+	value ibu_collapse_fmt 0='no use' 1='monthly' 2='weekly/daily' -9='missing';
 
 	value excludefmt 0='include'
 						1='exclude';
