@@ -13,18 +13,11 @@
 #
 *******************************************************************/
 
-libname conv 'C:\REB\NSAIDS melanoma AARP\Data\converted';
-
 %include 'C:\REB\NSAIDS melanoma AARP\Analysis\format.risk.w.sas';
-
-data melan_use; 
-	set conv.melan_use; 
-run;
 
 ***************************************;
 **** Combine variables for Table 1 ****;
 ***************************************;
-
 
 data melan_use;
 	set melan_use;

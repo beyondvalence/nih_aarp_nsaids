@@ -25,23 +25,19 @@ filename uv_pub 'C:\REB\NSAIDS melanoma AARP\Data\uv_public.v9x';
 ** import the UVR with file extension v9x from the anchovy folder;
 proc cimport data=uv_pub1 infile=uv_pub; 
 run;
-/***************************************************/
+/***************************************************
 ** use baseline census tract for higher resolution;
 proc means data=uv_pub1;
 	title "Comparing UVR exposure means";
 	var exposure_jul_78_93 exposure_jul_96_05 exposure_jul_78_05;
 	var exposure_net_78_93 exposure_net_96_05 exposure_net_78_05;
-run;
+run; */
 
-** keep the july UVR data only;
+** keep the july 1978-2005 UVR data only;
 data conv.uv_pub1;
 	set uv_pub1; 
 	keep	westatid
 			exposure_jul_78_05;
-run;
-
-proc contents data=conv.rout09jan14;
-	title 'risk exp';
 run;
 
 ** input: first primary cancer _risk; 
@@ -100,7 +96,7 @@ data ranalysis;
 
 			
 			rel_1d_cancer			/* family history of cancer - any 1st degree relatives ever diagnosed with cancer (nnmsc)*/
-			FAM_CANCER				/* Any blood relatives diagnosed with cancer?*/
+			/*FAM_CANCER				 Any blood relatives diagnosed with cancer?*/
 
 			/* add more variables here */
 			BMI_CUR					/* current bmi kg/m2*/
@@ -209,9 +205,6 @@ proc copy noclone in=Work out=conv;
 	select ranalysis;
 run;
 
-proc contents data=conv.ranalysis;
-run;
-
 /**********/
 /* start2 */
 /**********/
@@ -246,11 +239,6 @@ data melan_r;
 	merge melan_r (in=frodo) conv.uv_pub1 ;
 	by westatid;
 	if frodo;
-run;
-
-** copy and save the melan dataset to the converted folder;
-proc copy noclone in=Work out=conv;
-	select melan_r;
 run;
 
 ** quick checks on the conv.melan file;
@@ -295,6 +283,7 @@ title 'exclusion macro, rfq';
 /***************************************************************************************/ 
 /*   Exclude if person-years = 0                                                       */
 /***************************************************************************************/      
+title 'exclusion person years';
 data melan_r;
    set melan_r;
    excl_1_pyr=0;
@@ -313,6 +302,7 @@ run;
 /***************************************************************************************/ 
 /*   Exclude if not 'non-Hispanic White'                                               */
 /***************************************************************************************/      
+title 'exclusion non-Hispanic whites';
 data melan_r;
    set melan_r;
    excl_2_race=0;
@@ -327,14 +317,9 @@ data melan_r;
 	set melan_r;
 	where excl_2_race=0;
 run;
+title;
 
 *END HERE for exclusion counts;
-
-** copy and save the melan dataset to the converted folder;
-** now work with melan data in conv library;
-proc copy noclone in=work out=conv;
-	select melan_r;
-run;
 
 ** find the cutoffs for the percentiles of UVR- exposure_jul_78_05 mped_a_bev;
 /*proc univariate data=conv.melan_r;
@@ -373,8 +358,8 @@ run; */
 ** create the UVR, and confounder variables by quartile/categories;
 ** for both baseline and riskfactor questionnaire variables;
 /* cat=categorical ************************************************************************/
-data conv.melan_use;
-	set conv.melan_r;
+data melan_use;
+	set melan_r;
 
 	** UVR TOMS quartile;
 	UVRQ=.;
@@ -581,12 +566,12 @@ data conv.melan_use;
 run;
 
 ** check melanoma variables;
-proc freq data=conv.melan_use;
+proc freq data=melan_use;
 	table rf_Q44*utilizer_w utilizer_m /missing;
 run;
 
 ** add labels;
-proc datasets library=conv;
+proc datasets library=work;
 	title;
 	modify melan_use;
 	
@@ -633,11 +618,5 @@ proc datasets library=conv;
 			rf_abnet_ibuprofen rf_abnet_ibuprofenfmt. rf_abnet_cat_aspirin rf_abnet_cat_aspirinfmt.
             rf_abnet_cat_ibuprofen rf_abnet_cat_ibuprofenfmt.
 			rf_physic_1518_c rfphysicfmt. rf_physic_c rfphysicfmt.
-;
+	;
 run;
-
-
-proc freq data=conv.melan_use;
-	tables melanoma_c*melanoma_ins;
-run;
-
