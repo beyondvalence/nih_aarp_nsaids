@@ -68,25 +68,25 @@ data melan_use;
 	else if			rf_abnet_aspirin=1| rf_abnet_ibuprofen=1				then nsaid_bi=1; *nsaid user*;
 
 	nsaid=.;
-	if			rf_abnet_cat_aspirin=0 and rf_abnet_cat_ibuprofen=0						then nsaid=0; *nsaid non-user*;
+	if			rf_abnet_cat_aspirin=0 and rf_abnet_cat_ibuprofen=0			then nsaid=0; *nsaid non-user*;
 
-	else if		rf_abnet_cat_aspirin=1 and rf_abnet_cat_ibuprofen=0						then nsaid=1; *nsaid monthly user*;
-	else if		rf_abnet_cat_aspirin=0 and rf_abnet_cat_ibuprofen=1						then nsaid=1; *nsaid monthly user*;
-	else if		rf_abnet_cat_aspirin=1 and rf_abnet_cat_ibuprofen=1						then nsaid=1; *nsaid monthly user*;
+	else if		rf_abnet_cat_aspirin=1 and rf_abnet_cat_ibuprofen=0			then nsaid=1; *nsaid monthly user*;
+	else if		rf_abnet_cat_aspirin=0 and rf_abnet_cat_ibuprofen=1			then nsaid=1; *nsaid monthly user*;
+	else if		rf_abnet_cat_aspirin=1 and rf_abnet_cat_ibuprofen=1			then nsaid=1; *nsaid monthly user*;
 
-	else if		rf_abnet_cat_aspirin=2 and rf_abnet_cat_ibuprofen=0						then nsaid=2; *nsaid weekly user*;
-	else if		rf_abnet_cat_aspirin=2 and rf_abnet_cat_ibuprofen=1						then nsaid=2; *nsaid weekly user*;
-	else if		rf_abnet_cat_aspirin=0 and rf_abnet_cat_ibuprofen=2						then nsaid=2; *nsaid weekly user*;
-	else if		rf_abnet_cat_aspirin=1 and rf_abnet_cat_ibuprofen=2						then nsaid=2; *nsaid weekly user*;
-	else if		rf_abnet_cat_aspirin=2 and rf_abnet_cat_ibuprofen=2						then nsaid=2; *nsaid weekly user*;
+	else if		rf_abnet_cat_aspirin=2 and rf_abnet_cat_ibuprofen=0			then nsaid=2; *nsaid weekly user*;
+	else if		rf_abnet_cat_aspirin=2 and rf_abnet_cat_ibuprofen=1			then nsaid=2; *nsaid weekly user*;
+	else if		rf_abnet_cat_aspirin=0 and rf_abnet_cat_ibuprofen=2			then nsaid=2; *nsaid weekly user*;
+	else if		rf_abnet_cat_aspirin=1 and rf_abnet_cat_ibuprofen=2			then nsaid=2; *nsaid weekly user*;
+	else if		rf_abnet_cat_aspirin=2 and rf_abnet_cat_ibuprofen=2			then nsaid=2; *nsaid weekly user*;
 
-	else if		rf_abnet_cat_aspirin=3 and rf_abnet_cat_ibuprofen=0						then nsaid=3; *nsaid daily user*;
-	else if		rf_abnet_cat_aspirin=3 and rf_abnet_cat_ibuprofen=1						then nsaid=3; *nsaid daily user*;
-	else if		rf_abnet_cat_aspirin=3 and rf_abnet_cat_ibuprofen=2						then nsaid=3; *nsaid daily user*;
-	else if		rf_abnet_cat_aspirin=0 and rf_abnet_cat_ibuprofen=3						then nsaid=3; *nsaid daily user*;
-	else if		rf_abnet_cat_aspirin=1 and rf_abnet_cat_ibuprofen=3						then nsaid=3; *nsaid daily user*;
-	else if		rf_abnet_cat_aspirin=2 and rf_abnet_cat_ibuprofen=3						then nsaid=3; *nsaid daily user*;
-	else if		rf_abnet_cat_aspirin=3 and rf_abnet_cat_ibuprofen=3						then nsaid=3; *nsaid daily user*;
+	else if		rf_abnet_cat_aspirin=3 and rf_abnet_cat_ibuprofen=0			then nsaid=3; *nsaid daily user*;
+	else if		rf_abnet_cat_aspirin=3 and rf_abnet_cat_ibuprofen=1			then nsaid=3; *nsaid daily user*;
+	else if		rf_abnet_cat_aspirin=3 and rf_abnet_cat_ibuprofen=2			then nsaid=3; *nsaid daily user*;
+	else if		rf_abnet_cat_aspirin=0 and rf_abnet_cat_ibuprofen=3			then nsaid=3; *nsaid daily user*;
+	else if		rf_abnet_cat_aspirin=1 and rf_abnet_cat_ibuprofen=3			then nsaid=3; *nsaid daily user*;
+	else if		rf_abnet_cat_aspirin=2 and rf_abnet_cat_ibuprofen=3			then nsaid=3; *nsaid daily user*;
+	else if		rf_abnet_cat_aspirin=3 and rf_abnet_cat_ibuprofen=3			then nsaid=3; *nsaid daily user*;
 
 	utilizer=.; *combine utilizer_m (colonoscopy) and utilizer_w (mammogram) into single variable;
 	if			utilizer_m=1 and utilizer_w=1		then utilizer=1; *both yes;
