@@ -620,6 +620,89 @@ proc datasets library=work;
 			rf_physic_1518_c rfphysicfmt. rf_physic_c rfphysicfmt.
 	;
 run;
+
+***************************************;
+**** Combine variables for Table 1 ****;
+***************************************;
+
+data melan_use;
+	set melan_use;
+
+	educm_comb=.;
+	if			EDUCM in (1,2)					then educm_comb=1; *<=11 yrs*;
+	else if		EDUCM=3							then educm_comb=2; *high school graduate*;
+	else if		EDUCM=4							then educm_comb=3; *some college*;
+	else if		EDUCM=5							then educm_comb=4; *college graduate*;
+	else if		EDUCM=9							then educm_comb=9; *unknown*;
+
+	marriage_comb=.;
+	if			MARRIAGE=1						then marriage_comb=1; *married or living as married *;
+	else if		MARRIAGE=2						then marriage_comb=2; *widowed*;
+	else if		MARRIAGE in (3,4)				then marriage_comb=3; *divorced or separated*;
+	else if		MARRIAGE=5						then marriage_comb=4; *never married*;
+	else if		MARRIAGE=9						then marriage_comb=9; *unknown*;
+
+	alcohol_comb=.;
+	if 		mped_a_bev=0						then alcohol_comb=0; /* none */
+	else if 0<mped_a_bev<=1						then alcohol_comb=1; /* <=1 */
+	else if 1<mped_a_bev<=2 					then alcohol_comb=2; /* >1-<=2 drinks*/
+	else if 2< mped_a_bev						then alcohol_comb=3; /* 2< drinks */
+	else if	alcohol=9							then alcohol_comb=3; /* missing */
+
+	TV_comb=.;
+	if			RF_PHYS_TV in (0,1)				then TV_comb=1; *none/<1 hr/day *;
+	else if		RF_PHYS_TV=2					then TV_comb=2; *1-2 hours/day *;
+	else if		RF_PHYS_TV=3					then TV_comb=3; *3-4 hours/day *;
+	else if		RF_PHYS_TV in (4,5,6)			then TV_comb=4; *>=5 hours/day *;
+	else if		RF_PHYS_TV=9					then TV_comb=9; *unknown*;
+
+	nap_comb=.;
+	if			RF_PHYS_NAP=0					then nap_comb=0; *never naps *;
+	else if		RF_PHYS_NAP=1					then nap_comb=1; *<1 hour/day *;
+	else if		RF_PHYS_NAP in (2,3,4)			then nap_comb=2; *naps >=1 hour/day *;
+	else if		RF_PHYS_NAP=9					then nap_comb=9; *unknown/missing*;
+
+	nsaid_bi=.;
+	if				rf_abnet_aspirin=0 and rf_abnet_ibuprofen=0				then nsaid_bi=0; *nsaid non-user*;	
+	else if			rf_abnet_aspirin=1| rf_abnet_ibuprofen=1				then nsaid_bi=1; *nsaid user*;
+
+	nsaid=.;
+	if			rf_abnet_cat_aspirin=0 and rf_abnet_cat_ibuprofen=0			then nsaid=0; *nsaid non-user*;
+
+	else if		rf_abnet_cat_aspirin=1 and rf_abnet_cat_ibuprofen=0			then nsaid=1; *nsaid monthly user*;
+	else if		rf_abnet_cat_aspirin=0 and rf_abnet_cat_ibuprofen=1			then nsaid=1; *nsaid monthly user*;
+	else if		rf_abnet_cat_aspirin=1 and rf_abnet_cat_ibuprofen=1			then nsaid=1; *nsaid monthly user*;
+
+	else if		rf_abnet_cat_aspirin=2 and rf_abnet_cat_ibuprofen=0			then nsaid=2; *nsaid weekly user*;
+	else if		rf_abnet_cat_aspirin=2 and rf_abnet_cat_ibuprofen=1			then nsaid=2; *nsaid weekly user*;
+	else if		rf_abnet_cat_aspirin=0 and rf_abnet_cat_ibuprofen=2			then nsaid=2; *nsaid weekly user*;
+	else if		rf_abnet_cat_aspirin=1 and rf_abnet_cat_ibuprofen=2			then nsaid=2; *nsaid weekly user*;
+	else if		rf_abnet_cat_aspirin=2 and rf_abnet_cat_ibuprofen=2			then nsaid=2; *nsaid weekly user*;
+
+	else if		rf_abnet_cat_aspirin=3 and rf_abnet_cat_ibuprofen=0			then nsaid=3; *nsaid daily user*;
+	else if		rf_abnet_cat_aspirin=3 and rf_abnet_cat_ibuprofen=1			then nsaid=3; *nsaid daily user*;
+	else if		rf_abnet_cat_aspirin=3 and rf_abnet_cat_ibuprofen=2			then nsaid=3; *nsaid daily user*;
+	else if		rf_abnet_cat_aspirin=0 and rf_abnet_cat_ibuprofen=3			then nsaid=3; *nsaid daily user*;
+	else if		rf_abnet_cat_aspirin=1 and rf_abnet_cat_ibuprofen=3			then nsaid=3; *nsaid daily user*;
+	else if		rf_abnet_cat_aspirin=2 and rf_abnet_cat_ibuprofen=3			then nsaid=3; *nsaid daily user*;
+	else if		rf_abnet_cat_aspirin=3 and rf_abnet_cat_ibuprofen=3			then nsaid=3; *nsaid daily user*;
+
+	utilizer=.; *combine utilizer_m (colonoscopy) and utilizer_w (mammogram) into single variable;
+	if			utilizer_m=1 and utilizer_w=1		then utilizer=1; *both yes;
+	if			utilizer_m=1 and utilizer_w=0		then utilizer=1; *colonoscopy yes, mammogram no = utilizer yes;
+	if			utilizer_m=0 and utilizer_w=1		then utilizer=1; *colonoscopy no, mammogram yes = utilizer yes;
+	if			utilizer_m=0 and utilizer_w=0		then utilizer=0; *both no = utilizer no;
+
+	coffee=.;
+	if		qp12b='0'							then coffee=0; 	/* none */
+	else if qp12b in ('1','2','3','4','5','6')	then coffee=1; 	/* <=1/day */
+	else if qp12b='7'							then coffee=2; 	/* 2-3/day */
+	else if qp12b in ('8','9')					then coffee=3; 	/* >=4/day */
+	else if qp12b in ('E','M')					then coffee=-9;	/* missing */
+	else	coffee_c=-9; 										/* missing */
+
+run;
+
 proc copy noclone in=Work out=conv;
 	select melan_use;
 run;
