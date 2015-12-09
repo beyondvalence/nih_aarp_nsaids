@@ -9,7 +9,7 @@
 # uses melan_use dataset
 # 
 # Created: July 30, 2015
-# Updated: 20151201TUE wtl
+# Updated: 20151209WED wtl
 #
 *******************************************************************/
 libname conv 'C:\REB\NSAIDS melanoma AARP\Data\converted';
@@ -59,7 +59,7 @@ proc tabulate data=melan_use missing;
 	table   
 			SEX 
 			UVRQ
-		  	RF_ABNET_ASPIRIN RF_ABNET_CAT_ASPIRIN RF_ABNET_CAT_IBUPROFEN RF_ABNET_IBUPROFEN  
+		  	RF_ABNET_ASPIRIN RF_ABNET_CAT_ASPIRIN RF_ABNET_IBUPROFEN RF_ABNET_CAT_IBUPROFEN
 			alcohol_comb
 			SMOKE_FORMER 
 			physic_c 
@@ -69,8 +69,8 @@ proc tabulate data=melan_use missing;
 			marriage_comb
 			educm_comb
 			HEART
-			utilizer_m 
-			utilizer_w ,
+			utilizer_w utilizer_m 
+			,
 
 			(melanoma_c)* (N colpctn='Percent') /nocellmerge; 
 run; 
