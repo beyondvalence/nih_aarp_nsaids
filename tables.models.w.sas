@@ -12,98 +12,18 @@
 # Updated: 20151201TUE wtl
 #
 *******************************************************************/
-
+libname conv 'C:\REB\NSAIDS melanoma AARP\Data\converted';
 %include 'C:\REB\NSAIDS melanoma AARP\Analysis\format.risk.w.sas';
-
-***************************************;
-**** Combine variables for Table 1 ****;
-***************************************;
-
-data melan_use;
-	set melan_use;
-
-	educm_comb=.;
-	if			EDUCM in (1,2)					then educm_comb=1; *<=11 yrs*;
-	else if		EDUCM=3							then educm_comb=2; *high school graduate*;
-	else if		EDUCM=4							then educm_comb=3; *some college*;
-	else if		EDUCM=5							then educm_comb=4; *college graduate*;
-	else if		EDUCM=9							then educm_comb=9; *unknown*;
-
-	marriage_comb=.;
-	if			MARRIAGE=1						then marriage_comb=1; *married or living as married *;
-	else if		MARRIAGE=2						then marriage_comb=2; *widowed*;
-	else if		MARRIAGE in (3,4)				then marriage_comb=3; *divorced or separated*;
-	else if		MARRIAGE=5						then marriage_comb=4; *never married*;
-	else if		MARRIAGE=9						then marriage_comb=9; *unknown*;
-
-	alcohol_comb=.;
-	if 		mped_a_bev=0						then alcohol_comb=0; /* none */
-	else if 0<mped_a_bev<=1						then alcohol_comb=1; /* <=1 */
-	else if 1<mped_a_bev<=2 					then alcohol_comb=2; /* >1-<=2 drinks*/
-	else if 2< mped_a_bev						then alcohol_comb=3; /* 2< drinks */
-	else if	alcohol=9							then alcohol_comb=3; /* missing */
-
-	TV_comb=.;
-	if			RF_PHYS_TV in (0,1)				then TV_comb=1; *none/<1 hr/day *;
-	else if		RF_PHYS_TV=2					then TV_comb=2; *1-2 hours/day *;
-	else if		RF_PHYS_TV=3					then TV_comb=3; *3-4 hours/day *;
-	else if		RF_PHYS_TV in (4,5,6)			then TV_comb=4; *>=5 hours/day *;
-	else if		RF_PHYS_TV=9					then TV_comb=9; *unknown*;
-
-	nap_comb=.;
-	if			RF_PHYS_NAP=0					then nap_comb=0; *never naps *;
-	else if		RF_PHYS_NAP=1					then nap_comb=1; *<1 hour/day *;
-	else if		RF_PHYS_NAP in (2,3,4)			then nap_comb=2; *naps >=1 hour/day *;
-	else if		RF_PHYS_NAP=9					then nap_comb=9; *unknown/missing*;
-
-	nsaid_bi=.;
-	if				rf_abnet_aspirin=0 and rf_abnet_ibuprofen=0				then nsaid_bi=0; *nsaid non-user*;	
-	else if			rf_abnet_aspirin=1| rf_abnet_ibuprofen=1				then nsaid_bi=1; *nsaid user*;
-
-	nsaid=.;
-	if			rf_abnet_cat_aspirin=0 and rf_abnet_cat_ibuprofen=0			then nsaid=0; *nsaid non-user*;
-
-	else if		rf_abnet_cat_aspirin=1 and rf_abnet_cat_ibuprofen=0			then nsaid=1; *nsaid monthly user*;
-	else if		rf_abnet_cat_aspirin=0 and rf_abnet_cat_ibuprofen=1			then nsaid=1; *nsaid monthly user*;
-	else if		rf_abnet_cat_aspirin=1 and rf_abnet_cat_ibuprofen=1			then nsaid=1; *nsaid monthly user*;
-
-	else if		rf_abnet_cat_aspirin=2 and rf_abnet_cat_ibuprofen=0			then nsaid=2; *nsaid weekly user*;
-	else if		rf_abnet_cat_aspirin=2 and rf_abnet_cat_ibuprofen=1			then nsaid=2; *nsaid weekly user*;
-	else if		rf_abnet_cat_aspirin=0 and rf_abnet_cat_ibuprofen=2			then nsaid=2; *nsaid weekly user*;
-	else if		rf_abnet_cat_aspirin=1 and rf_abnet_cat_ibuprofen=2			then nsaid=2; *nsaid weekly user*;
-	else if		rf_abnet_cat_aspirin=2 and rf_abnet_cat_ibuprofen=2			then nsaid=2; *nsaid weekly user*;
-
-	else if		rf_abnet_cat_aspirin=3 and rf_abnet_cat_ibuprofen=0			then nsaid=3; *nsaid daily user*;
-	else if		rf_abnet_cat_aspirin=3 and rf_abnet_cat_ibuprofen=1			then nsaid=3; *nsaid daily user*;
-	else if		rf_abnet_cat_aspirin=3 and rf_abnet_cat_ibuprofen=2			then nsaid=3; *nsaid daily user*;
-	else if		rf_abnet_cat_aspirin=0 and rf_abnet_cat_ibuprofen=3			then nsaid=3; *nsaid daily user*;
-	else if		rf_abnet_cat_aspirin=1 and rf_abnet_cat_ibuprofen=3			then nsaid=3; *nsaid daily user*;
-	else if		rf_abnet_cat_aspirin=2 and rf_abnet_cat_ibuprofen=3			then nsaid=3; *nsaid daily user*;
-	else if		rf_abnet_cat_aspirin=3 and rf_abnet_cat_ibuprofen=3			then nsaid=3; *nsaid daily user*;
-
-	utilizer=.; *combine utilizer_m (colonoscopy) and utilizer_w (mammogram) into single variable;
-	if			utilizer_m=1 and utilizer_w=1		then utilizer=1; *both yes;
-	if			utilizer_m=1 and utilizer_w=0		then utilizer=1; *colonoscopy yes, mammogram no = utilizer yes;
-	if			utilizer_m=0 and utilizer_w=1		then utilizer=1; *colonoscopy no, mammogram yes = utilizer yes;
-	if			utilizer_m=0 and utilizer_w=0		then utilizer=0; *both no = utilizer no;
-
-	coffee=.;
-	if			QP12B=0								then coffee=0; *none*;
-	if			QP12B=1								then coffee=1; *1 cup/d*;
-	if			QP12B>=2 and QP12B<=3				then coffee=2; *2-3 cup/d*;
-	if			QP12B>=4 							then coffee=3; *>=4 cup/d*;
-
-run;
 
 ***************************************;
 *** mean age at entry and exit (SD) ***;
 ***************************************;
 
 proc tabulate data=melan_use;
-	class race_c;
+	class race_c melanoma_c;
 	var exit_age entry_age;
 	table (exit_age entry_age),
-	(race_c)* (mean='Mean' stddev='SD');
+	(melanoma_c)* (mean='Mean' stddev='SD');
 run; 
 
 ****************************;
@@ -116,6 +36,7 @@ run;
 
 **** Categorical ****;
 ods html body= 'C:\REB\NSAIDS melanoma AARP\Results\Table_1\Supp_Table1_a.xls' style=minimal;
+title 'table1 supp';
 proc tabulate data=melan_use missing;
 	
 	class 	melanoma_c  
@@ -153,7 +74,8 @@ proc tabulate data=melan_use missing;
 
 			(melanoma_c)* (N colpctn='Percent') /nocellmerge; 
 run; 
-
+title;
+ods html close; ods html;
 *categorical chi-squared and trend for in situ;
 
 ods output ChiSq=Table1Chi      (keep=Table Statistic Prob rename=(prob=Chi2Pvalue)    where=(Statistic='Chi-Square'));
@@ -188,16 +110,16 @@ proc sort data=Table1Trd;
 	by Table; run;
 data Table1ap; 
 	set Table1Chi Table1Trd ; by Table; run;
-ods html file='E:\NCI REB\AARP\Results\Table_1\Supp_Table1_ap_ins.xls' style=minimal;
+ods html file='C:\REB\NSAIDS melanoma AARP\Results\Table_1\Supp_Table1_ap_ins.xls' style=minimal;
 proc print data= Table1ap;
 	title 'print chi2 and trend for melanoma_ins';
 run; 
-ods html close;
+ods html close; ods html;
 
 *******************************************************************************************************************;
 
 **Continuous;
-ods html body='E:\NCI REB\AARP\Results\Table_1\Supp_Table1b_ins.xls' style=minimal;
+ods html body='C:\REB\NSAIDS melanoma AARP\Results\Table_1\Supp_Table1b_ins.xls' style=minimal;
 proc tabulate data=melan_use;
 title 'tab continuous melanoma_ins';
 class melanoma_ins;
@@ -212,7 +134,7 @@ title 'ttest melanoma_ins'
 class melanoma_ins;
 var exit_age entry_age bmi_cur exposure_jul_78_05 ;
 run;
-ods html file='E:\NCI REB\AARP\Results\Table_1\Supp_Table1bp_ins.xls' style=minimal;
+ods html file='C:\REB\NSAIDS melanoma AARP\Results\Table_1\Supp_Table1bp_ins.xls' style=minimal;
 proc print data= Table1T; run;
 ods html close;
 
@@ -259,7 +181,7 @@ ods html close;
 *******************************************************************************************************************;
 
 **Continuous;
-ods html body='E:\NCI REB\AARP\Results\Table_1\Supp_Table1b_mal.xls' style=minimal;
+ods html body='C:\REB\NSAIDS melanoma AARP\Results\Table_1\Supp_Table1b_mal.xls' style=minimal;
 proc tabulate data=melan_use;
 title 'tab continuous melanoma_mal';
 class melanoma_mal;
@@ -275,7 +197,7 @@ class melanoma_mal;
 var exit_age entry_age bmi_cur exposure_jul_78_05 ;
 run;
 
-ods html file='E:\NCI REB\AARP\Results\Table_1\Supp_Table1bp_mal.xls' style=minimal;
+ods html file='C:\REB\NSAIDS melanoma AARP\Results\Table_1\Supp_Table1bp_mal.xls' style=minimal;
 proc print data= Table1T; 
 run;
 ods html close;
@@ -292,7 +214,7 @@ ods html close;
 
 
 ** Categorical;
-ods html body= 'E:\NCI REB\AARP\Results\Table_2\Table2_nsaid.xls' style=minimal;
+ods html body= 'C:\REB\NSAIDS melanoma AARP\Results\Table_2\Table2_nsaid.xls' style=minimal;
 proc tabulate data=melan_use missing;
 class 	nsaid_bi  
 			SEX 
@@ -358,7 +280,7 @@ proc sort data=Table1Trd;
 	by Table; run;
 data Table2ap; 
 	set Table1Chi Table1Trd ; by Table; run;
-ods html file='E:\NCI REB\AARP\Results\Table_2\Table2ap_nsaid.xls' style=minimal;
+ods html file='C:\REB\NSAIDS melanoma AARP\Results\Table_2\Table2ap_nsaid.xls' style=minimal;
 proc print data= Table2ap;
 	title 'print chi2 and trend for nsaid_bi';
 run; 
@@ -369,7 +291,7 @@ ods html close;
 
 ** Continuous;
 
-ods html body='E:\NCI REB\AARP\Results\Table_2\Table2b_nsaid.xls' style=minimal;
+ods html body='C:\REB\NSAIDS melanoma AARP\Results\Table_2\Table2b_nsaid.xls' style=minimal;
 proc tabulate data=melan_use;
 title 'tab continuous melanoma_mal';
 class nsaid_bi;
@@ -384,7 +306,7 @@ title 'ttest nsaid_bi';
 class nsaid_bi;
 var exit_age entry_age bmi_cur exposure_jul_78_05 ;
 run;
-ods html file='E:\NCI REB\AARP\Results\Table_2\Table2bp_nsaid.xls' style=minimal;
+ods html file='C:\REB\NSAIDS melanoma AARP\Results\Table_2\Table2bp_nsaid.xls' style=minimal;
 proc print data= Table2T; run;
 ods html close;
 
@@ -395,7 +317,7 @@ ods html close;
 *using as Table 1 in paper i.e. not presenting cohort characteristics by melanoma case vs non-case;
 
 **** Categorical ****;
-ods html body= 'E:\NCI REB\AARP\Results\Table_2\Strat_Table2_a.xls' style=minimal;
+ods html body= 'C:\REB\NSAIDS melanoma AARP\Results\Table_2\Strat_Table2_a.xls' style=minimal;
 proc tabulate data=melan_use missing;
 class 	nsaid  
 		SEX 
