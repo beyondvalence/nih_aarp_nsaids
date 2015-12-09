@@ -620,3 +620,6 @@ proc datasets library=work;
 			rf_physic_1518_c rfphysicfmt. rf_physic_c rfphysicfmt.
 	;
 run;
+proc copy noclone in=Work out=conv;
+	select melan_use;
+run;
