@@ -130,7 +130,7 @@ run; ods html close;
 
 ods output Ttests=Table1T ; ods html;
 proc ttest data=melan_use;
-title 'ttest melanoma_ins'
+title 'ttest melanoma_ins';
 class melanoma_ins;
 var exit_age entry_age bmi_cur exposure_jul_78_05 ;
 run;
@@ -189,8 +189,8 @@ var exit_age entry_age bmi_cur exposure_jul_78_05 ;
 table (exit_age entry_age bmi_cur exposure_jul_78_05 ),
 (melanoma_mal)* (mean='Mean' stddev='SD');
 run; ods html close;
-ods output Ttests=Table1T ; ods html;
 
+ods output Ttests=Table1T ; ods html;
 proc ttest data=melan_use;
 title 'ttest melanoma_mal';
 class melanoma_mal;
@@ -198,8 +198,7 @@ var exit_age entry_age bmi_cur exposure_jul_78_05 ;
 run;
 
 ods html file='C:\REB\NSAIDS melanoma AARP\Results\Table_1\Supp_Table1bp_mal.xls' style=minimal;
-proc print data= Table1T; 
-run;
+proc print data= Table1T; run;
 ods html close;
 
 
@@ -211,7 +210,6 @@ ods html close;
 ** NSAID user vs non-user **;
 ****************************;
 *using as Table 1 in paper i.e. not presenting cohort characteristics by melanoma case/non-case;
-
 
 ** Categorical;
 ods html body= 'C:\REB\NSAIDS melanoma AARP\Results\Table_2\Table2_nsaid.xls' style=minimal;
