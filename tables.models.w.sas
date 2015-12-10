@@ -118,7 +118,7 @@ ods html close; ods html;
 
 *******************************************************************************************************************;
 
-**Continuous;
+**Continuous means for in situ;
 ods html body='C:\REB\NSAIDS melanoma AARP\Results\Table_1\Supp_Table1b_ins.xls' style=minimal;
 proc tabulate data=melan_use;
 title 'tab continuous melanoma_ins';
