@@ -687,6 +687,13 @@ data melan_use;
 	else if		rf_abnet_cat_aspirin=2 and rf_abnet_cat_ibuprofen=3			then nsaid=3; *nsaid daily user*;
 	else if		rf_abnet_cat_aspirin=3 and rf_abnet_cat_ibuprofen=3			then nsaid=3; *nsaid daily user*;
 
+	nsaid_1=nsaid;
+	if nsaid_1 in (2,3)				then nsaid_1=0;
+	nsaid_2=nsaid;
+	if nsaid_2 in (1,3)				then nsaid_2=0;
+	nsaid_3=nsaid;
+	if nsaid_3 in (1,2)				then nsaid_3=0;
+
 	utilizer=.; *combine utilizer_m (colonoscopy) and utilizer_w (mammogram) into single variable;
 	if			utilizer_m=1 and utilizer_w=1		then utilizer=1; *both yes;
 	if			utilizer_m=1 and utilizer_w=0		then utilizer=1; *colonoscopy yes, mammogram no = utilizer yes;
