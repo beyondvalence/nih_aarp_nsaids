@@ -9,7 +9,7 @@
 # uses melan_use dataset
 # 
 # Created: July 30, 2015
-# Updated: 20151209WED wtl
+# Updated: 20151210THU WTL
 #
 *******************************************************************/
 libname conv 'C:\REB\NSAIDS melanoma AARP\Data\converted';
@@ -209,15 +209,15 @@ ods html close;
 ****************************;
 ** NSAID user vs non-user **;
 ****************************;
-*using as Table 1 in paper i.e. not presenting cohort characteristics by melanoma case/non-case;
+*using this as Table 1 in paper i.e. not presenting cohort characteristics by melanoma case/non-case;
 
 ** Categorical;
 ods html body= 'C:\REB\NSAIDS melanoma AARP\Results\Table_2\Table2_nsaid.xls' style=minimal;
+title 'real table1, confounders to exposure';
 proc tabulate data=melan_use missing;
 class 	nsaid_bi  
 			SEX 
 			UVRQ
-	  		RF_ABNET_ASPIRIN RF_ABNET_CAT_ASPIRIN RF_ABNET_CAT_IBUPROFEN RF_ABNET_IBUPROFEN  
 			alcohol_comb
 			SMOKE_FORMER 
 			physic_c 
@@ -232,7 +232,6 @@ class 	nsaid_bi
 table   
 			SEX 
 			UVRQ
-	  		RF_ABNET_ASPIRIN RF_ABNET_CAT_ASPIRIN RF_ABNET_CAT_IBUPROFEN RF_ABNET_IBUPROFEN  
 			alcohol_comb
 			SMOKE_FORMER 
 			physic_c 
@@ -241,11 +240,14 @@ table
 			marriage_comb
 			educm_comb
 			HEART
-			utilizer_m 
-			utilizer_w		,
+			utilizer_w utilizer_m 
+			,
 
 		(nsaid_bi)* (N colpctn='Percent') /nocellmerge; 
+where nsaid_bi NE .;
 run; 
+title;
+ods html close;
 
 ods output ChiSq=Table1Chi      (keep=Table Statistic Prob rename=(prob=Chi2Pvalue)    where=(Statistic='Chi-Square'));
 ods output TrendTest=Table1Trd  (keep=Table Name1 cValue1 rename=(cValue1=TrendPvalue) where=(Name1='P2_TREND'));
@@ -254,7 +256,6 @@ proc freq data=melan_use;
 tables nsaid_bi* (
 			SEX 
 			UVRQ
-	  		RF_ABNET_ASPIRIN RF_ABNET_CAT_ASPIRIN RF_ABNET_CAT_IBUPROFEN RF_ABNET_IBUPROFEN  
 			alcohol_comb
 			SMOKE_FORMER 
 			physic_c 
@@ -315,12 +316,11 @@ ods html close;
 *using as Table 1 in paper i.e. not presenting cohort characteristics by melanoma case vs non-case;
 
 **** Categorical ****;
-ods html body= 'C:\REB\NSAIDS melanoma AARP\Results\Table_2\Strat_Table2_a.xls' style=minimal;
+ods html body= 'C:\REB\NSAIDS melanoma AARP\Results\Table_2\Table2strat_a.xls' style=minimal;
 proc tabulate data=melan_use missing;
-class 	nsaid  
+class 	nsaid
 		SEX 
 		UVRQ
-	  	RF_ABNET_ASPIRIN RF_ABNET_CAT_ASPIRIN RF_ABNET_CAT_IBUPROFEN RF_ABNET_IBUPROFEN  
 		alcohol_comb
 		SMOKE_FORMER 
 		physic_c 
@@ -338,7 +338,6 @@ class 	nsaid
 table   
 		SEX 
 		UVRQ
-	  	RF_ABNET_ASPIRIN RF_ABNET_CAT_ASPIRIN RF_ABNET_CAT_IBUPROFEN RF_ABNET_IBUPROFEN  
 		alcohol_comb
 		SMOKE_FORMER 
 		physic_c 
@@ -349,15 +348,49 @@ table
 		marriage_comb
 		educm_comb
 		HEART
-		utilizer_m 
-		utilizer_w ,
+		utilizer_w utilizer_m 
+		,
 
 		(nsaid)* (N colpctn='Percent') /nocellmerge; 
+where nsaid NE .;
 run; 
+title;
+ods html close;
 
 ods output ChiSq=Table1Chi      (keep=Table Statistic Prob rename=(prob=Chi2Pvalue)    where=(Statistic='Chi-Square'));
 ods output TrendTest=Table1Trd  (keep=Table Name1 cValue1 rename=(cValue1=TrendPvalue) where=(Name1='P2_TREND'));
-
+proc freq data=melan_use;
+tables nsaid_1* (
+			SEX 
+			UVRQ
+			alcohol_comb
+			SMOKE_FORMER 
+			physic_c 
+			TV_comb 
+			nap_comb 
+			marriage_comb
+			educm_comb
+			HEART
+			utilizer_m 
+			utilizer_w			
+			)
+	 		/chisq trend nocol nopercent scores=table;
+run;
+data Table1Chi; 
+	set Table1Chi (keep=Table Chi2Pvalue); run;
+data Table1Trd; 
+	set Table1Trd (keep=Table TrendPvalue); run;
+proc sort data=Table1Chi; 
+	by Table; run;
+proc sort data=Table1Trd; 
+	by Table; run;
+data Table2ap; 
+	set Table1Chi Table1Trd ; by Table; run;
+ods html file='C:\REB\NSAIDS melanoma AARP\Results\Table_2\Table2strat_ap1.xls' style=minimal;
+proc print data= Table2ap;
+	title 'print chi2 and trend for nsaid _1';
+run; 
+ods html close;
 
 ***********************************************;
 *********		    abnet exposure	***********;
