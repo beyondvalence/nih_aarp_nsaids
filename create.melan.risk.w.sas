@@ -124,8 +124,8 @@ data ranalysis;
 			rf_Q15C
 			rf_Q15D
 			rf_Q15E
-			HEART
-			DIABETES				/*self-report diabetes y/n*/
+			HEART					/*baseline Q40C */
+			DIABETES				/*baseline Q40B self-report diabetes y/n*/
 			MARRIAGE
 			BMI_CUR					/* current bmi kg/m2*/
 			qp12b 					/* coffee drinking */
