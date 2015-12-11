@@ -366,9 +366,9 @@ data melan_use;
 	else if 186.255 < exposure_jul_78_05 <= 236.805 	then UVRQ=2;
 	else if 236.805 < exposure_jul_78_05 <= 253.731 	then UVRQ=3;
 	else if 253.731 < exposure_jul_78_05 <= 289.463		then UVRQ=4;
-	else 												UVRQ=-9;
+	else 												UVRQ=9;
 
-	** birth cohort date of birth quintile;
+	** birth cohort date of birth quintile; /*CHECK*/
 	birth_cohort=.;
 	if      -11931 <= F_DOB <= -11392 then birth_cohort=1;
 	else if -11392 <= F_DOB < -10316  then birth_cohort=2;
@@ -383,7 +383,7 @@ data melan_use;
 	else if physic=3 	 		then physic_c=2; /* 1-2 per week */
 	else if physic=4     		then physic_c=3; /* 3-4 per week */
 	else if physic=5     		then physic_c=4; /* 5+ per week */
-	else if physic=9	 		then physic_c=-9; /* missing */
+	else if physic=9	 		then physic_c=9; /* missing */
 
 	** physical exercise ages 15..18 cat;
 	physic_1518_c=.;
@@ -392,28 +392,21 @@ data melan_use;
 	else if physic_1518=3 		 	then physic_1518_c=2; /* 1-2 per week */
 	else if physic_1518=4   	  	then physic_1518_c=3; /* 3-4 per week */
 	else if physic_1518=5	     	then physic_1518_c=4; /* 5+ per week */
-	else if physic_1518=9		 	then physic_1518_c=-9; /* missing */
+	else if physic_1518=9		 	then physic_1518_c=9; /* missing */
 
 	** education cat;
 	educ_c=.;
 	if 		educm in (1,2) 		then educ_c=0; /* highschool or less */
 	else if educm in (3,4)		then educ_c=1; /* some college */
 	else if educm=5				then educ_c=2; /* college and grad */
-	else if educm=9				then educ_c=-9; /* missing */
-
-	** race cat;
-	race_c=.;
-	if      racem=1				then race_c=0; /* non hispanic white */
-	else if racem=2				then race_c=1; /* non hispanic black */
-	else if racem in (3,4) 		then race_c=2; /* hispanic, asian PI AIAN */
-	else if racem=9				then race_c=-9; /* missing */
+	else if educm=9				then educ_c=9; /* missing */
 	
 	** former smoker status cat;
 	smoke_f_c=.;
 	if      bf_smoke_former=0		then smoke_f_c=0; /* never smoke */
 	else if bf_smoke_former=1		then smoke_f_c=1; /* former smoker (ever)*/
 	else if bf_smoke_former=2		then smoke_f_c=1; /* current smoker? (ever)*/
-	else if bf_smoke_former=9		then smoke_f_c=-9; /* missing */
+	else if bf_smoke_former=9		then smoke_f_c=9; /* missing */
 	else 							smoke_f_c=-9;
 
 	** cancer grade cat;
@@ -422,7 +415,7 @@ data melan_use;
 	else if cancer_grade='2'		then cancer_g_c=1;
 	else if cancer_grade='3'		then cancer_g_c=2;
 	else if cancer_grade='4'		then cancer_g_c=3;
-	else if cancer_grade='9'		then cancer_g_c=-9; /* missing */
+	else if cancer_grade='9'		then cancer_g_c=9; /* missing */
 
 	** bmi three categories;
 	bmi_c=.;
@@ -430,7 +423,7 @@ data melan_use;
 	else if 18.5<=bmi_cur<25 	then bmi_c=1; /* normal */
    	else if 25<=bmi_cur<30 		then bmi_c=2; /* overweight */
    	else if 30<=bmi_cur 		then bmi_c=3; /* obese */
-   	else if bmi_cur=. 			then bmi_c=-9; /* missing */
+   	else if bmi_cur=. 			then bmi_c=9; /* missing */
       	
 	** bmi three categories standalone variables;
 	bmi_c1=0;
@@ -441,7 +434,7 @@ data melan_use;
 	if      bmi_c=1 	then bmi_c1=1;
    	else if bmi_c=2 	then bmi_c2=1;
 	else if bmi_c=3 	then bmi_c3=1;
-	else if bmi_c=-9 	then bmi_cn9=1;
+	else if bmi_c=9 	then bmi_cn9=1;
 
 	** bmi five categories;
 	if      18.5<=bmi_cur<25 	then bmi_fc=1; /* low bmi */
@@ -449,7 +442,7 @@ data melan_use;
    	else if 30<=bmi_cur<35 		then bmi_fc=3; /* high bmi */
 	else if 35<=bmi_cur<40 		then bmi_fc=4; /* higher bmi */
    	else if bmi_cur>=40 		then bmi_fc=5; /* highest valid bmi */
-	else bmi_fc=-9;
+	else bmi_fc=9;
 
 	** bmi five categories standalone variables;
 	bmi_fc1=0;
@@ -471,7 +464,7 @@ data melan_use;
 	else if cancer_ss_stg in ('2','3','4','5')	then stage_c=2;
 	else if cancer_ss_stg='7'					then stage_c=3;
 	else if cancer_ss_stg in ('8','9')			then stage_c=4;
-	else  										stage_c=-9;	
+	else  										stage_c=9;	
 
 	** coffee drinking;
 	coffee_c=.;
@@ -479,8 +472,8 @@ data melan_use;
 	else if qp12b in ('1','2','3','4','5','6')	then coffee_c=1; 	/* <=1/day */
 	else if qp12b='7'							then coffee_c=2; 	/* 2-3/day */
 	else if qp12b in ('8','9')					then coffee_c=3; 	/* >=4/day */
-	else if qp12b in ('E','M')					then coffee_c=-9;	/* missing */
-	else										coffee_c=-9; 		/* missing */
+	else if qp12b in ('E','M')					then coffee_c=9;	/* missing */
+	else										coffee_c=9; 		/* missing */
 
 	** total alcohol per day; /* CHECKME */
 	etoh_c=.;
@@ -490,17 +483,17 @@ data melan_use;
 	else if 0.1 <mped_a_bev<=0.52	then etoh_c=3;		/* 0.1-0.52 */
 	else if 0.52<mped_a_bev<=1.12	then etoh_c=4;		/* 0.52-1.12 */
 	else if 	 mped_a_bev> 1.12	then etoh_c=5;		/* 1.12-37.44 */
-	else 		 					etoh_c=-9;			/* missing */
+	else 		 					etoh_c=9;			/* missing */
 
-	** risk physical exercise ages 15..18 cat;
+	** (rf) physical exercise ages 15..18 cat;
 	rf_physic_1518_c=.;
 	if      rf_phys_modvig_15_18 in (0,1)	then rf_physic_1518_c=0; /* rarely */
 	else if rf_phys_modvig_15_18=2 	 		then rf_physic_1518_c=1; /* <1 hour/week */
 	else if rf_phys_modvig_15_18=3 	 		then rf_physic_1518_c=2; /* 1-3 hours/week */
 	else if rf_phys_modvig_15_18=4     		then rf_physic_1518_c=3; /* 4-7 hours/week */
 	else if rf_phys_modvig_15_18=5     		then rf_physic_1518_c=4; /* >7 hours/week */
-	else if rf_phys_modvig_15_18=9	 		then rf_physic_1518_c=-9; /* missing */
-	else 									rf_physic_1518_c=-9;
+	else if rf_phys_modvig_15_18=9	 		then rf_physic_1518_c=9; /* missing */
+	else 									rf_physic_1518_c=9;
 
 	** (rf) physical exercise how often participate mod-vig activites in past 10 years;
 	rf_physic_c=.;
@@ -509,8 +502,8 @@ data melan_use;
 	else if rf_phys_modvig_curr=3			then rf_physic_c=2; /* 1-3 hr/week */
 	else if rf_phys_modvig_curr=4			then rf_physic_c=3; /* 4-7 hr/week */
 	else if rf_phys_modvig_curr=5			then rf_physic_c=4; /* >7 hr/week */
-	else if rf_phys_modvig_curr=9			then rf_physic_c=-9; /* missing */
-	else 									rf_physic_c=-9;
+	else if rf_phys_modvig_curr=9			then rf_physic_c=9; /* missing */
+	else 									rf_physic_c=9;
 
 	alcohol=.;
 	if mped_a_bev=0							then alcohol=0;		/* none */
@@ -518,11 +511,7 @@ data melan_use;
 	else if 1<mped_a_bev<=2 				then alcohol=2;		/* >1-<=2 drinks*/
 	else if 2< mped_a_bev<=3				then alcohol=3;		/* >2-<=3 drinks */
 	else if 3<mped_a_bev					then alcohol=4;		/* >3 drinks */
-	else 									alcohol=-9;			/* missing */
-
-	white=.;
-	if race_c=0 							then white=1; /* non-Hispanic white */
-	else white=-9;
+	else 									alcohol=9;			/* missing */
 
 	/* checked 20151201TUE wtl */
 	/*utilizer_m=-9; 
@@ -646,7 +635,7 @@ data melan_use;
 	else if 0<mped_a_bev<=1						then alcohol_comb=1; /* <=1 */
 	else if 1<mped_a_bev<=2 					then alcohol_comb=2; /* >1-<=2 drinks*/
 	else if 2< mped_a_bev						then alcohol_comb=3; /* 2< drinks */
-	else if	alcohol=9							then alcohol_comb=3; /* missing */
+	else if	alcohol=9							then alcohol_comb=9; /* missing */
 
 	TV_comb=.;
 	if			RF_PHYS_TV in (0,1)				then TV_comb=1; *none/<1 hr/day *;
@@ -704,8 +693,7 @@ data melan_use;
 	else if qp12b in ('1','2','3','4','5','6')	then coffee=1; 	/* <=1/day */
 	else if qp12b='7'							then coffee=2; 	/* 2-3/day */
 	else if qp12b in ('8','9')					then coffee=3; 	/* >=4/day */
-	else if qp12b in ('E','M')					then coffee=-9;	/* missing */
-	else	coffee_c=-9; 										/* missing */
+	else if qp12b in ('E','M')					then coffee=9;	/* missing */
 run;
 
 proc copy noclone in=Work out=conv;
