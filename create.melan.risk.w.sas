@@ -279,43 +279,42 @@ title 'exclusion macro, rfq';
 		 ex_prevcan      	= 1,
          ex_deathcan     	= 1);
 
-
-/***************************************************************************************/ 
-/*   Exclude if person-years = 0                                                       */
-/***************************************************************************************/      
-title 'exclusion person years';
-data melan_r;
-   set melan_r;
-   excl_1_pyr=0;
-   if rf_personyrs <= 0 then excl_1_pyr=1;
-run;
-proc freq data= melan_r ;
-	title 'excl_1_pyr: exclude 0 or negative person years';
-	tables excl_1_pyr
-			excl_1_pyr*melanoma_c /missing;
-run;
-data melan_r;
-	set melan_r;
-	where excl_1_pyr=0;
-run;
-
 /***************************************************************************************/ 
 /*   Exclude if not 'non-Hispanic White'                                               */
 /***************************************************************************************/      
-title 'exclusion non-Hispanic whites';
+title 'exclusion non non-Hispanic whites';
 data melan_r;
    set melan_r;
-   excl_2_race=0;
-   if racem in (2,3,4,9) then excl_2_race=1;
+   excl_1_race=0;
+   if racem NE 1 then excl_1_race=1;
 run;
 proc freq data= melan_r;
-	title 'excl_2_race: exclude non-whites';
-	tables excl_2_race
-			excl_2_race*melanoma_c /missing;
+	title 'excl_1_race: exclude non-whites';
+	tables 	excl_1_race
+			excl_1_race*melanoma_c /missing;
 run;
 data melan_r;
 	set melan_r;
-	where excl_2_race=0;
+	where excl_1_race=0;
+run;
+
+/***************************************************************************************/ 
+/*   Exclude if person-years <= 0                                                       */
+/***************************************************************************************/      
+title 'exclusion person years <=0';
+data melan_r;
+   set melan_r;
+   excl_2_pyr=0;
+   if rf_personyrs <= 0 then excl_2_pyr=1;
+run;
+proc freq data= melan_r ;
+	title 'excl_2_pyr: exclude 0 or negative person years';
+	tables 	excl_2_pyr
+			excl_2_pyr*melanoma_c /missing;
+run;
+data melan_r;
+	set melan_r;
+	where excl_2_pyr=0;
 run;
 title;
 
@@ -707,7 +706,6 @@ data melan_use;
 	else if qp12b in ('8','9')					then coffee=3; 	/* >=4/day */
 	else if qp12b in ('E','M')					then coffee=-9;	/* missing */
 	else	coffee_c=-9; 										/* missing */
-
 run;
 
 proc copy noclone in=Work out=conv;
