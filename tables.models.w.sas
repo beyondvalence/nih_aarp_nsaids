@@ -403,6 +403,38 @@ ods html close;
 %table2chi;
 ods html;
 
+
+** Continuous nsaid stratified;
+%macro table2cont;
+%let ns = nsaid_1 nsaid_2 nsaid_3;
+%do n = 1 %to 3;
+%let count = %scan(&ns, &n);
+%put &count;
+	ods html body="C:\REB\NSAIDS melanoma AARP\Results\Table_2\Table2strat_b&n..xls" style=minimal;
+	proc tabulate data=melan_use;
+		title 'tab continuous &count';
+		class &count;
+		var exit_age entry_age bmi_cur exposure_jul_78_05 ;
+		table (exit_age entry_age bmi_cur exposure_jul_78_05 ),
+		(&count)* (mean='Mean' stddev='SD');
+	run; 
+	ods html close;
+
+	ods output Ttests=Table2T ; ods html;
+	proc ttest data=melan_use;
+		title 'ttest &count';
+		class &count;
+		var exit_age entry_age bmi_cur exposure_jul_78_05 ;
+	run;
+	ods html file="C:\REB\NSAIDS melanoma AARP\Results\Table_2\Table2strat_bp&n..xls" style=minimal;
+	proc print data= Table2T; 
+	run;
+	ods html close;
+%end;
+%mend table2cont;
+%table2cont;
+ods html;
+
 ***********************************************;
 *********		    abnet exposure	***********;
 *********		    4 categories	***********;
