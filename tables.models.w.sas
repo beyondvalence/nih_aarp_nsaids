@@ -356,41 +356,52 @@ where nsaid NE .;
 run; 
 title;
 ods html close;
-
-ods output ChiSq=Table1Chi      (keep=Table Statistic Prob rename=(prob=Chi2Pvalue)    where=(Statistic='Chi-Square'));
-ods output TrendTest=Table1Trd  (keep=Table Name1 cValue1 rename=(cValue1=TrendPvalue) where=(Name1='P2_TREND'));
-proc freq data=melan_use;
-tables nsaid_1* (
-			SEX 
-			UVRQ
-			alcohol_comb
-			SMOKE_FORMER 
-			physic_c 
-			TV_comb 
-			nap_comb 
-			marriage_comb
-			educm_comb
-			HEART
-			utilizer_m 
-			utilizer_w			
-			)
-	 		/chisq trend nocol nopercent scores=table;
-run;
-data Table1Chi; 
-	set Table1Chi (keep=Table Chi2Pvalue); run;
-data Table1Trd; 
-	set Table1Trd (keep=Table TrendPvalue); run;
-proc sort data=Table1Chi; 
-	by Table; run;
-proc sort data=Table1Trd; 
-	by Table; run;
-data Table2ap; 
-	set Table1Chi Table1Trd ; by Table; run;
-ods html file='C:\REB\NSAIDS melanoma AARP\Results\Table_2\Table2strat_ap1.xls' style=minimal;
-proc print data= Table2ap;
-	title 'print chi2 and trend for nsaid _1';
-run; 
-ods html close;
+/* create macro to obtain chi2 pval and ptrend using loops for each nsaid stratification */
+%macro table2chi;
+%let ns = nsaid_1 nsaid_2 nsaid_3;
+%do n = 1 %to 3;
+%let count = %scan(&ns, &n);
+%put &count;
+	ods output ChiSq=Table1Chi      (keep=Table Statistic Prob rename=(prob=Chi2Pvalue)    where=(Statistic='Chi-Square'));
+	ods output TrendTest=Table1Trd  (keep=Table Name1 cValue1 rename=(cValue1=TrendPvalue) where=(Name1='P2_TREND'));
+	proc freq data=melan_use;
+	tables &count* (
+				SEX 
+				UVRQ
+				alcohol_comb
+				SMOKE_FORMER 
+				physic_c 		
+				RF_PHYS_MODVIG_CURR
+				coffee
+				TV_comb 
+				nap_comb 
+				marriage_comb
+				educm_comb
+				HEART
+				utilizer_m 
+				utilizer_w			
+				)
+		 		/chisq trend nocol nopercent scores=table;
+	run;
+	data Table1Chi; 
+		set Table1Chi (keep=Table Chi2Pvalue); run;
+	data Table1Trd; 
+		set Table1Trd (keep=Table TrendPvalue); run;
+	proc sort data=Table1Chi; 
+		by Table; run;
+	proc sort data=Table1Trd; 
+		by Table; run;
+	data Table2ap; 
+		set Table1Chi Table1Trd ; by Table; run;
+	ods html file="C:\REB\NSAIDS melanoma AARP\Results\Table_2\Table2strat_ap&n..xls" style=minimal;
+	proc print data= Table2ap;
+		title "print chi2 and trend for nsaid_&n";
+	run; 
+	ods html close;
+%end;
+%mend table2chi; 
+%table2chi;
+ods html;
 
 ***********************************************;
 *********		    abnet exposure	***********;
