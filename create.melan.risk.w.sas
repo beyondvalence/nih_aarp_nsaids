@@ -53,7 +53,7 @@ data ranalysis;
 			rf_entry_dt
 			rf_entry_age
 			f_dob
-			AGECAT
+			AGECAT /*nu*/
 			racem /* for race exclusions */
 			SEX
 			raadate /* date moved outside of Registry Ascertainment Area */
@@ -62,23 +62,14 @@ data ranalysis;
 			cancer
 			cancer_dxdt
 			cancer_seergroup
-			cancer_ss_stg /* summary stage: first cancer */
 			cancer_behv /* for cancer staging */
 			cancer_siterec3
-			cancer_grade
-			skincan
-			skin_dxdt
 
-			/* for self reported cancers */
-			self_prostate
-			self_breast
-			self_colon
-			self_other
+			
+			self_other /* required for excl macro, for self reported cancers */
 
-			health
-			renal
-			DODSource
-			DOD
+			health /* required for excl macro */
+			DOD /* date of death */
 			EDUCM
 			fl_proxy /* for proxy responder exclusions */
 
@@ -101,9 +92,6 @@ data ranalysis;
 			/* add more variables here */
 			BMI_CUR					/* current bmi kg/m2*/
 			qp12b 					/* coffee drinking */
-			calories 				/* calories consumed */
-			Q45 					/* pipe-cigar smoking */
-			Q32 					/* current physical activity */
 			physic 					/* physical activity >=20 min in past 12 months */
 			physic_1518				/* physical activity >=20 min in past 12 months during ages 15-18 */
 			mped_a_bev 				/* total alcohol per day including food sources */
@@ -129,9 +117,6 @@ data ranalysis;
 			MARRIAGE
 			BMI_CUR					/* current bmi kg/m2*/
 			qp12b 					/* coffee drinking */
-			calories 				/* calories consumed */
-			Q45 					/* pipe-cigar smoking */
-			Q32 					/* current physical activity */
 			physic 					/* physical activity >=20 min in past 12 months */
 			physic_1518				/* physical activity >=20 min in past 12 months during ages 15-18 */
 			mped_a_bev 				/* total alcohol per day including food sources */
@@ -318,6 +303,11 @@ data melan_r;
 	set melan_r;
 	where excl_2_pyr=0;
 run;
+
+proc freq data= melan_r;
+	title 'RFQ counts';
+	tables sex*melanoma_c /missing;
+run;
 title;
 
 *END HERE for exclusion counts;
@@ -448,29 +438,12 @@ data melan_use;
 	else if physic_1518=5	     	then physic_1518_c=4; /* 5+ per week */
 	else if physic_1518=9		 	then physic_1518_c=9; /* missing */
 
-	** cancer grade cat;
-	cancer_g_c=9;
-	if 	    cancer_grade='1'		then cancer_g_c=0; 
-	else if cancer_grade='2'		then cancer_g_c=1;
-	else if cancer_grade='3'		then cancer_g_c=2;
-	else if cancer_grade='4'		then cancer_g_c=3;
-	else if cancer_grade='9'		then cancer_g_c=9; /* missing */
-
 	** bmi three categories;
 	bmi_c=9;
 	if      18.5<bmi_cur<25 				then bmi_c=1; /* 18.5 up to 25 */
    	else if 25<=bmi_cur<30 					then bmi_c=2; /* 25 up to 30 */
    	else if 30<=bmi_cur<60 					then bmi_c=3; /* 30 up to 60 */
 	else 										 bmi_c=9; /* missing or extreme */
-
-	** first primary cancer stage;
-	stage_c=9;
-	if      cancer_ss_stg='0' 					then stage_c=0;
-	else if cancer_ss_stg='1' 					then stage_c=1;
-	else if cancer_ss_stg in ('2','3','4','5')	then stage_c=2;
-	else if cancer_ss_stg='7'					then stage_c=3;
-	else if cancer_ss_stg in ('8','9')			then stage_c=4;
-	else  										stage_c=9;	
 
 	** coffee drinking;
 	coffee_c=9;
