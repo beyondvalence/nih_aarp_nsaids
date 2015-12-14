@@ -213,7 +213,7 @@ ods html close;
 
 ** Categorical;
 ods html body= 'C:\REB\NSAIDS melanoma AARP\Results\Table_2\Table2_nsaid.xls' style=minimal;
-title 'real table1, confounders to exposure';
+title 'actual table1, confounders to exposure';
 proc tabulate data=melan_use missing;
 class 	nsaid_bi  
 			SEX 
