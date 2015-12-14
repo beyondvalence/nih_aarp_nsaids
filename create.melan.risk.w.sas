@@ -10,7 +10,7 @@
 # note: using new rexp dataset above
 #
 # Created: April 13 2015
-# Updated: v20151209WED WTL
+# Updated: v20151214MON WTL
 # Used IMS: anchovy
 # Warning: original IMS datasets are in LINUX latin1 encoding
 *******************************************************************/
@@ -186,19 +186,6 @@ data ranalysis;
 ;
 run;
 
-data ranalysis;
-	set ranalysis;
-	****  Create exit date, exit age, and person years for First Primary Cancer;
-	** with first primary cancer as skin cancer;
-	* Chooses the earliest of 4 possible exit dates for skin cancer;
-  	exit_dt = min(mdy(12,31,2006), cancer_dxdt, dod, raadate); 
-  	exit_age = round(((exit_dt-f_dob)/365.25),.001);
-  	personyrs = round(((exit_dt-entry_dt)/365.25),.001);
-	rf_personyrs = round(((exit_dt-rf_entry_dt)/365.25),.001);
-
-	format exit_dt entry_date rf_entry_dt f_dob dod cancer_dxdt raadate Date9.;
-run;
-
 /* check point for merging the exposure and outcome data */
 ** copy and save the ranalysis dataset to the converted folder;
 proc copy noclone in=Work out=conv;
@@ -237,6 +224,16 @@ data melan_r; ** name the output of the first primary analysis include to melan_
 	if 		melanoma_c=1 	 	then melanoma_ins=1;
 	melanoma_mal=0;
 	if 		melanoma_c=2	 	then melanoma_mal=1;
+
+	****  Create exit date, exit age, and person years for First Primary Cancer;
+	** with first primary cancer as skin cancer;
+	* Chooses the earliest of 4 possible exit dates for skin cancer;
+  	exit_dt = min(mdy(12,31,2006), cancer_dxdt, dod, raadate); 
+  	exit_age = round(((exit_dt-f_dob)/365.25),.001);
+  	personyrs = round(((exit_dt-entry_dt)/365.25),.001);
+	rf_personyrs = round(((exit_dt-rf_entry_dt)/365.25),.001);
+
+	format exit_dt entry_date rf_entry_dt f_dob dod cancer_dxdt raadate Date9.;
 run;
 
 ** merge the melan_r dataset with the UV data;
@@ -365,6 +362,10 @@ run; */
 data melan_use;
 	set melan_r;
 
+	nsaid_bi=9;
+	if				rf_abnet_aspirin=0 and rf_abnet_ibuprofen=0		then nsaid_bi=0; *nsaid non-user*;	
+	else if			rf_abnet_aspirin=1| rf_abnet_ibuprofen=1		then nsaid_bi=1; *nsaid user*;
+
 	** UVR TOMS quartile;
 	UVRQ=9;
 	if      176.000 < exposure_jul_78_05 <= 186.255 	then UVRQ=1;
@@ -372,22 +373,71 @@ data melan_use;
 	else if 236.805 < exposure_jul_78_05 <= 253.731 	then UVRQ=3;
 	else if 253.731 < exposure_jul_78_05 <= 289.463		then UVRQ=4;
 
-	** birth cohort date of birth quintile; /*CHECK*/
-	birth_cohort=9;
-	if      -11931 <= F_DOB <= -11392 then birth_cohort=1;
-	else if -11392 <= F_DOB < -10316  then birth_cohort=2;
-	else if -10316 <= F_DOB < -9047   then birth_cohort=3;
-	else if -9047  <= F_DOB < -7544   then birth_cohort=4;
-	else if -7544  <= F_DOB           then birth_cohort=5;
+	alcohol_comb=9;
+	if 		mped_a_bev=0						then alcohol_comb=0; /* none */
+	else if 0<mped_a_bev<=1						then alcohol_comb=1; /* <=1 */
+	else if 1<mped_a_bev<=2 					then alcohol_comb=2; /* >1-<=2 drinks*/
+	else if 2< mped_a_bev						then alcohol_comb=3; /* 2< drinks */
+	else if	alcohol=9							then alcohol_comb=9; /* missing */
 
 	** physical exercise cat;
 	physic_c=9;
-	if      physic in (0,1)		then physic_c=0; /* rarely */
-	else if physic=2 	 		then physic_c=1; /* 1-3 per month */
-	else if physic=3 	 		then physic_c=2; /* 1-2 per week */
-	else if physic=4     		then physic_c=3; /* 3-4 per week */
-	else if physic=5     		then physic_c=4; /* 5+ per week */
-	else if physic=9	 		then physic_c=9; /* missing */
+	if      physic in (0,1)						then physic_c=0; /* rarely */
+	else if physic=2 	 						then physic_c=1; /* 1-3 per month */
+	else if physic=3 	 						then physic_c=2; /* 1-2 per week */
+	else if physic=4     						then physic_c=3; /* 3-4 per week */
+	else if physic=5     						then physic_c=4; /* 5+ per week */
+	else if physic=9	 						then physic_c=9; /* missing */
+
+	TV_comb=9;
+	if			RF_PHYS_TV in (0,1)				then TV_comb=1; *none/<1 hr/day *;
+	else if		RF_PHYS_TV=2					then TV_comb=2; *1-2 hours/day *;
+	else if		RF_PHYS_TV=3					then TV_comb=3; *3-4 hours/day *;
+	else if		RF_PHYS_TV in (4,5,6)			then TV_comb=4; *>=5 hours/day *;
+	else if		RF_PHYS_TV=9					then TV_comb=9; *unknown*;
+
+	nap_comb=9;
+	if			RF_PHYS_NAP=0					then nap_comb=0; *never naps *;
+	else if		RF_PHYS_NAP=1					then nap_comb=1; *<1 hour/day *;
+	else if		RF_PHYS_NAP in (2,3,4)			then nap_comb=2; *naps >=1 hour/day *;
+	else if		RF_PHYS_NAP=9					then nap_comb=9; *unknown/missing*;
+
+	marriage_comb=9;
+	if			MARRIAGE=1						then marriage_comb=1; *married or living as married *;
+	else if		MARRIAGE=2						then marriage_comb=2; *widowed*;
+	else if		MARRIAGE in (3,4)				then marriage_comb=3; *divorced or separated*;
+	else if		MARRIAGE=5						then marriage_comb=4; *never married*;
+	else if		MARRIAGE=9						then marriage_comb=9; *unknown*;
+
+	educm_comb=9;
+	if			EDUCM in (1,2)					then educm_comb=1; *<=11 yrs*;
+	else if		EDUCM=3							then educm_comb=2; *high school graduate*;
+	else if		EDUCM=4							then educm_comb=3; *some college*;
+	else if		EDUCM=5							then educm_comb=4; *college graduate*;
+	else if		EDUCM=9							then educm_comb=9; *unknown*;
+
+	utilizer_w=9;
+	if rf_Q44='1' | rf_Q44='2'					then utilizer_w=1; /* yes once and more mammograms in last 3 years*/
+	else if rf_Q44='0' 							then utilizer_w=0;	/* no mamograms in last 3 years */
+
+	utilizer_m=9;
+	if rf_Q15E='1'								then utilizer_m=0;
+	else if rf_Q15A='1'							then utilizer_m=1;
+	else if rf_Q15B='1'							then utilizer_m=1;
+	else if rf_Q15C='1'							then utilizer_m=1;
+	else if rf_Q15D='1'							then utilizer_m=1;
+
+
+
+/****************************************************************************************/
+
+	** birth cohort date of birth quintile; /*CHECKED, fixed again, 20151214MON WTL */
+	birth_cohort=9;
+	if      -12571 <= F_DOB < -11400  then birth_cohort=1;
+	else if -11400 <= F_DOB < -10327  then birth_cohort=2;
+	else if -10327 <= F_DOB < -9053   then birth_cohort=3;
+	else if -9053  <= F_DOB < -7543   then birth_cohort=4;
+	else if -7543  <= F_DOB <= -5267  then birth_cohort=5;
 
 	** physical exercise ages 15..18 cat;
 	physic_1518_c=9;
@@ -397,21 +447,6 @@ data melan_use;
 	else if physic_1518=4   	  	then physic_1518_c=3; /* 3-4 per week */
 	else if physic_1518=5	     	then physic_1518_c=4; /* 5+ per week */
 	else if physic_1518=9		 	then physic_1518_c=9; /* missing */
-
-	** education cat;
-	educ_c=9;
-	if 		educm in (1,2) 		then educ_c=0; /* highschool or less */
-	else if educm in (3,4)		then educ_c=1; /* some college */
-	else if educm=5				then educ_c=2; /* college and grad */
-	else if educm=9				then educ_c=9; /* missing */
-	
-	** former smoker status cat;
-	smoke_f_c=9;
-	if      bf_smoke_former=0		then smoke_f_c=0; /* never smoke */
-	else if bf_smoke_former=1		then smoke_f_c=1; /* former smoker (ever)*/
-	else if bf_smoke_former=2		then smoke_f_c=1; /* current smoker? (ever)*/
-	else if bf_smoke_former=9		then smoke_f_c=9; /* missing */
-	else 							smoke_f_c=-9;
 
 	** cancer grade cat;
 	cancer_g_c=9;
@@ -423,43 +458,10 @@ data melan_use;
 
 	** bmi three categories;
 	bmi_c=9;
-	if		0<bmi_cur<18.5		then bmi_c=0; /*underweight*/
-	else if 18.5<=bmi_cur<25 	then bmi_c=1; /* normal */
-   	else if 25<=bmi_cur<30 		then bmi_c=2; /* overweight */
-   	else if 30<=bmi_cur 		then bmi_c=3; /* obese */
-   	else if bmi_cur=. 			then bmi_c=9; /* missing */
-      	
-	** bmi three categories standalone variables;
-	bmi_c1=0;
-	bmi_c2=0;
-	bmi_c3=0;
-	bmi_cn9=0;
-
-	if      bmi_c=1 	then bmi_c1=1;
-   	else if bmi_c=2 	then bmi_c2=1;
-	else if bmi_c=3 	then bmi_c3=1;
-	else if bmi_c=9 	then bmi_cn9=1;
-
-	** bmi five categories;
-	if      18.5<=bmi_cur<25 	then bmi_fc=1; /* low bmi */
-   	else if 25<=bmi_cur<30 		then bmi_fc=2; /* mid bmi */
-   	else if 30<=bmi_cur<35 		then bmi_fc=3; /* high bmi */
-	else if 35<=bmi_cur<40 		then bmi_fc=4; /* higher bmi */
-   	else if bmi_cur>=40 		then bmi_fc=5; /* highest valid bmi */
-	else bmi_fc=9;
-
-	** bmi five categories standalone variables;
-	bmi_fc1=0;
-	bmi_fc2=0;
-	bmi_fc3=0;
-	bmi_fc4=0;
-	bmi_fc5=0;
-
-	if      bmi_fc=1 	then bmi_fc1=1;
-   	else if bmi_fc=2 	then bmi_fc2=1;
-	else if bmi_fc=3 	then bmi_fc3=1;
-	else if bmi_fc=4 	then bmi_fc4=1;
-	else if bmi_fc=5 	then bmi_fc5=1;
+	if      18.5<bmi_cur<25 				then bmi_c=1; /* 18.5 up to 25 */
+   	else if 25<=bmi_cur<30 					then bmi_c=2; /* 25 up to 30 */
+   	else if 30<=bmi_cur<60 					then bmi_c=3; /* 30 up to 60 */
+	else 										 bmi_c=9; /* missing or extreme */
 
 	** first primary cancer stage;
 	stage_c=9;
@@ -477,16 +479,6 @@ data melan_use;
 	else if qp12b='7'							then coffee_c=2; 	/* 2-3/day */
 	else if qp12b in ('8','9')					then coffee_c=3; 	/* >=4/day */
 	else if qp12b in ('E','M')					then coffee_c=9;	/* missing */
-
-	** total alcohol per day; /* CHECKME */
-	etoh_c=9;
-	if mped_a_bev=0					then etoh_c=0;		/* none */
-	else if 0   <mped_a_bev<=0.04	then etoh_c=1;		/* 0-0.04 */
-	else if 0.04<mped_a_bev<=0.1 	then etoh_c=2;		/* 0.04-0.1 */
-	else if 0.1 <mped_a_bev<=0.52	then etoh_c=3;		/* 0.1-0.52 */
-	else if 0.52<mped_a_bev<=1.12	then etoh_c=4;		/* 0.52-1.12 */
-	else if 	 mped_a_bev> 1.12	then etoh_c=5;		/* 1.12-37.44 */
-	else 		 					etoh_c=9;			/* missing */
 
 	** (rf) physical exercise ages 15..18 cat;
 	rf_physic_1518_c=9;
@@ -508,30 +500,12 @@ data melan_use;
 	else if rf_phys_modvig_curr=9			then rf_physic_c=9; /* missing */
 	else 									rf_physic_c=9;
 
-	alcohol=9;
-	if mped_a_bev=0							then alcohol=0;		/* none */
-	else if 0<mped_a_bev<=1					then alcohol=1;		/* 0-1 */
-	else if 1<mped_a_bev<=2 				then alcohol=2;		/* >1-<=2 drinks*/
-	else if 2< mped_a_bev<=3				then alcohol=3;		/* >2-<=3 drinks */
-	else if 3<mped_a_bev					then alcohol=4;		/* >3 drinks */
-
 	/* checked 20151201TUE wtl */
 	/*utilizer_m=-9; 
 	if rf_Q15A='1' | rf_Q15B='1' | 
 		rf_Q15C='1' | rf_Q15D='1' 			then utilizer_m=1;
 	else if rf_Q15E='1'						then utilizer_m=0; 
 	else utilizer_m=0;*/
-
-	utilizer_m=9;
-	if rf_Q15E='1'			then utilizer_m=0;
-	else if rf_Q15A='1'		then utilizer_m=1;
-	else if rf_Q15B='1'		then utilizer_m=1;
-	else if rf_Q15C='1'		then utilizer_m=1;
-	else if rf_Q15D='1'		then utilizer_m=1;
-
-	utilizer_w=9;
-	if rf_Q44='1' | rf_Q44='2'				then utilizer_w=1; /* yes once and more mammograms in last 3 years*/
-	else utilizer_w=0;
 
 	aspirin_collapse=9;
 	if RF_ABNET_CAT_ASPIRIN=0				then aspirin_collapse=0; /* no use */
@@ -542,11 +516,6 @@ data melan_use;
 	if RF_ABNET_CAT_IBUPROFEN=0				then ibu_collapse=0; /* no use */
 	else if RF_ABNET_CAT_IBUPROFEN=1		then ibu_collapse=1; /* monthly use */
 	else if RF_ABNET_CAT_IBUPROFEN>=2		then ibu_collapse=2; /* >monthly use */
-run;
-
-** check melanoma variables;
-proc freq data=melan_use;
-	table rf_Q44*utilizer_w utilizer_m /missing;
 run;
 
 ** add labels;
@@ -607,44 +576,6 @@ run;
 data melan_use;
 	set melan_use;
 
-	educm_comb=9;
-	if			EDUCM in (1,2)					then educm_comb=1; *<=11 yrs*;
-	else if		EDUCM=3							then educm_comb=2; *high school graduate*;
-	else if		EDUCM=4							then educm_comb=3; *some college*;
-	else if		EDUCM=5							then educm_comb=4; *college graduate*;
-	else if		EDUCM=9							then educm_comb=9; *unknown*;
-
-	marriage_comb=9;
-	if			MARRIAGE=1						then marriage_comb=1; *married or living as married *;
-	else if		MARRIAGE=2						then marriage_comb=2; *widowed*;
-	else if		MARRIAGE in (3,4)				then marriage_comb=3; *divorced or separated*;
-	else if		MARRIAGE=5						then marriage_comb=4; *never married*;
-	else if		MARRIAGE=9						then marriage_comb=9; *unknown*;
-
-	alcohol_comb=9;
-	if 		mped_a_bev=0						then alcohol_comb=0; /* none */
-	else if 0<mped_a_bev<=1						then alcohol_comb=1; /* <=1 */
-	else if 1<mped_a_bev<=2 					then alcohol_comb=2; /* >1-<=2 drinks*/
-	else if 2< mped_a_bev						then alcohol_comb=3; /* 2< drinks */
-	else if	alcohol=9							then alcohol_comb=9; /* missing */
-
-	TV_comb=9;
-	if			RF_PHYS_TV in (0,1)				then TV_comb=1; *none/<1 hr/day *;
-	else if		RF_PHYS_TV=2					then TV_comb=2; *1-2 hours/day *;
-	else if		RF_PHYS_TV=3					then TV_comb=3; *3-4 hours/day *;
-	else if		RF_PHYS_TV in (4,5,6)			then TV_comb=4; *>=5 hours/day *;
-	else if		RF_PHYS_TV=9					then TV_comb=9; *unknown*;
-
-	nap_comb=9;
-	if			RF_PHYS_NAP=0					then nap_comb=0; *never naps *;
-	else if		RF_PHYS_NAP=1					then nap_comb=1; *<1 hour/day *;
-	else if		RF_PHYS_NAP in (2,3,4)			then nap_comb=2; *naps >=1 hour/day *;
-	else if		RF_PHYS_NAP=9					then nap_comb=9; *unknown/missing*;
-
-	nsaid_bi=9;
-	if				rf_abnet_aspirin=0 and rf_abnet_ibuprofen=0				then nsaid_bi=0; *nsaid non-user*;	
-	else if			rf_abnet_aspirin=1| rf_abnet_ibuprofen=1				then nsaid_bi=1; *nsaid user*;
-
 	nsaid=9;
 	if			rf_abnet_cat_aspirin=0 and rf_abnet_cat_ibuprofen=0			then nsaid=0; *nsaid non-user*;
 
@@ -674,10 +605,8 @@ data melan_use;
 	if nsaid_3 in (1,2)				then nsaid_3=0;
 
 	utilizer=9; *combine utilizer_m (colonoscopy) and utilizer_w (mammogram) into single variable;
-	if			utilizer_m=1 and utilizer_w=1		then utilizer=1; *both yes;
-	if			utilizer_m=1 and utilizer_w=0		then utilizer=1; *colonoscopy yes, mammogram no = utilizer yes;
-	if			utilizer_m=0 and utilizer_w=1		then utilizer=1; *colonoscopy no, mammogram yes = utilizer yes;
-	if			utilizer_m=0 and utilizer_w=0		then utilizer=0; *both no = utilizer no;
+	if			utilizer_m=1 | utilizer_w=1			then utilizer=1; *either yes;
+	else if		utilizer_m=0 and utilizer_w=0		then utilizer=0; *both no = utilizer no;
 run;
 
 proc copy noclone in=Work out=conv;
