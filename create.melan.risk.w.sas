@@ -383,8 +383,8 @@ data melan_use;
 
 	/* education attained */
 	educm_comb=9;
-	if			EDUCM in (1,2)					then educm_comb=1; *<=11 yrs*;
-	else if		EDUCM=3							then educm_comb=2; *high school graduate*;
+	if			EDUCM in (1,2)					then educm_comb=1; *high school graduate*;
+	else if		EDUCM=3							then educm_comb=2; *post high school*;
 	else if		EDUCM=4							then educm_comb=3; *some college*;
 	else if		EDUCM=5							then educm_comb=4; *college graduate*;
 	else if		EDUCM=9							then educm_comb=9; *unknown*;
@@ -508,14 +508,26 @@ proc datasets library=work;
 	** set variable value labels;
 	format	/* for outcomes */
 			melanoma_c melanfmt. melanoma_agg melanomafmt. 
-
-			/*educ_c educfmt.*/ race_c racefmt. 
-			physic_c physic_1518_c physicfmt. smoke_f_c smokingfmt. 
-			bmi_fc bmifmt. agecat agecatfmt.
+			
+			bmi_c bmifmt. agecat agecatfmt.
 			smoke_former smokeformerfmt. smoke_quit smokequitfmt. smoke_dose smokedosefmt. 
 			smoke_quit_dose smokequitdosefmt.
-			coffee_c coffeefmt. /*etoh_c etohfmt.*/ rf_abnet_aspirin rf_abnet_aspirinfmt.
-			rf_abnet_ibuprofen rf_abnet_ibuprofenfmt. rf_abnet_cat_aspirin rf_abnet_cat_aspirinfmt.
+			coffee_c coffeefmt. 
+
+			sex sexfmt.
+			UVRQ uvrqfmt.
+			alcohol_comb alcoholfmt.
+			physic_c physicfmt. physic rfphysicfmt.
+			tv_comb tvfmt. RF_PHYS_TV rftvfmt.
+			nap_comb napfmt. RF_PHYS_NAP rfnapfmt.
+			marriage_comb marriagefmt. MARRIAGE rfmarriagefmt.
+			educm_comb educfmt. EDUCM rfeducfmt.
+			utilizer_w utilizerwfmt. rf_Q44 rfq44fmt.
+			utilizer_m utilizermfmt.
+			rf_Q15A rfq15afmt. rf_Q15B rfq15bfmt. rf_Q15C rfq15cfmt. rf_Q15D rfq15dfmt. rf_Q15E rfq15efmt.
+			rf_abnet_aspirin rf_abnet_aspirinfmt.
+			rf_abnet_ibuprofen rf_abnet_ibuprofenfmt. 
+			rf_abnet_cat_aspirin rf_abnet_cat_aspirinfmt.
             rf_abnet_cat_ibuprofen rf_abnet_cat_ibuprofenfmt.
 			rf_physic_1518_c rfphysicfmt. rf_physic_c rfphysicfmt.
 	;
