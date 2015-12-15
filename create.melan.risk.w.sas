@@ -306,29 +306,12 @@ run;
 
 proc freq data= melan_r;
 	title 'RFQ counts';
-	tables sex*melanoma_c /missing;
+	tables melanoma_c*sex /missing;
 run;
 title;
 
 *END HERE for exclusion counts;
 
-** find the cutoffs for the percentiles of UVR- exposure_jul_78_05 mped_a_bev;
-/*proc univariate data=conv.melan_r;
-	var F_DOB; 
-	output 	out=bla 
-			pctlpts= 10 20 25 30 40 50 60 70 75 80 90 
-			pctlpre=p;
-run;
-proc print data=bla; 
-	title 'DOB exposure percentiles';
-run; 
-
-
-	** need to change the exposure percentiles after exclusions;
-	** birth cohort;
-	** p10     p20     p25     p30     p40     p50     p60     p70     p75     p80   p90 ;
-	** -11931  -11392  -11113  -10843  -10316  -9711   -9047   -8327   -7950   -7544 -6578;
-*/
 ** find the cutoffs for the percentiles of UVR- exposure_jul_78_05 mped_a_bev;
 /*proc univariate data=conv.melan_r;
 	var exposure_jul_78_05; 
@@ -344,14 +327,16 @@ run; */
 	** uvr exposure;
 	** Quartiles: 176.095 <= Q1 <= 186.255 < Q2 <= 236.805 < Q3 <= 253.731 < Q4 <= 289.463
 
-
 /******************************************************************************************/
 ** create the UVR, and confounder variables by quartile/categories;
 ** for both baseline and riskfactor questionnaire variables;
 /* cat=categorical ************************************************************************/
+
 data melan_use;
 	set melan_r;
-
+	
+	/* NSAID user NO-YES */
+	** from Christian Abnet recode;
 	nsaid_bi=9;
 	if				rf_abnet_aspirin=0 and rf_abnet_ibuprofen=0		then nsaid_bi=0; *nsaid non-user*;	
 	else if			rf_abnet_aspirin=1| rf_abnet_ibuprofen=1		then nsaid_bi=1; *nsaid user*;
@@ -363,6 +348,7 @@ data melan_use;
 	else if 236.805 < exposure_jul_78_05 <= 253.731 	then UVRQ=3;
 	else if 253.731 < exposure_jul_78_05 <= 289.463		then UVRQ=4;
 
+	/* alcohol consumption */
 	alcohol_comb=9;
 	if 		mped_a_bev=0						then alcohol_comb=0; /* none */
 	else if 0<mped_a_bev<=1						then alcohol_comb=1; /* <=1 */
@@ -379,6 +365,7 @@ data melan_use;
 	else if physic=5     						then physic_c=4; /* 5+ per week */
 	else if physic=9	 						then physic_c=9; /* missing */
 
+	/* Television watched */
 	TV_comb=9;
 	if			RF_PHYS_TV in (0,1)				then TV_comb=1; *none/<1 hr/day *;
 	else if		RF_PHYS_TV=2					then TV_comb=2; *1-2 hours/day *;
@@ -386,12 +373,14 @@ data melan_use;
 	else if		RF_PHYS_TV in (4,5,6)			then TV_comb=4; *>=5 hours/day *;
 	else if		RF_PHYS_TV=9					then TV_comb=9; *unknown*;
 
+	/* napping duration */
 	nap_comb=9;
 	if			RF_PHYS_NAP=0					then nap_comb=0; *never naps *;
 	else if		RF_PHYS_NAP=1					then nap_comb=1; *<1 hour/day *;
 	else if		RF_PHYS_NAP in (2,3,4)			then nap_comb=2; *naps >=1 hour/day *;
 	else if		RF_PHYS_NAP=9					then nap_comb=9; *unknown/missing*;
 
+	/* marriage status */
 	marriage_comb=9;
 	if			MARRIAGE=1						then marriage_comb=1; *married or living as married *;
 	else if		MARRIAGE=2						then marriage_comb=2; *widowed*;
@@ -399,6 +388,7 @@ data melan_use;
 	else if		MARRIAGE=5						then marriage_comb=4; *never married*;
 	else if		MARRIAGE=9						then marriage_comb=9; *unknown*;
 
+	/* education attained */
 	educm_comb=9;
 	if			EDUCM in (1,2)					then educm_comb=1; *<=11 yrs*;
 	else if		EDUCM=3							then educm_comb=2; *high school graduate*;
@@ -406,18 +396,18 @@ data melan_use;
 	else if		EDUCM=5							then educm_comb=4; *college graduate*;
 	else if		EDUCM=9							then educm_comb=9; *unknown*;
 
+	/* hospital utilization-mammograms */
 	utilizer_w=9;
 	if rf_Q44='1' | rf_Q44='2'					then utilizer_w=1; /* yes once and more mammograms in last 3 years*/
 	else if rf_Q44='0' 							then utilizer_w=0;	/* no mamograms in last 3 years */
-
+	
+	/* hospital utilization-colonoscopy, sigmoidoscopy, proctoscopy in past 3 years */
 	utilizer_m=9;
 	if rf_Q15E='1'								then utilizer_m=0;
 	else if rf_Q15A='1'							then utilizer_m=1;
 	else if rf_Q15B='1'							then utilizer_m=1;
 	else if rf_Q15C='1'							then utilizer_m=1;
 	else if rf_Q15D='1'							then utilizer_m=1;
-
-
 
 /****************************************************************************************/
 
@@ -505,21 +495,17 @@ proc datasets library=work;
 
 			/* for baseline */
 			uvrq = "TOMS UVR measures in quartiles"
-			educ_c = "education level"
+			/*educ_c = "education level"*/
 			physic_c = "level of physical activity"	
-			cancer_g_c = "cancer grade"
 			bmi_c = "bmi, rough"
-			bmi_fc = "bmi, 5"
-			stage_c = "stage of first primary cancer"
-			physic_1518_c = "level of physical activity at ages 15-18 (base)"
+			physic_c = "physical activity in past 12 months"
 
-			smoke_f_c = "ever smoking status"
 			smoke_former ="Smoking Status"
 			smoke_quit = 'Quit smoking status'
 			smoke_dose = 'Smoking dose'
 			smoke_quit_dose = 'Smoking status and dose combined'
 			coffee_c = 'Coffee drinking'
-			etoh_c = 'Total alchohol per day including food sources'
+			alcohol_comb = 'Total alchohol per day including food sources'
 
 			/* for riskfactor */
 			rf_physic_1518_c = "level of physical activity at ages 15-18 (rf)"
@@ -530,12 +516,12 @@ proc datasets library=work;
 	format	/* for outcomes */
 			melanoma_c melanfmt. melanoma_agg melanomafmt. 
 
-			educ_c educfmt. race_c racefmt. 
+			/*educ_c educfmt.*/ race_c racefmt. 
 			physic_c physic_1518_c physicfmt. smoke_f_c smokingfmt. 
 			bmi_fc bmifmt. agecat agecatfmt.
 			smoke_former smokeformerfmt. smoke_quit smokequitfmt. smoke_dose smokedosefmt. 
 			smoke_quit_dose smokequitdosefmt.
-			coffee_c coffeefmt. etoh_c etohfmt. rf_abnet_aspirin rf_abnet_aspirinfmt.
+			coffee_c coffeefmt. /*etoh_c etohfmt.*/ rf_abnet_aspirin rf_abnet_aspirinfmt.
 			rf_abnet_ibuprofen rf_abnet_ibuprofenfmt. rf_abnet_cat_aspirin rf_abnet_cat_aspirinfmt.
             rf_abnet_cat_ibuprofen rf_abnet_cat_ibuprofenfmt.
 			rf_physic_1518_c rfphysicfmt. rf_physic_c rfphysicfmt.
