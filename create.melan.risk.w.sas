@@ -89,13 +89,6 @@ data ranalysis;
 			rel_1d_cancer			/* family history of cancer - any 1st degree relatives ever diagnosed with cancer (nnmsc)*/
 			/*FAM_CANCER				 Any blood relatives diagnosed with cancer?*/
 
-			/* add more variables here */
-			BMI_CUR					/* current bmi kg/m2*/
-			qp12b 					/* coffee drinking */
-			physic 					/* physical activity >=20 min in past 12 months */
-			physic_1518				/* physical activity >=20 min in past 12 months during ages 15-18 */
-			mped_a_bev 				/* total alcohol per day including food sources */
-
 		/******** riskfactor characteristics variables ********/
 			rf_agecat
 			rf_1d_cancer
@@ -346,7 +339,7 @@ data melan_use;
 	if      176.000 < exposure_jul_78_05 <= 186.255 	then UVRQ=1;
 	else if 186.255 < exposure_jul_78_05 <= 236.805 	then UVRQ=2;
 	else if 236.805 < exposure_jul_78_05 <= 253.731 	then UVRQ=3;
-	else if 253.731 < exposure_jul_78_05 <= 289.463		then UVRQ=4;
+	else if 253.731 < exposure_jul_78_05 < 290			then UVRQ=4;
 
 	/* alcohol consumption */
 	alcohol_comb=9;
