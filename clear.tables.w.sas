@@ -27,6 +27,7 @@ proc freq data=melan_use;
 	/missing nocol norow nopercent;
 run;
 proc freq data=melan_use;
+	title2 'Had any procedure on colon or rectum in past 3 years?';
 	tables
 		utilizer_m*rf_Q15A*rf_Q15B*rf_Q15C*rf_Q15D*rf_Q15E
 	/missing nocol norow nopercent list;
