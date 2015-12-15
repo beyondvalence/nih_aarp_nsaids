@@ -1,0 +1,21 @@
+proc freq data=melan_use;
+	tables
+		SEX 
+		UVRQ
+		RF_ABNET_ASPIRIN 
+		RF_ABNET_CAT_ASPIRIN 
+		RF_ABNET_IBUPROFEN 
+		RF_ABNET_CAT_IBUPROFEN
+		alcohol_comb
+		SMOKE_FORMER 
+		physic_c 
+		RF_PHYS_MODVIG_CURR
+		TV_comb 
+		nap_comb 
+		marriage_comb
+		educm_comb
+		HEART
+		utilizer_w 
+		utilizer_m 
+	/missing;
+run;
