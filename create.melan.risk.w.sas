@@ -522,9 +522,9 @@ proc datasets library=work;
 			nap_comb napfmt. RF_PHYS_NAP rfnapfmt.
 			marriage_comb marriagefmt. MARRIAGE rfmarriagefmt.
 			educm_comb educfmt. EDUCM rfeducfmt.
-			utilizer_w utilizerwfmt. rf_Q44 rfq44fmt.
+			utilizer_w utilizerwfmt. rf_Q44 $rfq44fmt.
 			utilizer_m utilizermfmt.
-			rf_Q15A rfq15afmt. rf_Q15B rfq15bfmt. rf_Q15C rfq15cfmt. rf_Q15D rfq15dfmt. rf_Q15E rfq15efmt.
+			rf_Q15A $rfq15afmt. rf_Q15B $rfq15bfmt. rf_Q15C $rfq15cfmt. rf_Q15D $rfq15dfmt. rf_Q15E $rfq15efmt.
 			rf_abnet_aspirin rf_abnet_aspirinfmt.
 			rf_abnet_ibuprofen rf_abnet_ibuprofenfmt. 
 			rf_abnet_cat_aspirin rf_abnet_cat_aspirinfmt.
