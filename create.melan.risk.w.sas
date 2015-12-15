@@ -332,7 +332,7 @@ data melan_use;
 	** from Christian Abnet recode;
 	nsaid_bi=9;
 	if				rf_abnet_aspirin=0 and rf_abnet_ibuprofen=0		then nsaid_bi=0; *nsaid non-user*;	
-	else if			rf_abnet_aspirin=1| rf_abnet_ibuprofen=1		then nsaid_bi=1; *nsaid user*;
+	else if			rf_abnet_aspirin=1 | rf_abnet_ibuprofen=1		then nsaid_bi=1; *nsaid user*;
 
 	** UVR TOMS quartile;
 	UVRQ=9;
@@ -472,6 +472,40 @@ data melan_use;
 	if RF_ABNET_CAT_IBUPROFEN=0				then ibu_collapse=0; /* no use */
 	else if RF_ABNET_CAT_IBUPROFEN=1		then ibu_collapse=1; /* monthly use */
 	else if RF_ABNET_CAT_IBUPROFEN>=2		then ibu_collapse=2; /* >monthly use */
+
+	nsaid=9;
+	if			rf_abnet_cat_aspirin=0 and rf_abnet_cat_ibuprofen=0			then nsaid=0; *nsaid non-user*;
+
+	else if		rf_abnet_cat_aspirin=1 and rf_abnet_cat_ibuprofen=0			then nsaid=1; *nsaid monthly user*;
+	else if		rf_abnet_cat_aspirin=0 and rf_abnet_cat_ibuprofen=1			then nsaid=1; *nsaid monthly user*;
+	else if		rf_abnet_cat_aspirin=1 and rf_abnet_cat_ibuprofen=1			then nsaid=1; *nsaid monthly user*;
+
+	else if		rf_abnet_cat_aspirin=2 and rf_abnet_cat_ibuprofen=0			then nsaid=2; *nsaid weekly user*;
+	else if		rf_abnet_cat_aspirin=2 and rf_abnet_cat_ibuprofen=1			then nsaid=2; *nsaid weekly user*;
+	else if		rf_abnet_cat_aspirin=0 and rf_abnet_cat_ibuprofen=2			then nsaid=2; *nsaid weekly user*;
+	else if		rf_abnet_cat_aspirin=1 and rf_abnet_cat_ibuprofen=2			then nsaid=2; *nsaid weekly user*;
+	else if		rf_abnet_cat_aspirin=2 and rf_abnet_cat_ibuprofen=2			then nsaid=2; *nsaid weekly user*;
+
+	else if		rf_abnet_cat_aspirin=3 and rf_abnet_cat_ibuprofen=0			then nsaid=3; *nsaid daily user*;
+	else if		rf_abnet_cat_aspirin=3 and rf_abnet_cat_ibuprofen=1			then nsaid=3; *nsaid daily user*;
+	else if		rf_abnet_cat_aspirin=3 and rf_abnet_cat_ibuprofen=2			then nsaid=3; *nsaid daily user*;
+	else if		rf_abnet_cat_aspirin=0 and rf_abnet_cat_ibuprofen=3			then nsaid=3; *nsaid daily user*;
+	else if		rf_abnet_cat_aspirin=1 and rf_abnet_cat_ibuprofen=3			then nsaid=3; *nsaid daily user*;
+	else if		rf_abnet_cat_aspirin=2 and rf_abnet_cat_ibuprofen=3			then nsaid=3; *nsaid daily user*;
+	else if		rf_abnet_cat_aspirin=3 and rf_abnet_cat_ibuprofen=3			then nsaid=3; *nsaid daily user*;
+
+	nsaid_1=nsaid;
+	if nsaid_1 in (2,3)				then nsaid_1=0;
+	nsaid_2=nsaid;
+	if nsaid_2 in (1,3)				then nsaid_2=0;
+	else if nsaid_2=2				then nsaid_2=1;
+	nsaid_3=nsaid;
+	if nsaid_3 in (1,2)				then nsaid_3=0;
+	else if nsaid_3=3				then nsaid_2=1;
+
+	utilizer=9; *combine utilizer_m (colonoscopy) and utilizer_w (mammogram) into single variable;
+	if			utilizer_m=1 | utilizer_w=1			then utilizer=1; *either yes;
+	else if		utilizer_m=0 and utilizer_w=0		then utilizer=0; *both no = utilizer no;
 run;
 
 ** add labels;
@@ -504,6 +538,8 @@ proc datasets library=work;
 			rf_physic_1518_c = "level of physical activity at ages 15-18 (rf)"
 			rf_physic_c = "Times engaged in moderate-vigorous physical activity"
 			rf_1d_cancer = "Family History of Cancer"
+			nsaid= "NSAID user frequency"
+			nsaid_bi="NSAID user yes/no"
 	;
 	** set variable value labels;
 	format	/* for outcomes */
@@ -517,11 +553,12 @@ proc datasets library=work;
 			sex sexfmt.
 			UVRQ uvrqfmt.
 			alcohol_comb alcoholfmt.
-			physic_c physicfmt. physic rfphysicfmt.
+			physic_c physicfmt. physic physiccfmt.
 			tv_comb tvfmt. RF_PHYS_TV rftvfmt.
 			nap_comb napfmt. RF_PHYS_NAP rfnapfmt.
 			marriage_comb marriagefmt. MARRIAGE rfmarriagefmt.
 			educm_comb educfmt. EDUCM rfeducfmt.
+			heart heartfmt.
 			utilizer_w utilizerwfmt. rf_Q44 $rfq44fmt.
 			utilizer_m utilizermfmt.
 			rf_Q15A $rfq15afmt. rf_Q15B $rfq15bfmt. rf_Q15C $rfq15cfmt. rf_Q15D $rfq15dfmt. rf_Q15E $rfq15efmt.
@@ -529,48 +566,12 @@ proc datasets library=work;
 			rf_abnet_ibuprofen rf_abnet_ibuprofenfmt. 
 			rf_abnet_cat_aspirin rf_abnet_cat_aspirinfmt.
             rf_abnet_cat_ibuprofen rf_abnet_cat_ibuprofenfmt.
-			rf_physic_1518_c rfphysicfmt. rf_physic_c rfphysicfmt.
+			aspirin_collapse aspirin_collapsefmt.
+			ibu_collapse ibu_collapsefmt.
+			nsaid_bi nsaidbifmt. nsaid nsaidfmt.
+			rf_physic_c rfphysicfmt. RF_PHYS_MODVIG_CURR rfphysiccfmt.
+			coffee_c coffeefmt. qp12b $qp12bfmt.
 	;
-run;
-
-***************************************;
-**** Combine variables for Table 1 ****;
-***************************************;
-
-data melan_use;
-	set melan_use;
-
-	nsaid=9;
-	if			rf_abnet_cat_aspirin=0 and rf_abnet_cat_ibuprofen=0			then nsaid=0; *nsaid non-user*;
-
-	else if		rf_abnet_cat_aspirin=1 and rf_abnet_cat_ibuprofen=0			then nsaid=1; *nsaid monthly user*;
-	else if		rf_abnet_cat_aspirin=0 and rf_abnet_cat_ibuprofen=1			then nsaid=1; *nsaid monthly user*;
-	else if		rf_abnet_cat_aspirin=1 and rf_abnet_cat_ibuprofen=1			then nsaid=1; *nsaid monthly user*;
-
-	else if		rf_abnet_cat_aspirin=2 and rf_abnet_cat_ibuprofen=0			then nsaid=2; *nsaid weekly user*;
-	else if		rf_abnet_cat_aspirin=2 and rf_abnet_cat_ibuprofen=1			then nsaid=2; *nsaid weekly user*;
-	else if		rf_abnet_cat_aspirin=0 and rf_abnet_cat_ibuprofen=2			then nsaid=2; *nsaid weekly user*;
-	else if		rf_abnet_cat_aspirin=1 and rf_abnet_cat_ibuprofen=2			then nsaid=2; *nsaid weekly user*;
-	else if		rf_abnet_cat_aspirin=2 and rf_abnet_cat_ibuprofen=2			then nsaid=2; *nsaid weekly user*;
-
-	else if		rf_abnet_cat_aspirin=3 and rf_abnet_cat_ibuprofen=0			then nsaid=3; *nsaid daily user*;
-	else if		rf_abnet_cat_aspirin=3 and rf_abnet_cat_ibuprofen=1			then nsaid=3; *nsaid daily user*;
-	else if		rf_abnet_cat_aspirin=3 and rf_abnet_cat_ibuprofen=2			then nsaid=3; *nsaid daily user*;
-	else if		rf_abnet_cat_aspirin=0 and rf_abnet_cat_ibuprofen=3			then nsaid=3; *nsaid daily user*;
-	else if		rf_abnet_cat_aspirin=1 and rf_abnet_cat_ibuprofen=3			then nsaid=3; *nsaid daily user*;
-	else if		rf_abnet_cat_aspirin=2 and rf_abnet_cat_ibuprofen=3			then nsaid=3; *nsaid daily user*;
-	else if		rf_abnet_cat_aspirin=3 and rf_abnet_cat_ibuprofen=3			then nsaid=3; *nsaid daily user*;
-
-	nsaid_1=nsaid;
-	if nsaid_1 in (2,3)				then nsaid_1=0;
-	nsaid_2=nsaid;
-	if nsaid_2 in (1,3)				then nsaid_2=0;
-	nsaid_3=nsaid;
-	if nsaid_3 in (1,2)				then nsaid_3=0;
-
-	utilizer=9; *combine utilizer_m (colonoscopy) and utilizer_w (mammogram) into single variable;
-	if			utilizer_m=1 | utilizer_w=1			then utilizer=1; *either yes;
-	else if		utilizer_m=0 and utilizer_w=0		then utilizer=0; *both no = utilizer no;
 run;
 
 proc copy noclone in=Work out=conv;

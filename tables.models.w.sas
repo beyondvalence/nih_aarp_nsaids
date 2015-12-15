@@ -221,6 +221,7 @@ class 	nsaid_bi
 			alcohol_comb
 			SMOKE_FORMER 
 			physic_c 
+			coffee_c
 			TV_comb 
 			nap_comb 
 			marriage_comb
@@ -235,6 +236,7 @@ table
 			alcohol_comb
 			SMOKE_FORMER 
 			physic_c 
+			coffee_c
 			TV_comb 
 			nap_comb 
 			marriage_comb
@@ -259,6 +261,7 @@ tables nsaid_bi* (
 			alcohol_comb
 			SMOKE_FORMER 
 			physic_c 
+			coffee_c
 			TV_comb 
 			nap_comb 
 			marriage_comb
@@ -268,6 +271,7 @@ tables nsaid_bi* (
 			utilizer_w			
 			)
 	 		/chisq trend nocol nopercent scores=table;
+	where nsaid_bi NE 9;
 run;
 data Table1Chi; 
 	set Table1Chi (keep=Table Chi2Pvalue); run;
@@ -325,7 +329,7 @@ class 	nsaid
 		SMOKE_FORMER 
 		physic_c 
 		RF_PHYS_MODVIG_CURR
-		coffee
+		coffee_c
 		TV_comb 
 		nap_comb 
 		marriage_comb
@@ -342,7 +346,7 @@ table
 		SMOKE_FORMER 
 		physic_c 
 		RF_PHYS_MODVIG_CURR
-		coffee
+		coffee_c
 		TV_comb 
 		nap_comb 
 		marriage_comb
