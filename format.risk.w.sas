@@ -13,34 +13,112 @@ proc format;
 									2='Malignant melanoma';
 	value melanomafmt 				0='No melanoma' 
 									1='Melanoma';
+	value nsaidbifmt				9='Missing'
+									0='No reported NSAID use'
+									1='Reported NSAID use';
+	value nsaidfmt					9='Missing'
+									0='No reported NSAID use'
+									1='Monthly NSAID user'
+									2='Weekly NSAID user'
+									3='Daily NSAID user';
 	value agecatfmt 				1='<55 years' 
 									2='55-59 years' 
 									3='60-64 years' 
 									4='65-69 years' 
 									5='>=70 years';
-	value racefmt 					-9='Missing' 
-									0='Non-Hispanic white' 
-									1='Non-Hispanic black' 
-									2='Hispanic, Asian, PI, AIAN';
-	value educfmt 					-9='Missing' 
-									0='High School or less' 
-									1='Some college' 
-									2='College or graduate school';
-	value bmifmt 					-9='Missing' 
+	value uvrqfmt					9='Missing'
+									1='1. >176 and <=186.255'
+									2='2. >186.255 and <=236.805'
+									3='3. >236.805 and <=253.731'
+									4='4. >253.731 and <290';
+	value alcoholfmt				9='Missing'
+									0='1. None'
+									1='2. <=1'
+									2='3. >1 and <=2 drinks'
+									3='4. >=3 drinks';
+	value physicfmt 				9='Missing' 
+									0='1. Never/rarely' 
+									1='2. 1-3 per month' 
+									2='3. 1-2 per week' 
+									3='4. 3-4 per week' 
+									4='5. 5+ per week';	
+	value rfphysicfmt 				9='Missing' 
+									0='Never' 
+									1='Rarely' 
+									2='1-3 per month' 
+									3='1-2 per week' 
+									4='3-4 per week' 
+									5='5+ per week';
+	value tvfmt						9='Missing'
+									1='1. <1 hr/day'
+									2='2. 1-2 hr/day'
+									3='3. 3-4 hr/day'
+									4='4. >=5 hr/day';
+	value rftvfmt					9='Missing'
+									0='None'
+									1='<1 hr/day'
+									2='1-2 hr/day'
+									3='3-4 hr/day'
+									4='5-6 hr/day'
+									5='7-8 hr/day'
+									6='9+ hr/day';
+	value napfmt					9='Missing'
+									0='1. Never nap'
+									1='2. <1 hr/day'
+									2='3. >=1 hr/day';
+	value rfnapfmt					9='Missing'
+									0='None'
+									1='<1'
+									2='1-2'
+									3='3-4'
+									4='5-6';
+	value marriagefmt				9='Missing'
+									1='1. Married'
+									2='2. Widowed'
+									3='3. Divorced or separated'
+									4='4. Never married';
+	value rfmarriagefmt				9='Missing'
+									1='Married'
+									2='Widowed'
+									3='Divorced'
+									4='Separated'
+									5='Never married';
+	value educfmt 					9='Missing' 
+									1='1. High school graduate' 
+									2='2. Post-high school'
+									3='3. Some college' 
+									4='4. College or graduate school';
+	value rfeducfmt					9='Missing'
+									1='Less than 11 years'
+									2='High school'
+									3='Post-high school'
+									4='Some college'
+									5='College and post graduate';
+	value utilizerwfmt				9='Missing'
+									0='No mammogram in past 3 years'
+									1='Yes mammogram(s) in past 3 years';
+	value $rfq44fmt					'0'='No mammograms'
+									'1'='Yes one mammogram'
+									'2'='Yes more than one mammogram';
+	value utilizermfmt				9='Missing'
+									0='No mammogram in past 3 years'
+									1='Yes mammogram(s) in past 3 years';
+	value $rfq15afmt 				'0'='No' 
+									'1'='Sigmoidoscopy';
+	value $rfq15bfmt 				'0'='No' 
+									'1'='Colonoscopy';
+	value $rfq15cfmt 				'0'='No' 
+									'1'='Proctoscopy';
+	value $rfq15dfmt 				'0'='No' 
+									'1'='Unknown type';
+	value $rfq15efmt 				'0'='NA' 
+									'1'='None';
+	value bmifmt 					9='Missing' 
 									1='18.5 to 25' 
 									2='25 to 30' 
 									3='30 to 35' 
 									4='35 to 40' 
 									5='>=40';
-	value physicfmt 				-9='Missing' 
-									0='Rarely' 
-									1='1-3 per month' 
-									2='1-2 per week' 
-									3='3-4 per week' 
-									4='5+ per week';
-	value smokingfmt 				-9='Missing' 
-									0='Never smoked' 
-									1='Ever smoke';
 
 /* :::risk factors::: */
 	** smoking;	
@@ -69,19 +147,12 @@ proc format;
 									2='quit, >20 cigs/day'
 									3='Currently smoking, <=20 cigs/day' 
 									4='Currently smoking, >20 cigs/day';
-	value coffeefmt 				-9='Missing' 
+	value coffeefmt 				9='Missing' 
 									0='None' 
 									1='<=1 cup/day' 
 									2='2-3 cups/day' 
 									3='>=4 cups/day';
-	value etohfmt 					-9='Missing' 
-									0='0' 
-									1='>0 to 0.04' 
-									2='>0.04 to 0.1' 
-									3='>0.1 to 0.52' 
-									4='>0.52 to 1.12' 
-									5='>1.12'; /* might want to change */
-	value rfphysicfmt 				-9='Missing' 
+	value rfphysicfmt 				9='Missing' 
 									0='Never-rarely' 
 									1='<1 hr/week' 
 									2='1-3 hr/week' 
@@ -102,11 +173,11 @@ proc format;
 	value aspirin_collapse_fmt 		0='no use' 
 									1='monthly' 
 									2='weekly/daily' 
-									-9='missing';
+									9='missing';
 	value ibu_collapse_fmt 			0='no use' 
 									1='monthly' 
 									2='weekly/daily' 
-									-9='missing';
+									9='missing';
 
 	value excludefmt 				0='include'
 									1='exclude';
