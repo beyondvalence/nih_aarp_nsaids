@@ -328,11 +328,34 @@ run; */
 data melan_use;
 	set melan_r;
 	
-	/* NSAID user NO-YES */
+	/* NSAID user, NO-YES */
 	** from Christian Abnet recode;
 	nsaid_bi=9;
 	if				rf_abnet_aspirin=0 and rf_abnet_ibuprofen=0		then nsaid_bi=0; *nsaid non-user*;	
 	else if			rf_abnet_aspirin=1 | rf_abnet_ibuprofen=1		then nsaid_bi=1; *nsaid user*;
+
+	/* NSAID user, usage */
+	** from Christian Abnet recode;
+	nsaid=9;
+	if			rf_abnet_cat_aspirin=0 and rf_abnet_cat_ibuprofen=0			then nsaid=0; *nsaid non-user*;
+
+	else if		rf_abnet_cat_aspirin=1 and rf_abnet_cat_ibuprofen=0			then nsaid=1; *nsaid monthly user*;
+	else if		rf_abnet_cat_aspirin=0 and rf_abnet_cat_ibuprofen=1			then nsaid=1; *nsaid monthly user*;
+	else if		rf_abnet_cat_aspirin=1 and rf_abnet_cat_ibuprofen=1			then nsaid=1; *nsaid monthly user*;
+
+	else if		rf_abnet_cat_aspirin=2 and rf_abnet_cat_ibuprofen=0			then nsaid=2; *nsaid weekly user*;
+	else if		rf_abnet_cat_aspirin=2 and rf_abnet_cat_ibuprofen=1			then nsaid=2; *nsaid weekly user*;
+	else if		rf_abnet_cat_aspirin=0 and rf_abnet_cat_ibuprofen=2			then nsaid=2; *nsaid weekly user*;
+	else if		rf_abnet_cat_aspirin=1 and rf_abnet_cat_ibuprofen=2			then nsaid=2; *nsaid weekly user*;
+	else if		rf_abnet_cat_aspirin=2 and rf_abnet_cat_ibuprofen=2			then nsaid=2; *nsaid weekly user*;
+
+	else if		rf_abnet_cat_aspirin=3 and rf_abnet_cat_ibuprofen=0			then nsaid=3; *nsaid daily user*;
+	else if		rf_abnet_cat_aspirin=3 and rf_abnet_cat_ibuprofen=1			then nsaid=3; *nsaid daily user*;
+	else if		rf_abnet_cat_aspirin=3 and rf_abnet_cat_ibuprofen=2			then nsaid=3; *nsaid daily user*;
+	else if		rf_abnet_cat_aspirin=0 and rf_abnet_cat_ibuprofen=3			then nsaid=3; *nsaid daily user*;
+	else if		rf_abnet_cat_aspirin=1 and rf_abnet_cat_ibuprofen=3			then nsaid=3; *nsaid daily user*;
+	else if		rf_abnet_cat_aspirin=2 and rf_abnet_cat_ibuprofen=3			then nsaid=3; *nsaid daily user*;
+	else if		rf_abnet_cat_aspirin=3 and rf_abnet_cat_ibuprofen=3			then nsaid=3; *nsaid daily user*;
 
 	** UVR TOMS quartile;
 	UVRQ=9;
@@ -475,26 +498,7 @@ data melan_use;
 	else if RF_ABNET_CAT_IBUPROFEN=1		then ibu_collapse=1; /* monthly use */
 	else if RF_ABNET_CAT_IBUPROFEN>=2		then ibu_collapse=2; /* >monthly use */
 
-	nsaid=9;
-	if			rf_abnet_cat_aspirin=0 and rf_abnet_cat_ibuprofen=0			then nsaid=0; *nsaid non-user*;
 
-	else if		rf_abnet_cat_aspirin=1 and rf_abnet_cat_ibuprofen=0			then nsaid=1; *nsaid monthly user*;
-	else if		rf_abnet_cat_aspirin=0 and rf_abnet_cat_ibuprofen=1			then nsaid=1; *nsaid monthly user*;
-	else if		rf_abnet_cat_aspirin=1 and rf_abnet_cat_ibuprofen=1			then nsaid=1; *nsaid monthly user*;
-
-	else if		rf_abnet_cat_aspirin=2 and rf_abnet_cat_ibuprofen=0			then nsaid=2; *nsaid weekly user*;
-	else if		rf_abnet_cat_aspirin=2 and rf_abnet_cat_ibuprofen=1			then nsaid=2; *nsaid weekly user*;
-	else if		rf_abnet_cat_aspirin=0 and rf_abnet_cat_ibuprofen=2			then nsaid=2; *nsaid weekly user*;
-	else if		rf_abnet_cat_aspirin=1 and rf_abnet_cat_ibuprofen=2			then nsaid=2; *nsaid weekly user*;
-	else if		rf_abnet_cat_aspirin=2 and rf_abnet_cat_ibuprofen=2			then nsaid=2; *nsaid weekly user*;
-
-	else if		rf_abnet_cat_aspirin=3 and rf_abnet_cat_ibuprofen=0			then nsaid=3; *nsaid daily user*;
-	else if		rf_abnet_cat_aspirin=3 and rf_abnet_cat_ibuprofen=1			then nsaid=3; *nsaid daily user*;
-	else if		rf_abnet_cat_aspirin=3 and rf_abnet_cat_ibuprofen=2			then nsaid=3; *nsaid daily user*;
-	else if		rf_abnet_cat_aspirin=0 and rf_abnet_cat_ibuprofen=3			then nsaid=3; *nsaid daily user*;
-	else if		rf_abnet_cat_aspirin=1 and rf_abnet_cat_ibuprofen=3			then nsaid=3; *nsaid daily user*;
-	else if		rf_abnet_cat_aspirin=2 and rf_abnet_cat_ibuprofen=3			then nsaid=3; *nsaid daily user*;
-	else if		rf_abnet_cat_aspirin=3 and rf_abnet_cat_ibuprofen=3			then nsaid=3; *nsaid daily user*;
 
 	nsaid_1=nsaid;
 	if nsaid_1 in (2,3)				then nsaid_1=0;
@@ -548,13 +552,14 @@ proc datasets library=work;
 			melanoma_c melanfmt. melanoma_agg melanomafmt. 
 			
 			bmi_c bmifmt. agecat agecatfmt.
-			smoke_former smokeformerfmt. smoke_quit smokequitfmt. smoke_dose smokedosefmt. 
+			 smoke_quit smokequitfmt. smoke_dose smokedosefmt. 
 			smoke_quit_dose smokequitdosefmt.
 			coffee_c coffeefmt. 
 
 			sex sexfmt.
 			UVRQ uvrqfmt.
 			alcohol_comb alcoholfmt.
+			smoke_former smokeformerfmt.
 			physic_c physicfmt. physic physiccfmt.
 			tv_comb tvfmt. RF_PHYS_TV rftvfmt.
 			nap_comb napfmt. RF_PHYS_NAP rfnapfmt.
