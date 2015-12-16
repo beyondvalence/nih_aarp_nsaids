@@ -9,13 +9,22 @@ proc freq data=melan_use;
 		nsaid*rf_abnet_cat_aspirin*rf_abnet_cat_ibuprofen
 	/missing nocol norow nopercent list;
 run;
+proc freq data=melan_use;
+	tables
+		nsaid_bi*melanoma_c
+		nsaid_bi*sex
+		nsaid*melanoma_c
+		nsaid*sex
+		/missing nocol norow nopercent;
+run;
 proc means data=melan_use missing;
 	class UVRQ;
 	var exposure_jul_78_05;
 run;
 proc freq data=melan_use;
 	tables
-		UVRQ*nsaid_bi
+		UVRQ*melanoma_c
+		UVRQ*sex
 	/missing nocol norow nopercent;
 run;
 proc means data=melan_use missing;
@@ -24,25 +33,33 @@ proc means data=melan_use missing;
 run;
 proc freq data=melan_use;
 	tables
-		alcohol_comb*nsaid_bi
+		alcohol_comb*melanoma_c
+		alcohol_comb*sex
 	/missing nocol norow nopercent;
 run;
 proc freq data=melan_use;
 	tables
 		physic_c*physic
-		physic_c*nsaid_bi
+		physic_c*melanoma_c
+		physic_c*sex
 		coffee_c*qp12b
-		coffee_c*nsaid_bi
+		coffee_c*melanoma_c
+		coffee_c*sex
 		TV_comb*RF_PHYS_TV
-		TV_comb*nsaid_bi
+		TV_comb*melanoma_c
+		TV_comb*sex
 		nap_comb*RF_PHYS_NAP
-		nap_comb*nsaid_bi
+		nap_comb*melanoma_c
+		nap_comb*sex
 		marriage_comb*MARRIAGE
-		marriage_comb*nsaid_bi
+		marriage_comb*melanoma_c
+		marriage_comb*sex
 		educm_comb*EDUCM
-		educm_comb*nsaid_bi
+		educm_comb*melanoma_c
+		educm_comb*sex
 		utilizer_w*rf_Q44
-		utilizer_w*nsaid_bi
+		utilizer_w*melanoma_c
+		utilizer_w*sex
 	/missing nocol norow nopercent;
 run;
 proc freq data=melan_use;
@@ -53,7 +70,8 @@ proc freq data=melan_use;
 run;
 proc freq data=melan_use;
 	tables
-		utilizer_m*nsaid_bi
+		utilizer_m*melanoma_c
+		utilizer_m*sex
 	/missing nocol norow nopercent;
 run;
 title;
