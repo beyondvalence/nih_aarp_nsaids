@@ -358,6 +358,14 @@ data melan_use;
 	else if physic=5     						then physic_c=4; /* 5+ per week */
 	else if physic=9	 						then physic_c=9; /* missing */
 
+	** coffee drinking;
+	coffee_c=9;
+	if		qp12b='0'							then coffee_c=0; 	/* none */
+	else if qp12b in ('1','2','3','4','5','6')	then coffee_c=1; 	/* <=1/day */
+	else if qp12b='7'							then coffee_c=2; 	/* 2-3/day */
+	else if qp12b in ('8','9')					then coffee_c=3; 	/* >=4/day */
+	else if qp12b in ('E','M')					then coffee_c=9;	/* missing */
+
 	/* Television watched */
 	TV_comb=9;
 	if			RF_PHYS_TV in (0,1)				then TV_comb=1; *none/<1 hr/day *;
@@ -428,13 +436,7 @@ data melan_use;
    	else if 30<=bmi_cur<60 					then bmi_c=3; /* 30 up to 60 */
 	else 										 bmi_c=9; /* missing or extreme */
 
-	** coffee drinking;
-	coffee_c=9;
-	if		qp12b='0'							then coffee_c=0; 	/* none */
-	else if qp12b in ('1','2','3','4','5','6')	then coffee_c=1; 	/* <=1/day */
-	else if qp12b='7'							then coffee_c=2; 	/* 2-3/day */
-	else if qp12b in ('8','9')					then coffee_c=3; 	/* >=4/day */
-	else if qp12b in ('E','M')					then coffee_c=9;	/* missing */
+
 
 	** (rf) physical exercise ages 15..18 cat;
 	rf_physic_1518_c=9;
