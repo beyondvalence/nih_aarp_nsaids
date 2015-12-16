@@ -15,6 +15,12 @@ proc freq data=melan_use;
 		nsaid_bi*sex
 		nsaid*melanoma_c
 		nsaid*sex
+		nsaid_bi_me*nsaid_bi
+		nsaid_bi_me*melanoma_c
+		nsaid_bi_me*sex
+		nsaid_me*nsaid
+		nsaid_me*melanoma_c
+		nsaid_me*sex
 		/missing nocol norow nopercent;
 run;
 proc means data=melan_use missing;
