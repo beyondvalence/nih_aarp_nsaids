@@ -221,30 +221,11 @@ data melan_r;
 	if frodo;
 run;
 
-** quick checks on the conv.melan file;
-** especially for the seer ICD-O-3 codes;
-** melanoma code is 25010;
-** check to see if the melanoma was coded correctly;
-/*proc freq data=conv.melan_r;
-	table cancer_siterec3*sex;
-	table cancer_siterec3*cancer_seergroup /nopercent norow nocol;
-run;
-*/
-/*proc freq data=melan_r;
-tables sex;
-run;*/
-
-** Check for missing NSAID response;
-** Both aspirin and nonaspirin;
-
 **** Exclusions risk macro;
 
 *Start here to run macro to get exclusion;
 ods _all_ close; ods html;
 %include 'C:\REB\NSAIDS melanoma AARP\Analysis\anchovy\exclusions.first.primary.risk.macro.sas';
-
-**** Outbox macro for use with outliers;
-*%include 'E:\NCI REB\AARP\Analysis\anchovy\outbox.macro.sas';
 
 **** Use the exclusion macro to make "standard" exclusions and get counts of excluded subjects;
 title 'exclusion macro, rfq';
@@ -459,8 +440,6 @@ data melan_use;
    	else if 30<=bmi_cur<60 					then bmi_c=3; /* 30 up to 60 */
 	else 										 bmi_c=9; /* missing or extreme */
 
-
-
 	** (rf) physical exercise ages 15..18 cat;
 	rf_physic_1518_c=9;
 	if      rf_phys_modvig_15_18 in (0,1)	then rf_physic_1518_c=0; /* rarely */
@@ -497,8 +476,6 @@ data melan_use;
 	if RF_ABNET_CAT_IBUPROFEN=0				then ibu_collapse=0; /* no use */
 	else if RF_ABNET_CAT_IBUPROFEN=1		then ibu_collapse=1; /* monthly use */
 	else if RF_ABNET_CAT_IBUPROFEN>=2		then ibu_collapse=2; /* >monthly use */
-
-
 
 	nsaid_1=nsaid;
 	if nsaid_1 in (2,3)				then nsaid_1=0;
@@ -552,7 +529,7 @@ proc datasets library=work;
 			melanoma_c melanfmt. melanoma_agg melanomafmt. 
 			
 			bmi_c bmifmt. agecat agecatfmt.
-			 smoke_quit smokequitfmt. smoke_dose smokedosefmt. 
+			smoke_quit smokequitfmt. smoke_dose smokedosefmt. 
 			smoke_quit_dose smokequitdosefmt.
 			coffee_c coffeefmt. 
 
@@ -561,6 +538,7 @@ proc datasets library=work;
 			alcohol_comb alcoholfmt.
 			smoke_former smokeformerfmt.
 			physic_c physicfmt. physic physiccfmt.
+			coffee_c coffeefmt. qp12b $qp12bfmt.
 			tv_comb tvfmt. RF_PHYS_TV rftvfmt.
 			nap_comb napfmt. RF_PHYS_NAP rfnapfmt.
 			marriage_comb marriagefmt. MARRIAGE rfmarriagefmt.
@@ -577,7 +555,7 @@ proc datasets library=work;
 			ibu_collapse ibu_collapsefmt.
 			nsaid_bi nsaidbifmt. nsaid nsaidfmt.
 			rf_physic_c rfphysicfmt. RF_PHYS_MODVIG_CURR rfphysiccfmt.
-			coffee_c coffeefmt. qp12b $qp12bfmt.
+			
 	;
 run;
 
