@@ -315,6 +315,9 @@ data melan_use;
 	if				rf_abnet_aspirin=0 and rf_abnet_ibuprofen=0		then nsaid_bi=0; *nsaid non-user*;	
 	else if			rf_abnet_aspirin=1 | rf_abnet_ibuprofen=1		then nsaid_bi=1; *nsaid user*;
 
+	nsaid_bi_me=nsaid_bi;
+	if nsaid_bi_me=9			then nsaid_bi_me=.;
+
 	/* NSAID user, usage */
 	** from Christian Abnet recode;
 	nsaid=9;
@@ -337,6 +340,9 @@ data melan_use;
 	else if		rf_abnet_cat_aspirin=1 and rf_abnet_cat_ibuprofen=3			then nsaid=3; *nsaid daily user*;
 	else if		rf_abnet_cat_aspirin=2 and rf_abnet_cat_ibuprofen=3			then nsaid=3; *nsaid daily user*;
 	else if		rf_abnet_cat_aspirin=3 and rf_abnet_cat_ibuprofen=3			then nsaid=3; *nsaid daily user*;
+
+	nsaid_me=nsaid;
+	if nsaid_me=9			then nsaid_me=.;
 
 	** UVR TOMS quartile;
 	UVRQ=9;
@@ -553,7 +559,7 @@ proc datasets library=work;
             rf_abnet_cat_ibuprofen rf_abnet_cat_ibuprofenfmt.
 			aspirin_collapse aspirin_collapsefmt.
 			ibu_collapse ibu_collapsefmt.
-			nsaid_bi nsaidbifmt. nsaid nsaidfmt.
+			nsaid_bi nsaid_bi_me nsaidbifmt. nsaid nsaid_me nsaidfmt.
 			rf_physic_c rfphysicfmt. RF_PHYS_MODVIG_CURR rfphysiccfmt.
 			
 	;
