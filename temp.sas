@@ -1,5 +1,10 @@
-ods html close; ods html;
+/******************************/
+/** NSAIDs test file **********/
+/** contains various checks ***/
+/** updated: 20151217THU WTL **/
+/******************************/
 
+ods html close; ods html;
 
 * check abnet nsaids freq code for aspirin and non-aspirin;
 proc freq data=melan_use;
