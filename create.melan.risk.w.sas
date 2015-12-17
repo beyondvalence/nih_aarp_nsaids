@@ -10,8 +10,9 @@
 # note: using new rexp dataset above
 #
 # Created: April 13 2015
-# Updated: v20151214MON WTL
-# Used IMS: anchovy
+# Updated: v20151217THU WTL
+# Under git version control
+# Used IMS: anchovy server
 # Warning: original IMS datasets are in LINUX latin1 encoding
 *******************************************************************/
 
@@ -135,10 +136,6 @@ data ranalysis;
 			rf_Q55_3				/* hours of moderate to vigorous activity ages 30-39 */
 			rf_Q55_4				/* hours of moderate to vigorous activity past 10 years*/
 
-			RF_PHYS_LIGHT_15_18		/*How often did you participate in light activities between the ages of 15 & 18?*/
-			RF_PHYS_LIGHT_19_29		/*How often did you participate in light activities between the ages of 19 & 29?*/
-			RF_PHYS_LIGHT_35_39		/*How often did you participate in light activities between the ages of 35 & 39?*/
-			RF_PHYS_LIGHT_CURR		/*How often did you participate in light activities in the past 10 years?*/
 			RF_PHYS_MODVIG_15_18	/*How often did you participate in moderate to vigorous activities between the ages of 15 & 18?*/
 			RF_PHYS_MODVIG_19_29	/*How often did you participate in moderate to vigorous activities between the ages of 19 & 29?*/
 			RF_PHYS_MODVIG_35_39	/*How often did you participate in moderate to vigorous activities between the ages of 35 & 39?*/
@@ -190,13 +187,6 @@ data melan_r; ** name the output of the first primary analysis include to melan_
 	else if cancer_behv='3' and cancer_seergroup = 18 and cancer_siterec3=25010 
 		then melanoma_c = 2;  
 	else melanoma_c = 0;
-	
-	** create melanoma indicator Y/N;
-	melanoma_agg = .;
-	* melanoma including in situ and malignant;
-	if (cancer_behv='2' or cancer_behv='3') and cancer_seergroup=18 and cancer_siterec3=25010
-		then melanoma_agg = 1;
-	else melanoma_agg = 0;
 
 	melanoma_ins=0;
 	if 		melanoma_c=1 	 	then melanoma_ins=1;
@@ -284,9 +274,9 @@ proc freq data= melan_r;
 run;
 title;
 
-*END HERE for exclusion counts;
+*END HERE for exclusion counts**;
 
-** find the cutoffs for the percentiles of UVR- exposure_jul_78_05 mped_a_bev;
+** find the cutoffs for the percentiles of UVR- exposure_jul_78_05 ;
 /*proc univariate data=conv.melan_r;
 	var exposure_jul_78_05; 
 	output 	out=blu 
@@ -344,6 +334,7 @@ data melan_use;
 	nsaid_me=nsaid;
 	if nsaid_me=9			then nsaid_me=.;
 	**********************************************************************************************************;
+	** new NSAID variables below **;
 
 	** Murphy NSAID coding 20151217THU;
 	** http://link.springer.com/article/10.1007/s10552-012-0063-2 ;
@@ -397,14 +388,16 @@ data melan_use;
 	else if rf_Q10_1='1' and rf_Q11_1='0'					then shebl_type=2; /* apsirin use only */
 	else if rf_Q10_1='0' and rf_Q11_1='1'					then shebl_type=3; /* non-aspirin use only */
 	else if rf_Q10_1='1' and rf_Q11_1='1'					then shebl_type=4; /* both aspirin and non-aspirin use */
+
+	** END new NSAIDs variables **;
 	************************************************************************************************************************;
 
 	** UVR TOMS quartile;
 	UVRQ=9;
-	if      176.000 < exposure_jul_78_05 <= 186.255 	then UVRQ=1;
-	else if 186.255 < exposure_jul_78_05 <= 236.805 	then UVRQ=2;
-	else if 236.805 < exposure_jul_78_05 <= 253.731 	then UVRQ=3;
-	else if 253.731 < exposure_jul_78_05 < 290			then UVRQ=4;
+	if      176.000 < exposure_jul_78_05 <= 186.255 	then UVRQ=1; /* Q1 lowest*/
+	else if 186.255 < exposure_jul_78_05 <= 236.805 	then UVRQ=2; /* Q2 */
+	else if 236.805 < exposure_jul_78_05 <= 253.731 	then UVRQ=3; /* Q3 */
+	else if 253.731 < exposure_jul_78_05 < 290			then UVRQ=4; /* Q4 highest */
 
 	/* alcohol consumption */
 	alcohol_comb=9;
@@ -469,11 +462,11 @@ data melan_use;
 	
 	/* hospital utilization-colonoscopy, sigmoidoscopy, proctoscopy in past 3 years */
 	utilizer_m=9;
-	if rf_Q15E='1'								then utilizer_m=0;
-	else if rf_Q15A='1'							then utilizer_m=1;
-	else if rf_Q15B='1'							then utilizer_m=1;
-	else if rf_Q15C='1'							then utilizer_m=1;
-	else if rf_Q15D='1'							then utilizer_m=1;
+	if rf_Q15E='1'								then utilizer_m=0; /* yes, utilized */
+	else if rf_Q15A='1'							then utilizer_m=1; /* did not utilize */
+	else if rf_Q15B='1'							then utilizer_m=1; /* did not utilize */
+	else if rf_Q15C='1'							then utilizer_m=1; /* did not utilize */
+	else if rf_Q15D='1'							then utilizer_m=1; /* did not utilize */
 
 /****************************************************************************************/
 
@@ -485,31 +478,12 @@ data melan_use;
 	else if -9053  <= F_DOB < -7543   then birth_cohort=4;
 	else if -7543  <= F_DOB <= -5267  then birth_cohort=5;
 
-	** physical exercise ages 15..18 cat;
-	physic_1518_c=9;
-	if      physic_1518 in (0,1)	then physic_1518_c=0; /* rarely */
-	else if physic_1518=2	 	 	then physic_1518_c=1; /* 1-3 per month */
-	else if physic_1518=3 		 	then physic_1518_c=2; /* 1-2 per week */
-	else if physic_1518=4   	  	then physic_1518_c=3; /* 3-4 per week */
-	else if physic_1518=5	     	then physic_1518_c=4; /* 5+ per week */
-	else if physic_1518=9		 	then physic_1518_c=9; /* missing */
-
 	** bmi three categories;
 	bmi_c=9;
 	if      18.5<bmi_cur<25 				then bmi_c=1; /* 18.5 up to 25 */
    	else if 25<=bmi_cur<30 					then bmi_c=2; /* 25 up to 30 */
    	else if 30<=bmi_cur<60 					then bmi_c=3; /* 30 up to 60 */
 	else 										 bmi_c=9; /* missing or extreme */
-
-	** (rf) physical exercise ages 15..18 cat;
-	rf_physic_1518_c=9;
-	if      rf_phys_modvig_15_18 in (0,1)	then rf_physic_1518_c=0; /* rarely */
-	else if rf_phys_modvig_15_18=2 	 		then rf_physic_1518_c=1; /* <1 hour/week */
-	else if rf_phys_modvig_15_18=3 	 		then rf_physic_1518_c=2; /* 1-3 hours/week */
-	else if rf_phys_modvig_15_18=4     		then rf_physic_1518_c=3; /* 4-7 hours/week */
-	else if rf_phys_modvig_15_18=5     		then rf_physic_1518_c=4; /* >7 hours/week */
-	else if rf_phys_modvig_15_18=9	 		then rf_physic_1518_c=9; /* missing */
-	else 									rf_physic_1518_c=9;
 
 	** (rf) physical exercise how often participate mod-vig activites in past 10 years;
 	rf_physic_c=9;
@@ -520,6 +494,9 @@ data melan_use;
 	else if rf_phys_modvig_curr=5			then rf_physic_c=4; /* >7 hr/week */
 	else if rf_phys_modvig_curr=9			then rf_physic_c=9; /* missing */
 	else 									rf_physic_c=9;
+
+	/****************************************************************/
+	** not sure if below variables are required **;
 
 	/* checked 20151201TUE wtl */
 	/*utilizer_m=-9; 
@@ -621,7 +598,6 @@ proc datasets library=work;
 			shebl_asp_u shebl_non_u sheblaspufmt.
 			shebl_type shebltypefmt.
 			rf_physic_c rfphysicfmt. RF_PHYS_MODVIG_CURR rfphysiccfmt.
-			
 	;
 run;
 
