@@ -343,6 +343,61 @@ data melan_use;
 
 	nsaid_me=nsaid;
 	if nsaid_me=9			then nsaid_me=.;
+	**********************************************************************************************************;
+
+	** Murphy NSAID coding 20151217THU;
+	** http://link.springer.com/article/10.1007/s10552-012-0063-2 ;
+	murphy_asp=9; * unknown aspirin;
+	if 		rf_Q10_1='1' and rf_Q10_2 in ('2','3','4','5','6')					then murphy_asp=1; /* regular user, 1+ per week */
+	else if rf_Q10_1='1' and rf_Q10_2 in ('0','1')								then murphy_asp=2; /* non-regular user, <1 per week */
+	/* no to use but has freq use */
+	else if rf_Q10_1='0' and rf_Q10_2 in ('0','1','2','3','4','5','6')			then murphy_asp=9; /* unk, no use but has use freq */
+	/* yes to use, but no freq use */
+	else if rf_Q10_1='1' and rf_Q10_2 not in ('0','1','2','3','4','5','6')		then murphy_asp=9; /* unk, use but no use freq*/
+	/* did not answer yes/no, but had freq use */
+	else if rf_Q10_1 not in ('0','1') and rf_Q10_2 in ('2','3','4','5','6')		then murphy_asp=1; /* regular user, 1+ per week, */
+	else if rf_Q10_1 not in ('0','1') and rf_Q10_2 in ('0','1')					then murphy_asp=2; /* non-regular user, <1 per week */
+
+	murphy_non=9; * unknown non-aspirin;
+	if 		rf_Q11_1='1' and rf_Q11_2 in ('2','3','4','5','6')					then murphy_non=1; /* regular user, 1+ per week */
+	else if rf_Q11_1='1' and rf_Q11_2 in ('0','1')								then murphy_non=2; /* non-regular user, <1 per week */
+	/* no to use but has freq use */
+	else if rf_Q11_1='0' and rf_Q11_2 in ('0','1','2','3','4','5','6')			then murphy_non=9; /* unk, no use but has use freq */
+	/* yes to use, but no freq use */
+	else if rf_Q11_1='1' and rf_Q11_2 not in ('0','1','2','3','4','5','6')		then murphy_non=9; /* unk, use but no use freq*/
+	/* did not answer yes/no, but had freq use */
+	else if rf_Q11_1 not in ('0','1') and rf_Q11_2 in ('2','3','4','5','6')		then murphy_non=1; /* regular user, 1+ per week, */
+	else if rf_Q11_1 not in ('0','1') and rf_Q11_2 in ('0','1')					then murphy_non=2; /* non-regular user, <1 per week */
+
+	** Shebl NSAID coding 20151217THU;
+	** http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0114633 ;
+	** aspirin use frequency;
+	shebl_asp_f=9; * unknown aspirin;
+	if		rf_Q10_1='1' and rf_Q10_2 in ('0','1')			then shebl_asp_f=1; /* monthly, <=3 per month */
+	else if rf_Q10_1='1' and rf_Q10_2 in ('2','3','4')		then shebl_asp_f=2; /* weekly, >=1 per week */
+	else if rf_Q10_1='1' and rf_Q10_2 in ('5','6')			then shebl_asp_f=3; /* daily, >=1 per day */
+	**aspirin use indicator;
+	shebl_asp_u=9;
+	if		rf_Q10_1='1'									then shebl_asp_u=1; /* yes aspirin use */
+	else if rf_Q10_1='0'									then shebl_asp_u=0; /* no aspirin use */
+
+	** non-aspirin use frequency;
+	shebl_non_f=9; * unknown non-aspirin;
+	if		rf_Q11_1='1' and rf_Q11_2 in ('0','1')			then shebl_non_f=1; /* monthly, <=3 per month */
+	else if rf_Q11_1='1' and rf_Q11_2 in ('2','3','4')		then shebl_non_f=2; /* weekly, >=1 per week */
+	else if rf_Q11_1='1' and rf_Q11_2 in ('5','6')			then shebl_non_f=3; /* daily, >=1 per day */
+	** non-aspirin use indicator;
+	shebl_non_u=9;
+	if		rf_Q11_1='1'									then shebl_non_u=1; /* yes non-aspirin use */
+	else if rf_Q11_1='0'									then shebl_non_u=0; /* no non-aspirin use */
+
+	** nsaid type;
+	shebl_type=9;
+	if		rf_Q10_1='0' and rf_Q11_1='0'					then shebl_type=1; /* no nsaid use */
+	else if rf_Q10_1='1' and rf_Q11_1='0'					then shebl_type=2; /* apsirin use only */
+	else if rf_Q10_1='0' and rf_Q11_1='1'					then shebl_type=3; /* non-aspirin use only */
+	else if rf_Q10_1='1' and rf_Q11_1='1'					then shebl_type=4; /* both aspirin and non-aspirin use */
+	************************************************************************************************************************;
 
 	** UVR TOMS quartile;
 	UVRQ=9;
@@ -560,6 +615,11 @@ proc datasets library=work;
 			aspirin_collapse aspirin_collapsefmt.
 			ibu_collapse ibu_collapsefmt.
 			nsaid_bi nsaid_bi_me nsaidbifmt. nsaid nsaid_me nsaidfmt.
+			rf_Q10_1 rf_Q11_1 $rfq101fmt. rf_Q10_2 rf_Q11_2 $rfq102fmt. 
+			murphy_asp murphy_non murphyaspfmt.
+			shebl_asp_f shebl_non_f sheblaspffmt.
+			shebl_asp_u shebl_non_u sheblaspufmt.
+			shebl_type shebltypefmt.
 			rf_physic_c rfphysicfmt. RF_PHYS_MODVIG_CURR rfphysiccfmt.
 			
 	;
