@@ -203,6 +203,30 @@ proc format;
 	value nsaidbifmt				9='Missing'
 									0='NSAID non-user'
 									1='NSAID user';
+	value $rfq101fmt				'0'='No use'
+									'1'='Yes use';
+	value $rfq102fmt				'0'='<2 per month'
+									'1'='2-3 per month'
+									'2'='1-2 per week'
+									'3'='3-4 per week'
+									'4'='5-6 per week'
+									'5'='1 per day'
+									'6'='2+ per day';
+	value murphyaspfmt				9='Unknown'
+									1='Regular user, 1+ per week'
+									2='Non-regular user, <1 per week';
+	value sheblaspffmt				9='Unknown'
+									1='Monthly, <=3 per month'
+									2='Weekly, >=1 per week'
+									3='Daily, >=1 per day';
+	value sheblaspufmt				9='Unknown'
+									1='Yes, user'
+									0='Not user';
+	value shebltypefmt				9='Unknown'
+									1='No NSAID use'
+									2='Aspirin use only'
+									3='Non-aspirin use only'
+									4='Both aspirin and non-aspirin use';
 	value excludefmt 				0='include'
 									1='exclude';
 run;
