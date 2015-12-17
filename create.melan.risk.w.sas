@@ -556,11 +556,21 @@ proc datasets library=work;
 			alcohol_comb = 'Total alchohol per day including food sources'
 
 			/* for riskfactor */
-			rf_physic_1518_c = "level of physical activity at ages 15-18 (rf)"
+			rf_Q10_1="RFQ aspirin indicator"
+			rf_Q10_2="RFQ aspirin freq"
+			rf_Q11_1="RRQ non-aspirin indicator"
+			rf_Q11_2="RFQ non-aspirin freq"
 			rf_physic_c = "Times engaged in moderate-vigorous physical activity"
 			rf_1d_cancer = "Family History of Cancer"
 			nsaid= "NSAID user frequency"
 			nsaid_bi="NSAID user yes/no"
+			murphy_asp="Murphy coded aspirin freq"
+			murphy_non="Murphy coded non-aspirin freq"
+			shebl_asp_f="Shebl coded aspirin freq"
+			shebl_non_f="Shebl coded non-aspirin freq"
+			shebl_asp_u="Shebl coded aspirin indicator"
+			shebl_non_u="Shebl coded non-aspirin indicator"
+			shebl_type="Shebl coded NSAID use type"
 	;
 	** set variable value labels;
 	format	/* for outcomes */
