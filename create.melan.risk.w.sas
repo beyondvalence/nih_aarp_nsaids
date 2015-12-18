@@ -403,7 +403,7 @@ data melan_use;
 	alcohol_comb=9;
 	if 		mped_a_bev=0						then alcohol_comb=0; /* none */
 	else if 0<mped_a_bev<=1						then alcohol_comb=1; /* <=1 */
-	else if 1<mped_a_bev<=2 					then alcohol_comb=2; /* >1-<=2 drinks*/
+	else if 1<mped_a_bev<=2 					then alcohol_comb=2; /* >1-<=2 drinks */
 	else if 2< mped_a_bev						then alcohol_comb=3; /* 2< drinks */
 	else if	alcohol=9							then alcohol_comb=9; /* missing */
 
