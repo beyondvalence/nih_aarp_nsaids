@@ -1,8 +1,10 @@
-/* clearance tables */
-** 20151215TUE WTL;
+/******************************/
+/** NSAIDS clearance tables ***/
+** 20151221MON WTL ************;
+/******************************/
 ods html close; ods html;
 title1 'RFQ clearance tables';
-
+title2 'nsaid exposures';
 proc freq data=melan_use;
 	tables
 		nsaid_bi*rf_abnet_aspirin*rf_abnet_ibuprofen
@@ -23,6 +25,8 @@ proc freq data=melan_use;
 		nsaid_me*sex
 		/missing nocol norow nopercent;
 run;
+
+title2 'confounders';
 proc means data=melan_use missing;
 	class UVRQ;
 	var exposure_jul_78_05;
@@ -75,9 +79,39 @@ proc freq data=melan_use;
 	/missing nocol norow nopercent list;
 run;
 proc freq data=melan_use;
+	title2;
 	tables
 		utilizer_m*melanoma_c
 		utilizer_m*sex
 	/missing nocol norow nopercent;
 run;
+title2 'additional variables';
+proc means data=melan_use missing;
+	class birth_cohort;
+	var F_DOB;
+run;
+proc freq data=melan_use;
+	tables
+		birth_cohort*melanoma_c
+		birth_cohort*sex
+	/missing nocol norow nopercent;
+run;
+proc means data=melan_use missing;
+	class bmi_c;
+	var bmi_cur;
+run;
+proc freq data=melan_use;
+	tables
+		bmi_c*melanoma_c
+		bmi_c*sex
+		rf_physic_c*rf_phys_modvig_curr
+		rf_physic_c*melanoma_c
+		rf_physic_c*sex
+		aspirin_collapse*RF_ABNET_CAT_ASPIRIN
+		aspirin_collapse*melanoma_c
+		aspirin_coolapse*sex
+		ibu_collapse*RF_ABNET_CAT_IBUPROFEN
+		ibu_collapse*melanoma_c
+		ibu_collapse*sex
+	/missing nocol norow nopercent;
 title;
