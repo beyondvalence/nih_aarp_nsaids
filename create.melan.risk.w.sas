@@ -434,7 +434,6 @@ data melan_use;
 	else if 0<mped_a_bev<=1						then alcohol_comb=1; /* <=1 */
 	else if 1<mped_a_bev<=2 					then alcohol_comb=2; /* >1-<=2 drinks */
 	else if 2< mped_a_bev						then alcohol_comb=3; /* 2< drinks */
-	else if	alcohol=9							then alcohol_comb=9; /* missing */
 
 	** physical exercise cat;
 	physic_c=9;
@@ -635,7 +634,8 @@ proc datasets library=work;
 			murphy_asp murphy_non murphyaspfmt.
 			shebl_asp_f shebl_non_f sheblaspffmt.
 			shebl_asp_u shebl_non_u sheblaspufmt.
-			shebl_type shebltypefmt.
+			shebl_type liu_combo shebltypefmt.
+			liu_asp_only liuasponlyfmt. liu_non_only liunononlyfmt. liu_both liubothfmt.
 			rf_physic_c rfphysicfmt. RF_PHYS_MODVIG_CURR rfphysiccfmt.
 	;
 run;
