@@ -1,7 +1,7 @@
 /******************************/
 /** NSAIDs test file **********/
 /** contains various checks ***/
-/** updated: 20151217THU WTL **/
+/** updated: 20151221MON WTL **/
 /******************************/
 
 ods html close; ods html;
@@ -12,6 +12,8 @@ proc freq data=melan_use;
 	table rf_Q10_1 rf_Q10_2*RF_ABNET_CAT_ASPIRIN rf_Q11_1 rf_Q11_2*RF_ABNET_CAT_IBUPROFEN 
 	/missing nocol norow nopercent;
 run;
+
+*******************************;
 * check murphy code for aspirin;
 proc freq data=melan_use;
 	title 'murphy aspirin';
@@ -31,6 +33,7 @@ proc freq data=melan_use;
 	/missing ;
 run;
 
+**************************;
 *check shebl freq, aspirin;
 proc freq data=melan_use;
 	title 'shebl aspirin freq';
@@ -56,7 +59,7 @@ proc freq data=melan_use;
 	/missing nocol norow nopercent;
 run;
 
-
+****************;
 * check liu type;
 proc freq data=melan_use;
 	title 'Asp, non, both, liu_combo';
