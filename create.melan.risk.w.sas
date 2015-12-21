@@ -338,7 +338,7 @@ data melan_use;
 
 	** Murphy NSAID coding 20151217THU;
 	** http://link.springer.com/article/10.1007/s10552-012-0063-2 ;
-	murphy_asp=9; * unknown aspirin;
+	murphy_asp=9; 
 	if 		rf_Q10_1='1' and rf_Q10_2 in ('2','3','4','5','6')					then murphy_asp=1; /* regular user, 1+ per week */
 	else if rf_Q10_1='1' and rf_Q10_2 in ('0','1')								then murphy_asp=2; /* non-regular user, <1 per week */
 	/* no to use but has freq use */
@@ -349,7 +349,7 @@ data melan_use;
 	else if rf_Q10_1 not in ('0','1') and rf_Q10_2 in ('2','3','4','5','6')		then murphy_asp=1; /* regular user, 1+ per week, */
 	else if rf_Q10_1 not in ('0','1') and rf_Q10_2 in ('0','1')					then murphy_asp=2; /* non-regular user, <1 per week */
 
-	murphy_non=9; * unknown non-aspirin;
+	murphy_non=9; 
 	if 		rf_Q11_1='1' and rf_Q11_2 in ('2','3','4','5','6')					then murphy_non=1; /* regular user, 1+ per week */
 	else if rf_Q11_1='1' and rf_Q11_2 in ('0','1')								then murphy_non=2; /* non-regular user, <1 per week */
 	/* no to use but has freq use */
@@ -363,7 +363,7 @@ data melan_use;
 	** Shebl NSAID coding 20151217THU;
 	** http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0114633 ;
 	** aspirin use frequency;
-	shebl_asp_f=9; * unknown aspirin;
+	shebl_asp_f=9; 
 	if		rf_Q10_1='1' and rf_Q10_2 in ('0','1')			then shebl_asp_f=1; /* monthly, <=3 per month */
 	else if rf_Q10_1='1' and rf_Q10_2 in ('2','3','4')		then shebl_asp_f=2; /* weekly, >=1 per week */
 	else if rf_Q10_1='1' and rf_Q10_2 in ('5','6')			then shebl_asp_f=3; /* daily, >=1 per day */
@@ -373,7 +373,7 @@ data melan_use;
 	else if rf_Q10_1='0'									then shebl_asp_u=0; /* no aspirin use */
 
 	** non-aspirin use frequency;
-	shebl_non_f=9; * unknown non-aspirin;
+	shebl_non_f=9; 
 	if		rf_Q11_1='1' and rf_Q11_2 in ('0','1')			then shebl_non_f=1; /* monthly, <=3 per month */
 	else if rf_Q11_1='1' and rf_Q11_2 in ('2','3','4')		then shebl_non_f=2; /* weekly, >=1 per week */
 	else if rf_Q11_1='1' and rf_Q11_2 in ('5','6')			then shebl_non_f=3; /* daily, >=1 per day */
@@ -389,6 +389,35 @@ data melan_use;
 	else if rf_Q10_1='0' and rf_Q11_1='1'					then shebl_type=3; /* non-aspirin use only */
 	else if rf_Q10_1='1' and rf_Q11_1='1'					then shebl_type=4; /* both aspirin and non-aspirin use */
 
+	** Liu Wei NSAID codoing 20151221MON;
+	** http://link.springer.com/article/10.1007%2Fs10552-013-0263-4 ;
+	** nsaid type ;
+	liu_combo=shebl_type;
+	** aspirin only freq;
+	liu_asp_only=9;
+	if 		rf_Q10_1='1' and rf_Q11_1='0' and rf_Q10_2 in ('0','1')			then liu_asp_only=1; /* monthly, only aspirin */
+	else if rf_Q10_1='1' and rf_Q11_1='0' and rf_Q10_2 in ('2','3','4')		then liu_asp_only=2; /* weekly, only aspirin */
+	else if rf_Q10_1='1' and rf_Q11_1='0' and rf_Q10_2 in ('5','6')			then liu_asp_only=3; /* daily, only aspirin */
+	** nonaspirin only freq;
+	liu_non_only=9;
+	if 		rf_Q10_1='0' and rf_Q11_1='1' and rf_Q11_2 in ('0','1')			then liu_non_only=1; /* monthly, only nonaspirin */
+	else if rf_Q10_1='0' and rf_Q11_1='1' and rf_Q11_2 in ('2','3','4')		then liu_non_only=2; /* weekly, only nonaspirin */
+	else if rf_Q10_1='0' and rf_Q11_1='1' and rf_Q11_2 in ('5','6')			then liu_non_only=3; /* daily, only nonaspirin */
+	** both aspirin and nonaspirin freq;
+	liu_both=9;
+	/* both monthly */
+	if 		rf_Q10_1='1' and rf_Q11_1='1' and 
+			rf_Q10_2 in ('0','1')	and rf_Q11_2 in ('0','1')	then liu_both=1; 
+	/* aspirin monthly, nonaspirin weekly/daily */
+	else if rf_Q10_1='1' and rf_Q11_1='1' and 
+			rf_Q10_2 in ('0','1') and rf_Q11_2 in ('2','3','4','5','6')	then liu_both=2; 
+	/* nonaspirin monthly, aspirin weekly/daily */
+	else if rf_Q10_1='1' and rf_Q11_1='1' and 
+			rf_Q10_2 in ('2','3','4','5','6') and rf_Q11_2 in ('0','1')	then liu_both=3; 
+	/* both weekly/daily */
+	else if rf_Q10_1='1' and rf_Q11_1='1' and 
+			rf_Q10_2 in ('2','3','4','5','6') and rf_Q11_2 in ('2','3','4','5','6') then liu_both=4;
+
 	** END new NSAIDs variables **;
 	************************************************************************************************************************;
 
@@ -397,7 +426,7 @@ data melan_use;
 	if      176.000 < exposure_jul_78_05 <= 186.255 	then UVRQ=1; /* Q1 lowest*/
 	else if 186.255 < exposure_jul_78_05 <= 236.805 	then UVRQ=2; /* Q2 */
 	else if 236.805 < exposure_jul_78_05 <= 253.731 	then UVRQ=3; /* Q3 */
-	else if 253.731 < exposure_jul_78_05 < 290			then UVRQ=4; /* Q4 highest */
+	else if 253.731 < exposure_jul_78_05 <  290			then UVRQ=4; /* Q4 highest */
 
 	/* alcohol consumption */
 	alcohol_comb=9;
