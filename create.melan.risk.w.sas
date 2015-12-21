@@ -10,7 +10,7 @@
 # note: using new rexp dataset above
 #
 # Created: April 13 2015
-# Updated: v20151217THU WTL
+# Updated: v20151221MON WTL
 # Under git version control
 # Used IMS: anchovy server
 # Warning: original IMS datasets are in LINUX latin1 encoding
@@ -496,7 +496,7 @@ data melan_use;
 	else if rf_Q15C='1'							then utilizer_m=1; /* did not utilize */
 	else if rf_Q15D='1'							then utilizer_m=1; /* did not utilize */
 
-/****************************************************************************************/
+/*************************************************************************************************/
 
 	** birth cohort date of birth quintile; /*CHECKED, fixed again, 20151214MON WTL */
 	birth_cohort=9;
@@ -525,13 +525,6 @@ data melan_use;
 
 	/****************************************************************/
 	** not sure if below variables are required **;
-
-	/* checked 20151201TUE wtl */
-	/*utilizer_m=-9; 
-	if rf_Q15A='1' | rf_Q15B='1' | 
-		rf_Q15C='1' | rf_Q15D='1' 			then utilizer_m=1;
-	else if rf_Q15E='1'						then utilizer_m=0; 
-	else utilizer_m=0;*/
 
 	aspirin_collapse=9;
 	if RF_ABNET_CAT_ASPIRIN=0				then aspirin_collapse=0; /* no use */
@@ -599,6 +592,10 @@ proc datasets library=work;
 			shebl_asp_u="Shebl coded aspirin indicator"
 			shebl_non_u="Shebl coded non-aspirin indicator"
 			shebl_type="Shebl coded NSAID use type"
+			liu_combo="Liu nsaid type"
+			liu_asp_only="Liu aspirin only freq"
+			liu_non_only="Liu nonaspirin only freq"
+			liu_both="Liu both asp and nonasp freq"
 	;
 	** set variable value labels;
 	format	/* for outcomes */
