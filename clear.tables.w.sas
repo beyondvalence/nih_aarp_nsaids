@@ -25,8 +25,65 @@ proc freq data=melan_use;
 		nsaid_me*sex
 		/missing nocol norow nopercent;
 run;
-
-title2 'confounders';
+proc freq data=melan_use;
+	title3'murphy variables with regular/non users';
+	tables
+		murphy_asp*rf_Q10_1*rf_Q10_2
+		murphy_non*rf_Q11_1*rf_Q11_2
+	/missing nocol norow nopercent list;
+run;
+proc freq data=melan_use;
+	tables
+		murphy_asp*melanoma_c
+		murphy_asp*sex
+		murphy_non*melanoma_c
+		murphy_non*sex
+	/missing nocol norow nopercent;
+run;
+proc freq data=melan_use;
+	title3'shebl variables with freq';
+	tables
+		shebl_asp_f*rf_Q10_1*rf_Q10_2
+		shebl_non_f*rf_Q11_1*rf_Q11_2
+		shebl_type*rf_Q10_1*rf_Q11_1 
+	/missing nocol norow nopercent list;
+run;
+proc freq data=melan_use;
+	tables
+		shebl_asp_f*melanoma_c
+		shebl_asp_f*sex
+		shebl_non_f*melanoma_c
+		shebl_non_f*sex
+		shebl_asp_u*melanoma_c
+		shebl_asp_u*sex
+		shebl_non_u*melanoma_c
+		shebl_non_u*sex
+		shebl_type*melanoma_c
+		shebl_type*sex
+		liu_combo*shebl_type
+		liu_combo*melanoma_c
+		liu_combo*sex
+	/missing nocol norow nopercent;
+run;
+proc freq data=melan_use;
+	title3'liu variables with both freq';
+	tables
+		liu_asp_only*rf_Q10_1*rf_Q11_1*rf_Q10_2
+		liu_non_only*rf_Q10_1*rf_Q11_1*rf_Q11_2
+		liu_both*rf_Q10_1*rf_Q11_1*liu_combo*rf_Q10_2*rf_Q11_2
+	/missing nocol norow nopercent list;
+run;
+proc freq data=melan_use;
+	tables
+		liu_asp_only*melanoma_c
+		liu_asp_only*sex
+		liu_non_only*melanoma_c
+		liu_non_only*sex
+		liu_both*melanoma_c
+		liu_both*sex
+	/missing nocol norow nopercent;
+run;
+title2 'confounders'; title3;
 proc means data=melan_use missing;
 	class UVRQ;
 	var exposure_jul_78_05;
