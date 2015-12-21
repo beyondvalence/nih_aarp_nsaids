@@ -227,6 +227,19 @@ proc format;
 									2='Aspirin use only'
 									3='Non-aspirin use only'
 									4='Both aspirin and non-aspirin use';
+	value liuasponlyfmt				9='Unknown'
+									1='monthly, only aspirin'
+									2='weekly, only aspirin'
+									3='daily, only aspirin';
+	value liunononlyfmt				9='Unknown'
+									1='monthly, only nonaspirin'
+									2='weekly, only nonaspirin'
+									3='daily only nonaspirin';
+	value liubothfmt				9='Unknown'
+									1='Both monthly'
+									2='Aspirin monthly, nonaspirin weekly/daily'
+									3='Nonaspirin monthly, aspirin weekly/daily'
+									4='Both weekly/daily';
 	value excludefmt 				0='include'
 									1='exclude';
 run;
