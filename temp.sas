@@ -67,21 +67,21 @@ run;
 * check liu aspirin only;
 proc freq data=melan_use;
 	title 'Aspirin only freq, liu_asp_only';
-	table liu_asp_only*(rf_Q10_1 rf_Q11_1 rf_Q10_2);
+	table liu_asp_only*(rf_Q10_1 rf_Q11_1 rf_Q10_2)
 	/missing nocol norow nopercent;
 run;
 
 * check liu nonaspirin only;
 proc freq data=melan_use;
 	title 'Nonaspirin only freq, liu_non_only';
-	table liu_non_only*(rf_Q10_1 rf_Q11_1 rf_Q11_2);
+	table liu_non_only*(rf_Q10_1 rf_Q11_1 rf_Q11_2)
 	/missing nocol norow nopercent;
 run;
 
 * check liu both aspirin, nonaspirin ;
 proc freq data=melan_use;
 	title 'Both asp and non freq, liu_both';
-	table liu_both*(rf_Q10_1 rf_Q11_1 rf_Q10_2 rf_Q11_2);
+	table liu_both*(rf_Q10_1 rf_Q11_1 liu_combo rf_Q10_2 rf_Q11_2)
 	/missing nocol norow nopercent;
 run;
 
