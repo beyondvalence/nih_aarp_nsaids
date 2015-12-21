@@ -407,7 +407,7 @@ data melan_use;
 	liu_both=9;
 	/* both monthly */
 	if 		rf_Q10_1='1' and rf_Q11_1='1' and 
-			rf_Q10_2 in ('0','1')	and rf_Q11_2 in ('0','1')	then liu_both=1; 
+			rf_Q10_2 in ('0','1') and rf_Q11_2 in ('0','1')	then liu_both=1; 
 	/* aspirin monthly, nonaspirin weekly/daily */
 	else if rf_Q10_1='1' and rf_Q11_1='1' and 
 			rf_Q10_2 in ('0','1') and rf_Q11_2 in ('2','3','4','5','6')	then liu_both=2; 
