@@ -60,25 +60,21 @@ proc freq data=melan_use;
 		shebl_non_u*sex
 		shebl_type*melanoma_c
 		shebl_type*sex
-		liu_combo*shebl_type
-		liu_combo*melanoma_c
-		liu_combo*sex
 	/missing nocol norow nopercent;
 run;
 proc freq data=melan_use;
 	title3'liu variables with both freq';
 	tables
-		liu_asp_only*rf_Q10_1*rf_Q11_1*rf_Q10_2
-		liu_non_only*rf_Q10_1*rf_Q11_1*rf_Q11_2
-		liu_both*rf_Q10_1*rf_Q11_1*liu_combo*rf_Q10_2*rf_Q11_2
-	/missing nocol norow nopercent list;
-run;
-proc freq data=melan_use;
-	tables
+		liu_combo*shebl_type
+		liu_combo*melanoma_c
+		liu_combo*sex
+		liu_asp_only*(rf_Q10_1 rf_Q11_1 rf_Q10_2)
 		liu_asp_only*melanoma_c
 		liu_asp_only*sex
+		liu_non_only*(rf_Q10_1 rf_Q11_1 rf_Q11_2)
 		liu_non_only*melanoma_c
 		liu_non_only*sex
+		liu_both*(rf_Q10_1 rf_Q11_1 liu_combo rf_Q10_2 rf_Q11_2)
 		liu_both*melanoma_c
 		liu_both*sex
 	/missing nocol norow nopercent;
