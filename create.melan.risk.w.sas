@@ -299,66 +299,8 @@ run; */
 data melan_use;
 	set melan_r;
 	
-	/* NSAID user, NO-YES */
-	** from Christian Abnet recode;
-	nsaid_bi=9;
-	if				rf_abnet_aspirin=0 and rf_abnet_ibuprofen=0		then nsaid_bi=0; *nsaid non-user*;	
-	else if			rf_abnet_aspirin=1 | rf_abnet_ibuprofen=1		then nsaid_bi=1; *nsaid user*;
-
-	nsaid_bi_me=nsaid_bi;
-	if nsaid_bi_me=9			then nsaid_bi_me=.;
-
-	/* NSAID user, usage */
-	** from Christian Abnet recode;
-	nsaid=9;
-	if			rf_abnet_cat_aspirin=0 and rf_abnet_cat_ibuprofen=0			then nsaid=0; *nsaid non-user*;
-
-	else if		rf_abnet_cat_aspirin=1 and rf_abnet_cat_ibuprofen=0			then nsaid=1; *nsaid monthly user*;
-	else if		rf_abnet_cat_aspirin=0 and rf_abnet_cat_ibuprofen=1			then nsaid=1; *nsaid monthly user*;
-	else if		rf_abnet_cat_aspirin=1 and rf_abnet_cat_ibuprofen=1			then nsaid=1; *nsaid monthly user*;
-
-	else if		rf_abnet_cat_aspirin=2 and rf_abnet_cat_ibuprofen=0			then nsaid=2; *nsaid weekly user*;
-	else if		rf_abnet_cat_aspirin=2 and rf_abnet_cat_ibuprofen=1			then nsaid=2; *nsaid weekly user*;
-	else if		rf_abnet_cat_aspirin=0 and rf_abnet_cat_ibuprofen=2			then nsaid=2; *nsaid weekly user*;
-	else if		rf_abnet_cat_aspirin=1 and rf_abnet_cat_ibuprofen=2			then nsaid=2; *nsaid weekly user*;
-	else if		rf_abnet_cat_aspirin=2 and rf_abnet_cat_ibuprofen=2			then nsaid=2; *nsaid weekly user*;
-
-	else if		rf_abnet_cat_aspirin=3 and rf_abnet_cat_ibuprofen=0			then nsaid=3; *nsaid daily user*;
-	else if		rf_abnet_cat_aspirin=3 and rf_abnet_cat_ibuprofen=1			then nsaid=3; *nsaid daily user*;
-	else if		rf_abnet_cat_aspirin=3 and rf_abnet_cat_ibuprofen=2			then nsaid=3; *nsaid daily user*;
-	else if		rf_abnet_cat_aspirin=0 and rf_abnet_cat_ibuprofen=3			then nsaid=3; *nsaid daily user*;
-	else if		rf_abnet_cat_aspirin=1 and rf_abnet_cat_ibuprofen=3			then nsaid=3; *nsaid daily user*;
-	else if		rf_abnet_cat_aspirin=2 and rf_abnet_cat_ibuprofen=3			then nsaid=3; *nsaid daily user*;
-	else if		rf_abnet_cat_aspirin=3 and rf_abnet_cat_ibuprofen=3			then nsaid=3; *nsaid daily user*;
-
-	nsaid_me=nsaid;
-	if nsaid_me=9			then nsaid_me=.;
 	**********************************************************************************************************;
 	** new NSAID variables below **;
-
-	** Murphy NSAID coding 20151217THU;
-	** http://link.springer.com/article/10.1007/s10552-012-0063-2 ;
-	murphy_asp=9; 
-	if 		rf_Q10_1='1' and rf_Q10_2 in ('2','3','4','5','6')					then murphy_asp=1; /* regular user, 1+ per week */
-	else if rf_Q10_1='1' and rf_Q10_2 in ('0','1')								then murphy_asp=2; /* non-regular user, <1 per week */
-	/* no to use but has freq use */
-	else if rf_Q10_1='0' and rf_Q10_2 in ('0','1','2','3','4','5','6')			then murphy_asp=9; /* unk, no use but has use freq */
-	/* yes to use, but no freq use */
-	else if rf_Q10_1='1' and rf_Q10_2 not in ('0','1','2','3','4','5','6')		then murphy_asp=9; /* unk, use but no use freq*/
-	/* did not answer yes/no, but had freq use */
-	else if rf_Q10_1 not in ('0','1') and rf_Q10_2 in ('2','3','4','5','6')		then murphy_asp=1; /* regular user, 1+ per week, */
-	else if rf_Q10_1 not in ('0','1') and rf_Q10_2 in ('0','1')					then murphy_asp=2; /* non-regular user, <1 per week */
-
-	murphy_non=9; 
-	if 		rf_Q11_1='1' and rf_Q11_2 in ('2','3','4','5','6')					then murphy_non=1; /* regular user, 1+ per week */
-	else if rf_Q11_1='1' and rf_Q11_2 in ('0','1')								then murphy_non=2; /* non-regular user, <1 per week */
-	/* no to use but has freq use */
-	else if rf_Q11_1='0' and rf_Q11_2 in ('0','1','2','3','4','5','6')			then murphy_non=9; /* unk, no use but has use freq */
-	/* yes to use, but no freq use */
-	else if rf_Q11_1='1' and rf_Q11_2 not in ('0','1','2','3','4','5','6')		then murphy_non=9; /* unk, use but no use freq*/
-	/* did not answer yes/no, but had freq use */
-	else if rf_Q11_1 not in ('0','1') and rf_Q11_2 in ('2','3','4','5','6')		then murphy_non=1; /* regular user, 1+ per week, */
-	else if rf_Q11_1 not in ('0','1') and rf_Q11_2 in ('0','1')					then murphy_non=2; /* non-regular user, <1 per week */
 
 	** Shebl NSAID coding 20151217THU;
 	** http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0114633 ;
@@ -388,35 +330,6 @@ data melan_use;
 	else if rf_Q10_1='1' and rf_Q11_1='0'					then shebl_type=2; /* apsirin use only */
 	else if rf_Q10_1='0' and rf_Q11_1='1'					then shebl_type=3; /* non-aspirin use only */
 	else if rf_Q10_1='1' and rf_Q11_1='1'					then shebl_type=4; /* both aspirin and non-aspirin use */
-
-	** Liu Wei NSAID codoing 20151221MON;
-	** http://link.springer.com/article/10.1007%2Fs10552-013-0263-4 ;
-	** nsaid type ;
-	liu_combo=shebl_type;
-	** aspirin only freq;
-	liu_asp_only=9;
-	if 		rf_Q10_1='1' and rf_Q11_1='0' and rf_Q10_2 in ('0','1')			then liu_asp_only=1; /* monthly, only aspirin */
-	else if rf_Q10_1='1' and rf_Q11_1='0' and rf_Q10_2 in ('2','3','4')		then liu_asp_only=2; /* weekly, only aspirin */
-	else if rf_Q10_1='1' and rf_Q11_1='0' and rf_Q10_2 in ('5','6')			then liu_asp_only=3; /* daily, only aspirin */
-	** nonaspirin only freq;
-	liu_non_only=9;
-	if 		rf_Q10_1='0' and rf_Q11_1='1' and rf_Q11_2 in ('0','1')			then liu_non_only=1; /* monthly, only nonaspirin */
-	else if rf_Q10_1='0' and rf_Q11_1='1' and rf_Q11_2 in ('2','3','4')		then liu_non_only=2; /* weekly, only nonaspirin */
-	else if rf_Q10_1='0' and rf_Q11_1='1' and rf_Q11_2 in ('5','6')			then liu_non_only=3; /* daily, only nonaspirin */
-	** both aspirin and nonaspirin freq;
-	liu_both=9;
-	/* both monthly */
-	if 		rf_Q10_1='1' and rf_Q11_1='1' and 
-			rf_Q10_2 in ('0','1') and rf_Q11_2 in ('0','1')							then liu_both=1; 
-	/* aspirin monthly, nonaspirin weekly/daily */
-	else if rf_Q10_1='1' and rf_Q11_1='1' and 
-			rf_Q10_2 in ('0','1') and rf_Q11_2 in ('2','3','4','5','6')				then liu_both=2; 
-	/* nonaspirin monthly, aspirin weekly/daily */
-	else if rf_Q10_1='1' and rf_Q11_1='1' and 
-			rf_Q10_2 in ('2','3','4','5','6') and rf_Q11_2 in ('0','1')				then liu_both=3; 
-	/* both weekly/daily */
-	else if rf_Q10_1='1' and rf_Q11_1='1' and 
-			rf_Q10_2 in ('2','3','4','5','6') and rf_Q11_2 in ('2','3','4','5','6') then liu_both=4;
 
 	** END new NSAIDs variables **;
 	************************************************************************************************************************;
