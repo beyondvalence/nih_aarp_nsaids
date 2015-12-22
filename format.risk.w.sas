@@ -212,13 +212,11 @@ proc format;
 									'4'='5-6 per week'
 									'5'='1 per day'
 									'6'='2+ per day';
-	value murphyaspfmt				9='Unknown'
-									1='Regular user, 1+ per week'
-									2='Non-regular user, <1 per week';
 	value sheblaspffmt				9='Unknown'
 									1='Monthly, <=3 per month'
 									2='Weekly, >=1 per week'
-									3='Daily, >=1 per day';
+									3='Daily, >=1 per day'
+									4='No Use';
 	value sheblaspufmt				9='Unknown'
 									1='Yes, user'
 									0='Not user';
@@ -227,19 +225,6 @@ proc format;
 									2='Aspirin use only'
 									3='Non-aspirin use only'
 									4='Both aspirin and non-aspirin use';
-	value liuasponlyfmt				9='Unknown'
-									1='monthly, only aspirin'
-									2='weekly, only aspirin'
-									3='daily, only aspirin';
-	value liunononlyfmt				9='Unknown'
-									1='monthly, only nonaspirin'
-									2='weekly, only nonaspirin'
-									3='daily only nonaspirin';
-	value liubothfmt				9='Unknown'
-									1='Both monthly'
-									2='Aspirin monthly, nonaspirin weekly/daily'
-									3='Nonaspirin monthly, aspirin weekly/daily'
-									4='Both weekly/daily';
 	value excludefmt 				0='include'
 									1='exclude';
 run;
