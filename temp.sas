@@ -88,4 +88,22 @@ proc freq data=melan_use;
 	/missing nocol norow nopercent;
 run;
 
+
+ods html close; ods html;
+proc freq data=melan_use;
+	table 
+		(RF_ABNET_CAT_ASPIRIN
+		murphy_asp
+		murphy_non
+		shebl_asp_f
+		shebl_non_f
+		shebl_asp_u
+		shebl_non_u
+		shebl_type
+		liu_combo
+		liu_asp_only
+		liu_non_only
+		liu_both)*melanoma_c
+	/missing nocol norow nopercent;
+run;
 title;
