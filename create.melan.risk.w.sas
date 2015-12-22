@@ -309,27 +309,33 @@ data melan_use;
 	if		rf_Q10_1='1' and rf_Q10_2 in ('0','1')			then shebl_asp_f=1; /* monthly, <=3 per month */
 	else if rf_Q10_1='1' and rf_Q10_2 in ('2','3','4')		then shebl_asp_f=2; /* weekly, >=1 per week */
 	else if rf_Q10_1='1' and rf_Q10_2 in ('5','6')			then shebl_asp_f=3; /* daily, >=1 per day */
+	else if rf_Q10_1='0'									then shebl_asp_f=4; /* no aspirin */
+	else if rf_Q10_1 not in ('0','1')						then shebl_asp_f=4; /* no aspirin */
+	else 													shebl_asp_f=9;		/* unknown */
 	**aspirin use indicator;
 	shebl_asp_u=9;
-	if		rf_Q10_1='1'									then shebl_asp_u=1; /* yes aspirin use */
-	else if rf_Q10_1='0'									then shebl_asp_u=0; /* no aspirin use */
+	if		shebl_asp_f in (1,2,3)							then shebl_asp_u=1; /* yes aspirin use */
+	else if shebl_asp_f=4									then shebl_asp_u=0; /* no aspirin use */
 
-	** non-aspirin use frequency;
+	** nonaspirin use frequency;
 	shebl_non_f=9; 
 	if		rf_Q11_1='1' and rf_Q11_2 in ('0','1')			then shebl_non_f=1; /* monthly, <=3 per month */
 	else if rf_Q11_1='1' and rf_Q11_2 in ('2','3','4')		then shebl_non_f=2; /* weekly, >=1 per week */
 	else if rf_Q11_1='1' and rf_Q11_2 in ('5','6')			then shebl_non_f=3; /* daily, >=1 per day */
-	** non-aspirin use indicator;
+	else if rf_Q11_1='0'									then shebl_non_f=4; /* no nonaspirin */
+	else if rf_Q11_1 not in ('0','1')						then shebl_non_f=4; /* no nonaspirin */
+	else 													shebl_non_f=9;		/* unknown */
+	** nonaspirin use indicator;
 	shebl_non_u=9;
-	if		rf_Q11_1='1'									then shebl_non_u=1; /* yes non-aspirin use */
-	else if rf_Q11_1='0'									then shebl_non_u=0; /* no non-aspirin use */
+	if		shebl_non_f in (1,2,3)							then shebl_non_u=1; /* yes non-aspirin use */
+	else if shebl_non_f=4									then shebl_non_u=0; /* no non-aspirin use */
 
 	** nsaid type;
 	shebl_type=9;
 	if		rf_Q10_1='0' and rf_Q11_1='0'					then shebl_type=1; /* no nsaid use */
 	else if rf_Q10_1='1' and rf_Q11_1='0'					then shebl_type=2; /* apsirin use only */
-	else if rf_Q10_1='0' and rf_Q11_1='1'					then shebl_type=3; /* non-aspirin use only */
-	else if rf_Q10_1='1' and rf_Q11_1='1'					then shebl_type=4; /* both aspirin and non-aspirin use */
+	else if rf_Q10_1='0' and rf_Q11_1='1'					then shebl_type=3; /* nonaspirin use only */
+	else if rf_Q10_1='1' and rf_Q11_1='1'					then shebl_type=4; /* both aspirin and nonaspirin use */
 
 	** END new NSAIDs variables **;
 	************************************************************************************************************************;
@@ -498,17 +504,11 @@ proc datasets library=work;
 			rf_1d_cancer = "Family History of Cancer"
 			nsaid= "NSAID user frequency"
 			nsaid_bi="NSAID user yes/no"
-			murphy_asp="Murphy coded aspirin freq"
-			murphy_non="Murphy coded non-aspirin freq"
 			shebl_asp_f="Shebl coded aspirin freq"
 			shebl_non_f="Shebl coded non-aspirin freq"
 			shebl_asp_u="Shebl coded aspirin indicator"
 			shebl_non_u="Shebl coded non-aspirin indicator"
 			shebl_type="Shebl coded NSAID use type"
-			liu_combo="Liu nsaid type"
-			liu_asp_only="Liu aspirin only freq"
-			liu_non_only="Liu nonaspirin only freq"
-			liu_both="Liu both asp and nonasp freq"
 	;
 	** set variable value labels;
 	format	/* for outcomes */
@@ -541,12 +541,10 @@ proc datasets library=work;
 			ibu_collapse ibu_collapsefmt.
 			nsaid_bi nsaid_bi_me nsaidbifmt. nsaid nsaid_me nsaidfmt.
 			rf_Q10_1 rf_Q11_1 $rfq101fmt. rf_Q10_2 rf_Q11_2 $rfq102fmt. 
-			murphy_asp murphy_non murphyaspfmt.
 			shebl_asp_f shebl_non_f sheblaspffmt.
 			shebl_asp_u shebl_non_u sheblaspufmt.
-			shebl_type liu_combo shebltypefmt.
-			liu_asp_only liuasponlyfmt. liu_non_only liunononlyfmt. liu_both liubothfmt.
-			rf_physic_c rfphysicfmt. RF_PHYS_MODVIG_CURR rfphysiccfmt.
+			shebl_type shebltypefmt.
+			RF_PHYS_MODVIG_CURR rfphysiccfmt.
 	;
 run;
 
