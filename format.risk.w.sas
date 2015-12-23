@@ -217,10 +217,10 @@ proc format;
 									'5'='1 per day'
 									'6'='2+ per day';
 	value sheblaspffmt				9='Unknown'
-									1='Monthly, <=3 per month'
-									2='Weekly, >=1 per week'
-									3='Daily, >=1 per day'
-									4='No Use';
+									2='Monthly, <=3 per month'
+									3='Weekly, >=1 per week'
+									4='Daily, >=1 per day'
+									1='No Use';
 	value sheblaspufmt				9='Unknown'
 									1='Yes, user'
 									0='Not user';
