@@ -33,9 +33,9 @@ proc format;
 									4='4. >253.731 and <290';
 	value alcoholfmt				9='Missing'
 									0='1. None'
-									1='2. >0 and <=1'
-									2='3. >1 and <=2 drinks'
-									3='4. >=3 drinks';
+									1='2. <1 drink per week'
+									2='3. 1-6 per week'
+									3='4. 7+ per week';
 	value physicfmt 				9='Missing' 
 									0='1. Never/rarely' 
 									1='2. 1-3 per month' 
@@ -129,9 +129,10 @@ proc format;
 	value $rfq15efmt 				'0'='NA' 
 									'1'='None';
 	value bmifmt 					9='Missing or extreme' 
-									1='>18.5 to <25' 
-									2='>=25 to <30' 
-									3='>=30 to <60';
+									1='1. underweight, <18.5' 
+									2='2. normal, 18.5-24.9' 
+									3='3. overweight, 25-29.9'
+									4='4. obese, 30+';
 	value smokeformerfmt 			9='Missing' 
 									0='Never smoked' 
 									1='Former smoker' 
@@ -175,6 +176,9 @@ proc format;
 									3='1-3 hr/week' 
 									4='4-7 hr/week' 
 									5='>7 hr/week';
+	value htensionfmt				9='Unknown'
+									0='No'
+									1='Yes hypertension';
 	value rf_abnet_aspirinfmt 		0='No' 
 									1='Yes';
 	value rf_abnet_ibuprofenfmt 	0='No' 
@@ -221,7 +225,7 @@ proc format;
 									1='Yes, user'
 									0='Not user';
 	value shebltypefmt				9='Unknown'
-									1='No NSAID use'
+									1='Neither NSAID use'
 									2='Aspirin use only'
 									3='Non-aspirin use only'
 									4='Both aspirin and non-aspirin use';
