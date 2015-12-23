@@ -1,7 +1,7 @@
 /****************************/
 /* AARP NSAIDS MELANOMA     */
 /* Format file              */
-/* Created: 20151130MON WTL */
+/* Created: 20151223WED WTL */
 /****************************/
 
 ** set value formats ; 
@@ -220,7 +220,7 @@ proc format;
 									2='Monthly, <=3 per month'
 									3='Weekly, >=1 per week'
 									4='Daily, >=1 per day'
-									1='No Use';
+									1='Non User';
 	value sheblaspufmt				9='Unknown'
 									1='Yes, user'
 									0='Not user';

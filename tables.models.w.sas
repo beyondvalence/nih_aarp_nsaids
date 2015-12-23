@@ -9,7 +9,7 @@
 # uses melan_use dataset
 # 
 # Created: July 30, 2015
-# Updated: 20151210THU WTL
+# Updated: 20151223WED WTL
 #
 *******************************************************************/
 libname conv 'C:\REB\NSAIDS melanoma AARP\Data\converted';
