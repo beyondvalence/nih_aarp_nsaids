@@ -215,38 +215,43 @@ ods html close;
 ods html body= 'C:\REB\NSAIDS melanoma AARP\Results\Table_2\Table2_nsaid.xls' style=minimal;
 title 'actual table1, confounders to exposure';
 proc tabulate data=melan_use missing;
-class 	nsaid_bi  
-			SEX 
-			UVRQ
-			alcohol_comb
-			SMOKE_FORMER 
-			physic_c 
-			coffee_c
-			TV_comb 
-			nap_comb 
-			marriage_comb
-			educm_comb
-			HEART
-			utilizer_m 
-			utilizer_w;
-
-table   
-			SEX 
-			UVRQ
-			alcohol_comb
-			SMOKE_FORMER 
-			physic_c 
-			coffee_c
-			TV_comb 
-			nap_comb 
-			marriage_comb
-			educm_comb
-			HEART
-			utilizer_w utilizer_m 
-			,
-
-		(nsaid_bi)* (N colpctn='Percent') /nocellmerge; 
-where nsaid_bi NE .;
+	class 	shebl_type  
+				SEX 
+				educm_comb
+				SMOKE_FORMER
+				alcohol_comb
+				bmi_c
+				physic_c
+				UVRQ
+				htension
+				HEART 
+				rel_1d_cancer
+				coffee_c
+				TV_comb 
+				nap_comb 
+				marriage_comb
+				utilizer_m 
+				utilizer_w
+	;
+	table   
+				SEX 
+				educm_comb
+				SMOKE_FORMER
+				alcohol_comb
+				bmi_c
+				physic_c
+				UVRQ
+				htension
+				HEART 
+				rel_1d_cancer
+				coffee_c
+				TV_comb 
+				nap_comb 
+				marriage_comb
+				utilizer_m 
+				utilizer_w
+	,
+	(shebl_type)*(colpctn='Percent') /nocellmerge; 
 run; 
 title;
 ods html close;
@@ -255,23 +260,25 @@ ods output ChiSq=Table1Chi      (keep=Table Statistic Prob rename=(prob=Chi2Pval
 ods output TrendTest=Table1Trd  (keep=Table Name1 cValue1 rename=(cValue1=TrendPvalue) where=(Name1='P2_TREND'));
 
 proc freq data=melan_use;
-tables nsaid_bi* (
-			SEX 
-			UVRQ
-			alcohol_comb
-			SMOKE_FORMER 
-			physic_c 
-			coffee_c
-			TV_comb 
-			nap_comb 
-			marriage_comb
-			educm_comb
-			HEART
-			utilizer_m 
-			utilizer_w			
+tables shebl_type* (
+				SEX 
+				educm_comb
+				SMOKE_FORMER
+				alcohol_comb
+				bmi_c
+				physic_c
+				UVRQ
+				htension
+				HEART 
+				rel_1d_cancer
+				coffee_c
+				TV_comb 
+				nap_comb 
+				marriage_comb
+				utilizer_m 
+				utilizer_w		
 			)
 	 		/chisq trend nocol nopercent scores=table;
-	where nsaid_bi NE 9;
 run;
 data Table1Chi; 
 	set Table1Chi (keep=Table Chi2Pvalue); run;
@@ -285,7 +292,7 @@ data Table2ap;
 	set Table1Chi Table1Trd ; by Table; run;
 ods html file='C:\REB\NSAIDS melanoma AARP\Results\Table_2\Table2ap_nsaid.xls' style=minimal;
 proc print data= Table2ap;
-	title 'print chi2 and trend for nsaid_bi';
+	title 'print chi2 and trend for shebl_type';
 run; 
 ods html close;
 
@@ -297,16 +304,16 @@ ods html close;
 ods html body='C:\REB\NSAIDS melanoma AARP\Results\Table_2\Table2b_nsaid.xls' style=minimal;
 proc tabulate data=melan_use;
 title 'tab continuous melanoma_mal';
-class nsaid_bi;
-var exit_age entry_age bmi_cur exposure_jul_78_05 ;
+class shebl_type;
+var exit_age entry_age bmi_cur exposure_jul_78_05 rf_personyrs;
 table (exit_age entry_age bmi_cur exposure_jul_78_05 ),
 (nsaid_bi)* (mean='Mean' stddev='SD');
 run; ods html close;
 
 ods output Ttests=Table2T ; ods html;
 proc ttest data=melan_use;
-title 'ttest nsaid_bi';
-class nsaid_bi;
+title 'ttest shebl_type';
+class shebl_type;
 var exit_age entry_age bmi_cur exposure_jul_78_05 ;
 run;
 ods html file='C:\REB\NSAIDS melanoma AARP\Results\Table_2\Table2bp_nsaid.xls' style=minimal;
