@@ -332,7 +332,7 @@ data melan_use;
 
 	** nsaid type;
 	shebl_type=9;
-	if		rf_Q10_1='0' and rf_Q11_1='0'					then shebl_type=1; /* no nsaid use */
+	if		rf_Q10_1='0' and rf_Q11_1='0'					then shebl_type=1; /* neither nsaid use */
 	else if rf_Q10_1='1' and rf_Q11_1='0'					then shebl_type=2; /* apsirin use only */
 	else if rf_Q10_1='0' and rf_Q11_1='1'					then shebl_type=3; /* nonaspirin use only */
 	else if rf_Q10_1='1' and rf_Q11_1='1'					then shebl_type=4; /* both aspirin and nonaspirin use */
