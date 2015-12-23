@@ -109,7 +109,23 @@ run;
 
 proc freq data=melan_use;
 	table
-		alcohol_comb bmi_c htension*rf_Q47_1
+				shebl_type
+				SEX 
+				educm_comb
+				SMOKE_FORMER
+				alcohol_comb
+				bmi_c
+				physic_c
+				UVRQ
+				htension
+				HEART 
+				rel_1d_cancer
+				coffee_c
+				TV_comb 
+				nap_comb 
+				marriage_comb
+				utilizer_m 
+				utilizer_w
 	/missing;
 run;
 title;
