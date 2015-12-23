@@ -119,6 +119,7 @@ data ranalysis;
 			q30b2					/* amount: beta-carotene */
 			q30d1					/* how often: vitamin e */
 			q30d2					/* amount: vitamin e */
+			rf_Q47_1				/* Ever been told by doctor to have  */
 			rf_Q48					/* have you had a physically demanding job? */
 			rf_Q49					/* how many physically demanding jobs have you ever held? */
 			rf_Q50					/* what is the total number of years that you worked in physically demanding jobs? */
@@ -348,11 +349,12 @@ data melan_use;
 	else if 253.731 < exposure_jul_78_05 <  290			then UVRQ=4; /* Q4 highest */
 
 	/* alcohol consumption */
+	** edited to weekly, 20151223WED ;
 	alcohol_comb=9;
 	if 		mped_a_bev=0						then alcohol_comb=0; /* none */
-	else if 0<mped_a_bev<=1						then alcohol_comb=1; /* <=1 */
-	else if 1<mped_a_bev<=2 					then alcohol_comb=2; /* >1-<=2 drinks */
-	else if 2< mped_a_bev						then alcohol_comb=3; /* 2< drinks */
+	else if 0<mped_a_bev<0.142857				then alcohol_comb=1; /* <=1, <1 drink per week */
+	else if 0.142857<=mped_a_bev<1				then alcohol_comb=2; /* >1-<=2 drinks, 1-6 per week */
+	else if 1<=mped_a_bev						then alcohol_comb=3; /* 2< drinks, 7+ per week */
 
 	** physical exercise cat;
 	physic_c=9;
@@ -415,54 +417,61 @@ data melan_use;
 	else if rf_Q15C='1'							then utilizer_m=1; /* did not utilize */
 	else if rf_Q15D='1'							then utilizer_m=1; /* did not utilize */
 
+	** bmi three categories;
+	bmi_c=9;
+	if            bmi_cur<18.5 					then bmi_c=1; /* <18.5, underweight */
+   	else if 18.5<=bmi_cur<25					then bmi_c=2; /* 18.5-24.9, normal */
+   	else if 25  <=bmi_cur<30					then bmi_c=3; /* 25-29.9, overweight */
+	else if 30  <=bmi_cur						then bmi_c=4; /* >=30, obese */
+	else 											 bmi_c=9; /* missing or extreme */
+
+	** hypertension as told by doctor?;
+	htension=9;
+	if		rf_Q47_1='1'						then htension=1; /* yes to hypertension */
+	else if rf_Q47_1='0'						then htension=0; /* no to hypertension*/
+	else 											 htension=9; /* unknown */
+
 /*************************************************************************************************/
 
 	** birth cohort date of birth quintile; /*CHECKED, fixed again, 20151214MON WTL */
 	birth_cohort=9;
-	if      -12571 <= F_DOB < -11400  then birth_cohort=1;
-	else if -11400 <= F_DOB < -10327  then birth_cohort=2;
-	else if -10327 <= F_DOB < -9053   then birth_cohort=3;
-	else if -9053  <= F_DOB < -7543   then birth_cohort=4;
-	else if -7543  <= F_DOB <= -5267  then birth_cohort=5;
-
-	** bmi three categories;
-	bmi_c=9;
-	if      18.5<bmi_cur<25 				then bmi_c=1; /* 18.5 up to 25 */
-   	else if 25<=bmi_cur<30 					then bmi_c=2; /* 25 up to 30 */
-   	else if 30<=bmi_cur<60 					then bmi_c=3; /* 30 up to 60 */
-	else 										 bmi_c=9; /* missing or extreme */
+	if      -12571 <= F_DOB < -11400  			then birth_cohort=1;
+	else if -11400 <= F_DOB < -10327 			then birth_cohort=2;
+	else if -10327 <= F_DOB < -9053   			then birth_cohort=3;
+	else if -9053  <= F_DOB < -7543   			then birth_cohort=4;
+	else if -7543  <= F_DOB <= -5267  			then birth_cohort=5;
 
 	** (rf) physical exercise how often participate mod-vig activites in past 10 years;
 	rf_physic_c=9;
-	if		rf_phys_modvig_curr in (0,1)	then rf_physic_c=0;	/* none-rarely */
-	else if rf_phys_modvig_curr=2			then rf_physic_c=1; /* <1 hr/week */
-	else if rf_phys_modvig_curr=3			then rf_physic_c=2; /* 1-3 hr/week */
-	else if rf_phys_modvig_curr=4			then rf_physic_c=3; /* 4-7 hr/week */
-	else if rf_phys_modvig_curr=5			then rf_physic_c=4; /* >7 hr/week */
-	else if rf_phys_modvig_curr=9			then rf_physic_c=9; /* missing */
-	else 									rf_physic_c=9;
+	if		rf_phys_modvig_curr in (0,1)		then rf_physic_c=0;	/* none-rarely */
+	else if rf_phys_modvig_curr=2				then rf_physic_c=1; /* <1 hr/week */
+	else if rf_phys_modvig_curr=3				then rf_physic_c=2; /* 1-3 hr/week */
+	else if rf_phys_modvig_curr=4				then rf_physic_c=3; /* 4-7 hr/week */
+	else if rf_phys_modvig_curr=5				then rf_physic_c=4; /* >7 hr/week */
+	else if rf_phys_modvig_curr=9				then rf_physic_c=9; /* missing */
+	else 											 rf_physic_c=9;
 
 	/****************************************************************/
 	** not sure if below variables are required **;
 
 	aspirin_collapse=9;
-	if RF_ABNET_CAT_ASPIRIN=0				then aspirin_collapse=0; /* no use */
-	else if RF_ABNET_CAT_ASPIRIN=1			then aspirin_collapse=1; /* monthly use */
-	else if RF_ABNET_CAT_ASPIRIN>=2			then aspirin_collapse=2; /* >monthly use */
+	if RF_ABNET_CAT_ASPIRIN=0					then aspirin_collapse=0; /* no use */
+	else if RF_ABNET_CAT_ASPIRIN=1				then aspirin_collapse=1; /* monthly use */
+	else if RF_ABNET_CAT_ASPIRIN>=2				then aspirin_collapse=2; /* >monthly use */
 
 	ibu_collapse=9;
-	if RF_ABNET_CAT_IBUPROFEN=0				then ibu_collapse=0; /* no use */
-	else if RF_ABNET_CAT_IBUPROFEN=1		then ibu_collapse=1; /* monthly use */
-	else if RF_ABNET_CAT_IBUPROFEN>=2		then ibu_collapse=2; /* >monthly use */
+	if RF_ABNET_CAT_IBUPROFEN=0					then ibu_collapse=0; /* no use */
+	else if RF_ABNET_CAT_IBUPROFEN=1			then ibu_collapse=1; /* monthly use */
+	else if RF_ABNET_CAT_IBUPROFEN>=2			then ibu_collapse=2; /* >monthly use */
 
 	nsaid_1=nsaid;
-	if nsaid_1 in (2,3)				then nsaid_1=0;
+	if nsaid_1 in (2,3)							then nsaid_1=0;
 	nsaid_2=nsaid;
-	if nsaid_2 in (1,3)				then nsaid_2=0;
-	else if nsaid_2=2				then nsaid_2=1;
+	if nsaid_2 in (1,3)							then nsaid_2=0;
+	else if nsaid_2=2							then nsaid_2=1;
 	nsaid_3=nsaid;
-	if nsaid_3 in (1,2)				then nsaid_3=0;
-	else if nsaid_3=3				then nsaid_2=1;
+	if nsaid_3 in (1,2)							then nsaid_3=0;
+	else if nsaid_3=3							then nsaid_2=1;
 
 	utilizer=9; *combine utilizer_m (colonoscopy) and utilizer_w (mammogram) into single variable;
 	if			utilizer_m=1 | utilizer_w=1			then utilizer=1; *either yes;
@@ -476,7 +485,6 @@ proc datasets library=work;
 	
 	** set variable labels;
 	label 	/* melanoma outcomes */
-			melanoma_agg = "Melanoma indicator"
 			melanoma_c = "Melanoma indicator by type"
 			melanoma_ins= "Melanoma in situ indicator"
 			melanoma_mal= "Malignant melanoma indicator"
@@ -500,10 +508,10 @@ proc datasets library=work;
 			rf_Q10_2="RFQ aspirin freq"
 			rf_Q11_1="RRQ non-aspirin indicator"
 			rf_Q11_2="RFQ non-aspirin freq"
+			rf_Q47_1="RFQ hypertension"
+			htension="Hypertension"
 			rf_physic_c = "Times engaged in moderate-vigorous physical activity"
 			rf_1d_cancer = "Family History of Cancer"
-			nsaid= "NSAID user frequency"
-			nsaid_bi="NSAID user yes/no"
 			shebl_asp_f="Shebl coded aspirin freq"
 			shebl_non_f="Shebl coded non-aspirin freq"
 			shebl_asp_u="Shebl coded aspirin indicator"
@@ -512,8 +520,7 @@ proc datasets library=work;
 	;
 	** set variable value labels;
 	format	/* for outcomes */
-			melanoma_c melanfmt. melanoma_agg melanomafmt. 
-			
+			melanoma_c melanfmt.
 			bmi_c bmifmt. agecat agecatfmt.
 			smoke_quit smokequitfmt. smoke_dose smokedosefmt. 
 			smoke_quit_dose smokequitdosefmt.
@@ -533,13 +540,13 @@ proc datasets library=work;
 			utilizer_w utilizerwfmt. rf_Q44 $rfq44fmt.
 			utilizer_m utilizermfmt.
 			rf_Q15A $rfq15afmt. rf_Q15B $rfq15bfmt. rf_Q15C $rfq15cfmt. rf_Q15D $rfq15dfmt. rf_Q15E $rfq15efmt.
+			htension htensionfmt.
 			rf_abnet_aspirin rf_abnet_aspirinfmt.
 			rf_abnet_ibuprofen rf_abnet_ibuprofenfmt. 
 			rf_abnet_cat_aspirin rf_abnet_cat_aspirinfmt.
             rf_abnet_cat_ibuprofen rf_abnet_cat_ibuprofenfmt.
 			aspirin_collapse aspirin_collapsefmt.
 			ibu_collapse ibu_collapsefmt.
-			nsaid_bi nsaid_bi_me nsaidbifmt. nsaid nsaid_me nsaidfmt.
 			rf_Q10_1 rf_Q11_1 $rfq101fmt. rf_Q10_2 rf_Q11_2 $rfq102fmt. 
 			shebl_asp_f shebl_non_f sheblaspffmt.
 			shebl_asp_u shebl_non_u sheblaspufmt.
