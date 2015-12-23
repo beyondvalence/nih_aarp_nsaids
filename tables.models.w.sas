@@ -253,6 +253,27 @@ proc tabulate data=melan_use missing;
 	,
 	(shebl_type)*(colpctn='Percent') /nocellmerge; 
 run; 
+proc freq data=melan_use;
+	table
+				shebl_type
+				SEX 
+				educm_comb
+				SMOKE_FORMER
+				alcohol_comb
+				bmi_c
+				physic_c
+				UVRQ
+				htension
+				HEART 
+				rel_1d_cancer
+				coffee_c
+				TV_comb 
+				nap_comb 
+				marriage_comb
+				utilizer_m 
+				utilizer_w
+	/missing;
+run;
 title;
 ods html close;
 
@@ -446,26 +467,20 @@ ods html;
 %table2cont;
 ods html;
 
-***********************************************;
-*********		    abnet exposure	***********;
-*********		    4 categories	***********;
-***********************************************;
+
 ***************************************************;
 ********** 		Number of cases		***************;
-********** 		4 categories		***************;
+********** 		3 categories		***************;
 ***************************************************;
 
 proc freq data=melan_use;
-tables rf_abnet_cat_aspirin*melanoma_ins;
+tables shebl_type*melanoma_c;
 run;
 proc freq data=melan_use;
-tables rf_abnet_cat_aspirin*melanoma_mal;
+tables shebl_asp_f*melanoma_c;
 run;
 proc freq data=melan_use;
-tables rf_abnet_cat_ibuprofen*melanoma_ins;
-run;
-proc freq data=melan_use;
-tables rf_abnet_cat_ibuprofen*melanoma_mal;
+tables shebl_non_f*melanoma_c;
 run;
 
 ***********************************************;
