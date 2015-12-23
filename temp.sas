@@ -106,4 +106,10 @@ proc freq data=melan_use;
 		liu_both)*melanoma_c
 	/missing nocol norow nopercent;
 run;
+
+proc freq data=melan_use;
+	table
+		alcohol_comb bmi_c htension*rf_Q47_1
+	/missing;
+run;
 title;
