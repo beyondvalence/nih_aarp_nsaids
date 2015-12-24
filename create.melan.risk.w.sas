@@ -53,6 +53,7 @@ data ranalysis;
 	keep	westatid
 			rf_entry_dt
 			rf_entry_age
+			entry_dt
 			f_dob
 			AGECAT /*nu*/
 			racem /* for race exclusions */
@@ -202,7 +203,7 @@ data melan_r; ** name the output of the first primary analysis include to melan_
   	personyrs = round(((exit_dt-entry_dt)/365.25),.001);
 	rf_personyrs = round(((exit_dt-rf_entry_dt)/365.25),.001);
 
-	format exit_dt entry_date rf_entry_dt f_dob dod cancer_dxdt raadate Date9.;
+	format exit_dt entry_dt rf_entry_dt f_dob dod cancer_dxdt raadate Date9.;
 run;
 
 ** merge the melan_r dataset with the UV data;
@@ -463,15 +464,6 @@ data melan_use;
 	if RF_ABNET_CAT_IBUPROFEN=0					then ibu_collapse=0; /* no use */
 	else if RF_ABNET_CAT_IBUPROFEN=1			then ibu_collapse=1; /* monthly use */
 	else if RF_ABNET_CAT_IBUPROFEN>=2			then ibu_collapse=2; /* >monthly use */
-
-	nsaid_1=nsaid;
-	if nsaid_1 in (2,3)							then nsaid_1=0;
-	nsaid_2=nsaid;
-	if nsaid_2 in (1,3)							then nsaid_2=0;
-	else if nsaid_2=2							then nsaid_2=1;
-	nsaid_3=nsaid;
-	if nsaid_3 in (1,2)							then nsaid_3=0;
-	else if nsaid_3=3							then nsaid_2=1;
 
 	utilizer=9; *combine utilizer_m (colonoscopy) and utilizer_w (mammogram) into single variable;
 	if			utilizer_m=1 | utilizer_w=1			then utilizer=1; *either yes;
