@@ -108,6 +108,9 @@ ods html close; ods html;
 *****************************************************************************;
 ****************		    Apriori Adjusted 		*************************;
 *****************************************************************************;
+** first set: in situ (type, asp_f, non_f);
+** second set: malignant (type, asp_f, non_f);
+** asp_f and non_f both have type3(LT) likelihood ratio outputs;
 
 ********************************************************;
 ********* 			IN SITU					************;
