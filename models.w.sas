@@ -38,7 +38,7 @@ variable="shebl_type_ins";
 run;
 proc phreg data = melan_use multipass;
 class shebl_asp_f (ref='1. Non User');
-model exit_age*melanoma_ins(0)=shebl_asp_f / entry = entry_age RL; *** The RL option requests risk limits ***;
+model exit_age*melanoma_ins(0)=shebl_asp_f / entry = entry_age RL type3(LR); *** The RL option requests risk limits ***;
 ods output ParameterEstimates=unadj_ins_asp;
 run;
 data unadj_ins_asp; set unadj_ins_asp;
@@ -47,7 +47,7 @@ variable="shebl_asp_ins";
 run;
 proc phreg data = melan_use multipass;
 class shebl_non_f (ref='1. Non User');
-model exit_age*melanoma_ins(0)=shebl_non_f / entry = entry_age RL; *** The RL option requests risk limits ***;
+model exit_age*melanoma_ins(0)=shebl_non_f / entry = entry_age RL type3(LR); *** The RL option requests risk limits ***;
 ods output ParameterEstimates=unadj_ins_non;
 run;
 data unadj_ins_non; set unadj_ins_non;
@@ -71,7 +71,7 @@ variable="shebl_type_mal";
 run;
 proc phreg data = melan_use multipass;
 class shebl_asp_f (ref='1. Non User');
-model exit_age*melanoma_mal(0)=shebl_asp_f / entry = entry_age RL; *** The RL option requests risk limits ***;
+model exit_age*melanoma_mal(0)=shebl_asp_f / entry = entry_age RL type3(LR); *** The RL option requests risk limits ***;
 ods output ParameterEstimates=unadj_mal_asp;
 run;
 data unadj_mal_asp; set unadj_mal_asp;
@@ -80,7 +80,7 @@ variable="shebl_asp_mal";
 run;
 proc phreg data = melan_use multipass;
 class shebl_non_f (ref='1. Non User');
-model exit_age*melanoma_mal(0)=shebl_non_f / entry = entry_age RL; *** The RL option requests risk limits ***;
+model exit_age*melanoma_mal(0)=shebl_non_f / entry = entry_age RL type3(LR); *** The RL option requests risk limits ***;
 ods output ParameterEstimates=unadj_mal_non;
 run;
 data unadj_mal_non; set unadj_mal_non;
@@ -101,7 +101,8 @@ data unadj_totalpop;
 set unadj_totalpop
 (Keep= variable HazardRatio HRLowerCL HRUpperCL Label ClassVal0); run;
 ods html file='C:\REB\NSAIDS melanoma AARP\Results\Main_effects\unadjusted_models\unadj_totalpop.xls' style=minimal;
-proc print data= unadj_totalpop; run; ods html close; ods html;
+proc print data= unadj_totalpop; run; 
+ods html close; ods html;
 
 
 *****************************************************************************;
@@ -192,7 +193,7 @@ proc phreg data = melan_use multipass;
 				marriage_comb
 				utilizer_m 
 				utilizer_w 
-	/ entry = entry_age RL; *** The RL option requests risk limits ***;
+	/ entry = entry_age RL type3(LR); *** The RL option requests risk limits ***;
 	ods output ParameterEstimates=adj_asp_ins;
 run;
 data adj_asp_ins; set adj_asp_ins;
@@ -236,7 +237,7 @@ proc phreg data = melan_use multipass;
 				marriage_comb
 				utilizer_m 
 				utilizer_w 
-	/ entry = entry_age RL; *** The RL option requests risk limits ***;
+	/ entry = entry_age RL type3(LR); *** The RL option requests risk limits ***;
 	ods output ParameterEstimates=adj_non_ins;
 run;
 data adj_non_ins; set adj_non_ins;
@@ -331,7 +332,7 @@ proc phreg data = melan_use multipass;
 				marriage_comb
 				utilizer_m 
 				utilizer_w 
-	/ entry = entry_age RL; *** The RL option requests risk limits ***;
+	/ entry = entry_age RL type3(LR); *** The RL option requests risk limits ***;
 	ods output ParameterEstimates=adj_asp_mal;
 run;
 data adj_asp_mal; set adj_asp_mal;
@@ -375,7 +376,7 @@ proc phreg data = melan_use multipass;
 				marriage_comb
 				utilizer_m 
 				utilizer_w 
-	/ entry = entry_age RL; *** The RL option requests risk limits ***;
+	/ entry = entry_age RL type3(LR); *** The RL option requests risk limits ***;
 	ods output ParameterEstimates=adj_non_mal;
 run;
 data adj_non_mal; set adj_non_mal;
@@ -396,7 +397,8 @@ data apriori_model;
 set apriori_model
 (Keep= variable HazardRatio HRLowerCL HRUpperCL Label ClassVal0); run;
 ods html file='C:\REB\NSAIDS melanoma AARP\Results\Main_effects\apriori\apriori_model.xls' style=minimal;
-proc print data= apriori_model; run; ods html close; ods html;
+proc print data= apriori_model; run; 
+ods html close; ods html;
 
 
 ******************************************************************;
