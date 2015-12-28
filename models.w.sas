@@ -19,17 +19,16 @@ libname conv 'C:\REB\NSAIDS melanoma AARP\Data\converted';
 *********		MODEL BUILDING		***********;
 ***********************************************;
 
-***********************************************;
-*********		   Unadjusted		***********;
-***********************************************;
+***********************************************************;
+***********			   Unadjusted		*******************;
+***********************************************************;
 
 ***********************************************;
-********* 			ASPIRIN			***********;
 ********* 			IN SITU			***********;
 ***********************************************;
 ods html close; ods html;
 proc phreg data = melan_use;
-class shebl_type (ref='Neither NSAID use') ;
+class shebl_type (ref='1. Neither NSAID use') ;
 model exit_age*melanoma_ins(0)=shebl_type  / entry = entry_age RL; *** The RL option requests risk limits ***;
 ods output ParameterEstimates=unadj_ins_type;
 run;
@@ -38,7 +37,7 @@ if Parameter='shebl_type';
 variable="shebl_type_ins";
 run;
 proc phreg data = melan_use multipass;
-class shebl_asp_f (ref='Non User');
+class shebl_asp_f (ref='1. Non User');
 model exit_age*melanoma_ins(0)=shebl_asp_f / entry = entry_age RL; *** The RL option requests risk limits ***;
 ods output ParameterEstimates=unadj_ins_asp;
 run;
@@ -47,7 +46,7 @@ if Parameter='shebl_asp_f';
 variable="shebl_asp_ins";
 run;
 proc phreg data = melan_use multipass;
-class shebl_non_f (ref='Non User');
+class shebl_non_f (ref='1. Non User');
 model exit_age*melanoma_ins(0)=shebl_non_f / entry = entry_age RL; *** The RL option requests risk limits ***;
 ods output ParameterEstimates=unadj_ins_non;
 run;
@@ -58,12 +57,11 @@ run;
 
 
 ***********************************************;
-********* 			ASPIRIN			***********;
 ********* 	   Malignant melanoma	***********;
 ***********************************************;
 
 proc phreg data = melan_use;
-class shebl_type (ref='Neither NSAID use') ;
+class shebl_type (ref='1. Neither NSAID use') ;
 model exit_age*melanoma_mal(0)=shebl_type  / entry = entry_age RL; *** The RL option requests risk limits ***;
 ods output ParameterEstimates=unadj_mal_type;
 run;
@@ -72,7 +70,7 @@ if Parameter='shebl_type';
 variable="shebl_type_mal";
 run;
 proc phreg data = melan_use multipass;
-class shebl_asp_f (ref='Non User');
+class shebl_asp_f (ref='1. Non User');
 model exit_age*melanoma_mal(0)=shebl_asp_f / entry = entry_age RL; *** The RL option requests risk limits ***;
 ods output ParameterEstimates=unadj_mal_asp;
 run;
@@ -81,7 +79,7 @@ if Parameter='shebl_asp_f';
 variable="shebl_asp_mal";
 run;
 proc phreg data = melan_use multipass;
-class shebl_non_f (ref='Non User');
+class shebl_non_f (ref='1. Non User');
 model exit_age*melanoma_mal(0)=shebl_non_f / entry = entry_age RL; *** The RL option requests risk limits ***;
 ods output ParameterEstimates=unadj_mal_non;
 run;
@@ -90,191 +88,315 @@ if Parameter='shebl_non_f';
 variable="shebl_non_mal";
 run;
 
-
-***********************************************;
-********* 			 IBU			***********;
-********* 	   		IN SITU			***********;
-***********************************************;
-
-proc phreg data = melan_use;
-class rf_abnet_ibuprofen (ref='no') ;
-model exit_age*melanoma_ins(0)=rf_abnet_ibuprofen  / entry = entry_age RL; *** The RL option requests risk limits ***;
-ods output ParameterEstimates=unadj_iins;
-run;
-data unadj_iins; set unadj_iins;
-if Parameter='RF_ABNET_IBUPROFEN';
-variable="unadj_iins";
-run;
-proc phreg data = melan_use multipass;
-class rf_abnet_cat_ibuprofen (ref='no use');
-model exit_age*melanoma_ins(0)=rf_abnet_cat_ibuprofen / entry = entry_age RL; *** The RL option requests risk limits ***;
-ods output ParameterEstimates=unadj_iins_cat;
-run;
-data unadj_iins_cat; set unadj_iins_cat;
-if Parameter='RF_ABNET_CAT_IBUPROF';
-variable="unadj_iins_cat";
-run;
-
-
-
-***********************************************;
-********* 			 IBU			***********;
-********* 	   	  Malignant			***********;
-***********************************************;
-
-*** model: exit_age*melanoma_mal(0)=rf_abnet_ibuprofen SEX birth_cohort utilizer_m utilizer_w exposure_jul_78_05;
-proc phreg data = melan_use;
-class rf_abnet_ibuprofen (ref='no') ;
-model exit_age*melanoma_mal(0)=rf_abnet_ibuprofen  / entry = entry_age RL; *** The RL option requests risk limits ***;
-ods output ParameterEstimates=unadj_imal;
-run;
-data unadj_imal; set unadj_imal;
-if Parameter='RF_ABNET_IBUPROFEN';
-variable="unadj_imal";
-run;
-proc phreg data = melan_use multipass;
-class rf_abnet_cat_ibuprofen (ref='no use') ;
-model exit_age*melanoma_mal(0)=rf_abnet_cat_ibuprofen / entry = entry_age RL; *** The RL option requests risk limits ***;
-ods output ParameterEstimates=unadj_imal_cat;
-run;
-data unadj_imal_cat; set unadj_imal_cat;
-if Parameter='RF_ABNET_CAT_IBUPROF';
-variable="unadj_iins_cat";
-run;
-
 data unadj_totalpop; 
-set 
-unadj_ains
-unadj_ains_cat
-unadj_amal
-unadj_amal_cat
-unadj_iins
-unadj_iins_cat
-unadj_imal
-unadj_imal_cat
+	set 
+		unadj_ins_type
+		unadj_ins_asp
+		unadj_ins_non
+		unadj_mal_type
+		unadj_mal_asp
+		unadj_mal_non
 ; run;
 data unadj_totalpop; 
 set unadj_totalpop
 (Keep= variable HazardRatio HRLowerCL HRUpperCL Label ClassVal0); run;
-ods html file='E:\NCI REB\AARP\Results\Main_effects\unadjusted_models\unadj_totalpop.xls' style=minimal;
-proc print data= unadj_totalpop; run;
+ods html file='C:\REB\NSAIDS melanoma AARP\Results\Main_effects\unadjusted_models\unadj_totalpop.xls' style=minimal;
+proc print data= unadj_totalpop; run; ods html close; ods html;
 
 
-*******************************************************;
-*********		    Apriori Adjusted 		***********;
-*******************************************************;
-********* 			ASPIRIN					***********;
-********* 			IN SITU					***********;
-*******************************************************;
+*****************************************************************************;
+****************		    Apriori Adjusted 		*************************;
+*****************************************************************************;
 
-*** model: exit_age*melanoma_ins(0)=rf_abnet_aspirin SEX birth_cohort utilizer_m utilizer_w exposure_jul_78_05;
-
+********************************************************;
+********* 			IN SITU					************;
+********************************************************;
 proc phreg data = melan_use multipass;
-class rf_abnet_aspirin (ref='no')SEX birth_cohort utilizer_m utilizer_w ;
-model exit_age*melanoma_ins(0)=rf_abnet_aspirin SEX birth_cohort utilizer_m utilizer_w exposure_jul_78_05/ entry = entry_age RL; *** The RL option requests risk limits ***;
-ods output ParameterEstimates=apriori;
+	class shebl_type (ref='1. Neither NSAID use')
+				SEX
+				birth_cohort 
+				educm_comb
+				SMOKE_FORMER
+				alcohol_comb
+				bmi_c
+				physic_c
+				UVRQ
+				htension
+				HEART 
+				rel_1d_cancer
+				coffee_c
+				TV_comb 
+				nap_comb 
+				marriage_comb
+				utilizer_m 
+				utilizer_w;
+	model exit_age*melanoma_ins(0)=shebl_type 
+				SEX
+				birth_cohort 
+				educm_comb
+				SMOKE_FORMER
+				alcohol_comb
+				bmi_c
+				physic_c
+				UVRQ
+				htension
+				HEART 
+				rel_1d_cancer
+				coffee_c
+				TV_comb 
+				nap_comb 
+				marriage_comb
+				utilizer_m 
+				utilizer_w 
+	/ entry = entry_age RL; *** The RL option requests risk limits ***;
+	ods output ParameterEstimates=adj_type_ins;
 run;
-data apriori_aspirin_ins; set apriori;
-if Parameter='RF_ABNET_ASPIRIN';
-variable="ap_asp_insitu          ";
+data adj_type_ins; set adj_type_ins;
+	if Parameter='shebl_type';
+	variable="shebl_type_ins              ";
 run;
 proc phreg data = melan_use multipass;
-class rf_abnet_cat_aspirin (ref='no use')SEX birth_cohort utilizer_m utilizer_w ;
-model exit_age*melanoma_ins(0)=rf_abnet_cat_aspirin SEX birth_cohort utilizer_m utilizer_w exposure_jul_78_05/ entry = entry_age RL; *** The RL option requests risk limits ***;
-ods output ParameterEstimates=apriori;
+	class shebl_asp_f (ref='1. Non User')
+				SEX
+				birth_cohort 
+				educm_comb
+				SMOKE_FORMER
+				alcohol_comb
+				bmi_c
+				physic_c
+				UVRQ
+				htension
+				HEART 
+				rel_1d_cancer
+				coffee_c
+				TV_comb 
+				nap_comb 
+				marriage_comb
+				utilizer_m 
+				utilizer_w;
+	model exit_age*melanoma_ins(0)=shebl_asp_f 
+				SEX
+				birth_cohort 
+				educm_comb
+				SMOKE_FORMER
+				alcohol_comb
+				bmi_c
+				physic_c
+				UVRQ
+				htension
+				HEART 
+				rel_1d_cancer
+				coffee_c
+				TV_comb 
+				nap_comb 
+				marriage_comb
+				utilizer_m 
+				utilizer_w 
+	/ entry = entry_age RL; *** The RL option requests risk limits ***;
+	ods output ParameterEstimates=adj_asp_ins;
 run;
-data apriori_ains_cat; set apriori;
+data adj_asp_ins; set adj_asp_ins;
+	if Parameter='shebl_asp_f';
+	variable="shebl_asp_f_ins              ";
+run;
+proc phreg data = melan_use multipass;
+	class shebl_non_f (ref='1. Non User')
+				SEX
+				birth_cohort 
+				educm_comb
+				SMOKE_FORMER
+				alcohol_comb
+				bmi_c
+				physic_c
+				UVRQ
+				htension
+				HEART 
+				rel_1d_cancer
+				coffee_c
+				TV_comb 
+				nap_comb 
+				marriage_comb
+				utilizer_m 
+				utilizer_w;
+	model exit_age*melanoma_ins(0)=shebl_non_f 
+				SEX
+				birth_cohort 
+				educm_comb
+				SMOKE_FORMER
+				alcohol_comb
+				bmi_c
+				physic_c
+				UVRQ
+				htension
+				HEART 
+				rel_1d_cancer
+				coffee_c
+				TV_comb 
+				nap_comb 
+				marriage_comb
+				utilizer_m 
+				utilizer_w 
+	/ entry = entry_age RL; *** The RL option requests risk limits ***;
+	ods output ParameterEstimates=adj_non_ins;
+run;
+data adj_non_ins; set adj_non_ins;
+	if Parameter='shebl_non_f';
+	variable="shebl_non_f_ins              ";
 run;
 
 ***********************************************;
-********* 			ASPIRIN			***********;
 ********* 	   Malignant melanoma	***********;
 ***********************************************;
 
 *** model: exit_age*melanoma_mal(0)=rf_abnet_aspirin SEX birth_cohort utilizer_m utilizer_w exposure_jul_78_05;
 
 proc phreg data = melan_use multipass;
-class rf_abnet_aspirin (ref='no')SEX birth_cohort utilizer_m utilizer_w ;
-model exit_age*melanoma_mal(0)=rf_abnet_aspirin SEX birth_cohort utilizer_m utilizer_w exposure_jul_78_05/ entry = entry_age RL; *** The RL option requests risk limits ***;
-ods output ParameterEstimates=apriori;
+	class shebl_type (ref='1. Neither NSAID use')
+				SEX
+				birth_cohort 
+				educm_comb
+				SMOKE_FORMER
+				alcohol_comb
+				bmi_c
+				physic_c
+				UVRQ
+				htension
+				HEART 
+				rel_1d_cancer
+				coffee_c
+				TV_comb 
+				nap_comb 
+				marriage_comb
+				utilizer_m 
+				utilizer_w;
+	model exit_age*melanoma_mal(0)=shebl_type 
+				SEX
+				birth_cohort 
+				educm_comb
+				SMOKE_FORMER
+				alcohol_comb
+				bmi_c
+				physic_c
+				UVRQ
+				htension
+				HEART 
+				rel_1d_cancer
+				coffee_c
+				TV_comb 
+				nap_comb 
+				marriage_comb
+				utilizer_m 
+				utilizer_w 
+	/ entry = entry_age RL; *** The RL option requests risk limits ***;
+	ods output ParameterEstimates=adj_type_mal;
 run;
-data apriori_aspirin_mal; set apriori;
-if Parameter='RF_ABNET_ASPIRIN';
-variable="ap_asp_mal          ";
-run;
-proc phreg data = melan_use multipass;
-class rf_abnet_cat_aspirin (ref='no use')SEX birth_cohort utilizer_m utilizer_w ;
-model exit_age*melanoma_mal(0)=rf_abnet_cat_aspirin SEX birth_cohort utilizer_m utilizer_w exposure_jul_78_05/ entry = entry_age RL; *** The RL option requests risk limits ***;
-ods output ParameterEstimates=apriori;
-run;
-data apriori_amal_cat; set apriori;
-run;
-
-***********************************************;
-********* 			 IBU			***********;
-********* 	   		IN SITU			***********;
-***********************************************;
-
-*** model: exit_age*melanoma_ins(0)=rf_abnet_ibuprofen SEX birth_cohort utilizer_m utilizer_w exposure_jul_78_05;
-
-proc phreg data = melan_use multipass;
-class rf_abnet_ibuprofen (ref='no')SEX birth_cohort utilizer_m utilizer_w ;
-model exit_age*melanoma_ins(0)=rf_abnet_ibuprofen SEX birth_cohort utilizer_m utilizer_w exposure_jul_78_05/ entry = entry_age RL; *** The RL option requests risk limits ***;
-ods output ParameterEstimates=apriori;
-run;
-data apriori_ibu_ins; set apriori;
-if Parameter='RF_ABNET_IBUPROFEN';
-variable="ap_ibu_ins          ";
-run;
-proc phreg data = melan_use multipass;
-class rf_abnet_cat_ibuprofen (ref='no use')SEX birth_cohort utilizer_m utilizer_w ;
-model exit_age*melanoma_ins(0)=rf_abnet_cat_ibuprofen SEX birth_cohort utilizer_m utilizer_w exposure_jul_78_05/ entry = entry_age RL; *** The RL option requests risk limits ***;
-ods output ParameterEstimates=apriori;
-run;
-data apriori_iins_cat; set apriori;
-run;
-
-***********************************************;
-********* 			 IBU			***********;
-********* 	   	  Malignant			***********;
-***********************************************;
-
-*** model: exit_age*melanoma_mal(0)=rf_abnet_ibuprofen SEX birth_cohort utilizer_m utilizer_w exposure_jul_78_05;
-
-proc phreg data = melan_use multipass;
-class rf_abnet_ibuprofen (ref='no')SEX birth_cohort utilizer_m utilizer_w ;
-model exit_age*melanoma_mal(0)=rf_abnet_ibuprofen SEX birth_cohort utilizer_m utilizer_w exposure_jul_78_05/ entry = entry_age RL; *** The RL option requests risk limits ***;
-ods output ParameterEstimates=apriori;
-run;
-data apriori_ibu_mal; set apriori;
-if Parameter='RF_ABNET_IBUPROFEN';
-variable="ap_ibu_mal          ";
+data adj_type_mal; set adj_type_mal;
+	if Parameter='shebl_type';
+	variable="shebl_type_mal              ";
 run;
 proc phreg data = melan_use multipass;
-class rf_abnet_cat_ibuprofen (ref='no use')SEX birth_cohort utilizer_m utilizer_w ;
-model exit_age*melanoma_mal(0)=rf_abnet_cat_ibuprofen SEX birth_cohort utilizer_m utilizer_w exposure_jul_78_05/ entry = entry_age RL; *** The RL option requests risk limits ***;
-ods output ParameterEstimates=apriori;
+	class shebl_asp_f (ref='1. Non User')
+				SEX
+				birth_cohort 
+				educm_comb
+				SMOKE_FORMER
+				alcohol_comb
+				bmi_c
+				physic_c
+				UVRQ
+				htension
+				HEART 
+				rel_1d_cancer
+				coffee_c
+				TV_comb 
+				nap_comb 
+				marriage_comb
+				utilizer_m 
+				utilizer_w;
+	model exit_age*melanoma_mal(0)=shebl_asp_f 
+				SEX
+				birth_cohort 
+				educm_comb
+				SMOKE_FORMER
+				alcohol_comb
+				bmi_c
+				physic_c
+				UVRQ
+				htension
+				HEART 
+				rel_1d_cancer
+				coffee_c
+				TV_comb 
+				nap_comb 
+				marriage_comb
+				utilizer_m 
+				utilizer_w 
+	/ entry = entry_age RL; *** The RL option requests risk limits ***;
+	ods output ParameterEstimates=adj_asp_mal;
 run;
-data apriori_imal_cat; set apriori;
+data adj_asp_mal; set adj_asp_mal;
+	if Parameter='shebl_asp_f';
+	variable="shebl_asp_f_mal              ";
 run;
-
+proc phreg data = melan_use multipass;
+	class shebl_non_f (ref='1. Non User')
+				SEX
+				birth_cohort 
+				educm_comb
+				SMOKE_FORMER
+				alcohol_comb
+				bmi_c
+				physic_c
+				UVRQ
+				htension
+				HEART 
+				rel_1d_cancer
+				coffee_c
+				TV_comb 
+				nap_comb 
+				marriage_comb
+				utilizer_m 
+				utilizer_w;
+	model exit_age*melanoma_mal(0)=shebl_non_f 
+				SEX
+				birth_cohort 
+				educm_comb
+				SMOKE_FORMER
+				alcohol_comb
+				bmi_c
+				physic_c
+				UVRQ
+				htension
+				HEART 
+				rel_1d_cancer
+				coffee_c
+				TV_comb 
+				nap_comb 
+				marriage_comb
+				utilizer_m 
+				utilizer_w 
+	/ entry = entry_age RL; *** The RL option requests risk limits ***;
+	ods output ParameterEstimates=adj_non_mal;
+run;
+data adj_non_mal; set adj_non_mal;
+	if Parameter='shebl_non_f';
+	variable="shebl_non_f_mal              ";
+run;
 
 data apriori_model; 
-set 
-apriori_aspirin_ins
-apriori_ains_cat
-apriori_aspirin_mal
-apriori_amal_cat
-apriori_ibu_ins
-apriori_iins_cat
-apriori_ibu_mal
-apriori_imal_cat
+	set 
+		adj_type_ins
+		adj_asp_ins
+		adj_non_ins
+		adj_type_mal
+		adj_asp_mal
+		adj_non_mal
 ; run;
 data apriori_model; 
 set apriori_model
 (Keep= variable HazardRatio HRLowerCL HRUpperCL Label ClassVal0); run;
-ods html file='E:\NCI REB\AARP\Results\Main_effects\apriori\apriori_model.xls' style=minimal;
-proc print data= apriori_model; run;
+ods html file='C:\REB\NSAIDS melanoma AARP\Results\Main_effects\apriori\apriori_model.xls' style=minimal;
+proc print data= apriori_model; run; ods html close; ods html;
 
 
 ******************************************************************;
