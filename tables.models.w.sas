@@ -216,7 +216,8 @@ ods html body= 'C:\REB\NSAIDS melanoma AARP\Results\Table_2\Table2_nsaid.xls' st
 title 'actual table1, confounders to exposure';
 proc tabulate data=melan_use missing;
 	class 	shebl_type  
-				SEX 
+				SEX
+				birth_cohort 
 				educm_comb
 				SMOKE_FORMER
 				alcohol_comb
@@ -235,6 +236,7 @@ proc tabulate data=melan_use missing;
 	;
 	table   
 				SEX 
+				birth_cohort
 				educm_comb
 				SMOKE_FORMER
 				alcohol_comb
