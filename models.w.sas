@@ -29,7 +29,7 @@ libname conv 'C:\REB\NSAIDS melanoma AARP\Data\converted';
 ods html close; ods html;
 proc phreg data = melan_use;
 class shebl_type (ref='1. Neither NSAID use') ;
-model exit_age*melanoma_ins(0)=shebl_type  / entry = entry_age RL; *** The RL option requests risk limits ***;
+model exit_age*melanoma_ins(0)=shebl_type  / entry = entry_age RL type3(LR); *** The RL option requests risk limits ***;
 ods output ParameterEstimates=unadj_ins_type;
 run;
 data unadj_ins_type; set unadj_ins_type;
@@ -62,7 +62,7 @@ run;
 
 proc phreg data = melan_use;
 class shebl_type (ref='1. Neither NSAID use') ;
-model exit_age*melanoma_mal(0)=shebl_type  / entry = entry_age RL; *** The RL option requests risk limits ***;
+model exit_age*melanoma_mal(0)=shebl_type  / entry = entry_age RL type3(LR); *** The RL option requests risk limits ***;
 ods output ParameterEstimates=unadj_mal_type;
 run;
 data unadj_mal_type; set unadj_mal_type;
@@ -152,7 +152,7 @@ proc phreg data = melan_use multipass;
 				marriage_comb
 				utilizer_m 
 				utilizer_w 
-	/ entry = entry_age RL; *** The RL option requests risk limits ***;
+	/ entry = entry_age RL type3(LR); *** The RL option requests risk limits ***;
 	ods output ParameterEstimates=adj_type_ins;
 run;
 data adj_type_ins; set adj_type_ins;
@@ -291,7 +291,7 @@ proc phreg data = melan_use multipass;
 				marriage_comb
 				utilizer_m 
 				utilizer_w 
-	/ entry = entry_age RL; *** The RL option requests risk limits ***;
+	/ entry = entry_age RL type3(LR); *** The RL option requests risk limits ***;
 	ods output ParameterEstimates=adj_type_mal;
 run;
 data adj_type_mal; set adj_type_mal;
@@ -404,9 +404,187 @@ proc print data= apriori_model; run;
 ods html close; ods html;
 
 
-******************************************************************;
-********* 		Excludes those with heart disease		**********;
-******************************************************************;
+**************************************************************************;
+********* 		P trend using likelihood ratio type3 test		**********;
+**************************************************************************;
+proc phreg data = melan_use multipass;
+	class 
+				SEX
+				birth_cohort 
+				educm_comb
+				SMOKE_FORMER
+				alcohol_comb
+				bmi_c
+				physic_c
+				UVRQ
+				htension
+				HEART 
+				rel_1d_cancer
+				coffee_c
+				TV_comb 
+				nap_comb 
+				marriage_comb
+				utilizer_m 
+				utilizer_w;
+	model exit_age*melanoma_ins(0)=shebl_asp_me 
+				SEX
+				birth_cohort 
+				educm_comb
+				SMOKE_FORMER
+				alcohol_comb
+				bmi_c
+				physic_c
+				UVRQ
+				htension
+				HEART 
+				rel_1d_cancer
+				coffee_c
+				TV_comb 
+				nap_comb 
+				marriage_comb
+				utilizer_m 
+				utilizer_w 
+	/ entry = entry_age RL type3(LR); *** The RL option requests risk limits ***;
+	ods output ParameterEstimates=adj_asp_ins;
+run;
+data adj_asp_ins; set adj_asp_ins;
+	if Parameter='shebl_asp_me';
+	variable="shebl_asp_me_ins              ";
+run;
+proc phreg data = melan_use multipass;
+	class 
+				SEX
+				birth_cohort 
+				educm_comb
+				SMOKE_FORMER
+				alcohol_comb
+				bmi_c
+				physic_c
+				UVRQ
+				htension
+				HEART 
+				rel_1d_cancer
+				coffee_c
+				TV_comb 
+				nap_comb 
+				marriage_comb
+				utilizer_m 
+				utilizer_w;
+	model exit_age*melanoma_ins(0)=shebl_non_me 
+				SEX
+				birth_cohort 
+				educm_comb
+				SMOKE_FORMER
+				alcohol_comb
+				bmi_c
+				physic_c
+				UVRQ
+				htension
+				HEART 
+				rel_1d_cancer
+				coffee_c
+				TV_comb 
+				nap_comb 
+				marriage_comb
+				utilizer_m 
+				utilizer_w 
+	/ entry = entry_age RL type3(LR); *** The RL option requests risk limits ***;
+	ods output ParameterEstimates=adj_non_ins;
+run;
+data adj_non_ins; set adj_non_ins;
+	if Parameter='shebl_non_me';
+	variable="shebl_non_me_ins              ";
+run;
+
+proc phreg data = melan_use multipass;
+	class 
+				SEX
+				birth_cohort 
+				educm_comb
+				SMOKE_FORMER
+				alcohol_comb
+				bmi_c
+				physic_c
+				UVRQ
+				htension
+				HEART 
+				rel_1d_cancer
+				coffee_c
+				TV_comb 
+				nap_comb 
+				marriage_comb
+				utilizer_m 
+				utilizer_w;
+	model exit_age*melanoma_mal(0)=shebl_asp_me
+				SEX
+				birth_cohort 
+				educm_comb
+				SMOKE_FORMER
+				alcohol_comb
+				bmi_c
+				physic_c
+				UVRQ
+				htension
+				HEART 
+				rel_1d_cancer
+				coffee_c
+				TV_comb 
+				nap_comb 
+				marriage_comb
+				utilizer_m 
+				utilizer_w 
+	/ entry = entry_age RL type3(LR); *** The RL option requests risk limits ***;
+	ods output ParameterEstimates=adj_asp_mal;
+run;
+data adj_asp_mal; set adj_asp_mal;
+	if Parameter='shebl_asp_me';
+	variable="shebl_asp_me_mal              ";
+run;
+proc phreg data = melan_use multipass;
+	class 
+				SEX
+				birth_cohort 
+				educm_comb
+				SMOKE_FORMER
+				alcohol_comb
+				bmi_c
+				physic_c
+				UVRQ
+				htension
+				HEART 
+				rel_1d_cancer
+				coffee_c
+				TV_comb 
+				nap_comb 
+				marriage_comb
+				utilizer_m 
+				utilizer_w;
+	model exit_age*melanoma_mal(0)=shebl_non_me 
+				SEX
+				birth_cohort 
+				educm_comb
+				SMOKE_FORMER
+				alcohol_comb
+				bmi_c
+				physic_c
+				UVRQ
+				htension
+				HEART 
+				rel_1d_cancer
+				coffee_c
+				TV_comb 
+				nap_comb 
+				marriage_comb
+				utilizer_m 
+				utilizer_w 
+	/ entry = entry_age RL type3(LR); *** The RL option requests risk limits ***;
+	ods output ParameterEstimates=adj_non_mal;
+run;
+data adj_non_mal; set adj_non_mal;
+	if Parameter='shebl_non_me';
+	variable="shebl_non_me_mal              ";
+run;
+
 
 ***********************************************;
 *********		   Unadjusted		***********;
