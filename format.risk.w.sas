@@ -216,19 +216,19 @@ proc format;
 									'4'='5-6 per week'
 									'5'='1 per day'
 									'6'='2+ per day';
-	value sheblaspffmt				9='Unknown'
-									2='Monthly, <=3 per month'
-									3='Weekly, >=1 per week'
-									4='Daily, >=1 per day'
-									1='Non User';
+	value sheblaspffmt				9='5. Unknown'
+									1='2. Monthly, <=3 per month'
+									2='3. Weekly, >=1 per week'
+									3='4. Daily, >=1 per day'
+									0='1. Non User';
 	value sheblaspufmt				9='Unknown'
 									1='Yes, user'
 									0='Not user';
 	value shebltypefmt				9='Unknown'
-									1='Neither NSAID use'
-									2='Aspirin use only'
-									3='Non-aspirin use only'
-									4='Both aspirin and non-aspirin use';
+									1='1. Neither NSAID use'
+									2='2. Aspirin use only'
+									3='3. Non-aspirin use only'
+									4='4. Both aspirin and non-aspirin use';
 	value excludefmt 				0='include'
 									1='exclude';
 run;
