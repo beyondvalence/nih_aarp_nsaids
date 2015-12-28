@@ -129,3 +129,4 @@ proc freq data=melan_use;
 	/missing;
 run;
 title;
+ods html;
