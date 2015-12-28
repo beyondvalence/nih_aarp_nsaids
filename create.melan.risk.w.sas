@@ -306,31 +306,6 @@ data melan_use;
 
 	** Shebl NSAID coding 20151217THU;
 	** http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0114633 ;
-	** aspirin use frequency;
-	shebl_asp_f=9; 
-	if		rf_Q10_1='1' and rf_Q10_2 in ('0','1')			then shebl_asp_f=1; /* monthly, <=3 per month */
-	else if rf_Q10_1='1' and rf_Q10_2 in ('2','3','4')		then shebl_asp_f=2; /* weekly, >=1 per week */
-	else if rf_Q10_1='1' and rf_Q10_2 in ('5','6')			then shebl_asp_f=3; /* daily, >=1 per day */
-	else if rf_Q10_1='0'									then shebl_asp_f=0; /* no aspirin */
-	else if rf_Q10_1 not in ('0','1')						then shebl_asp_f=0; /* no aspirin */
-	else 													shebl_asp_f=9;		/* unknown */
-	**aspirin use indicator;
-	shebl_asp_u=9;
-	if		shebl_asp_f in (1,2,3)							then shebl_asp_u=1; /* yes aspirin use */
-	else if shebl_asp_f=0									then shebl_asp_u=0; /* no aspirin use */
-
-	** nonaspirin use frequency;
-	shebl_non_f=9; 
-	if		rf_Q11_1='1' and rf_Q11_2 in ('0','1')			then shebl_non_f=1; /* monthly, <=3 per month */
-	else if rf_Q11_1='1' and rf_Q11_2 in ('2','3','4')		then shebl_non_f=2; /* weekly, >=1 per week */
-	else if rf_Q11_1='1' and rf_Q11_2 in ('5','6')			then shebl_non_f=3; /* daily, >=1 per day */
-	else if rf_Q11_1='0'									then shebl_non_f=0; /* no nonaspirin */
-	else if rf_Q11_1 not in ('0','1')						then shebl_non_f=0; /* no nonaspirin */
-	else 													shebl_non_f=9;		/* unknown */
-	** nonaspirin use indicator;
-	shebl_non_u=9;
-	if		shebl_non_f in (1,2,3)							then shebl_non_u=1; /* yes non-aspirin use */
-	else if shebl_non_f=0									then shebl_non_u=0; /* no non-aspirin use */
 
 	** nsaid type;
 	shebl_type=9;
@@ -338,6 +313,39 @@ data melan_use;
 	else if rf_Q10_1='1' and rf_Q11_1='0'					then shebl_type=2; /* apsirin use only */
 	else if rf_Q10_1='0' and rf_Q11_1='1'					then shebl_type=3; /* nonaspirin use only */
 	else if rf_Q10_1='1' and rf_Q11_1='1'					then shebl_type=4; /* both aspirin and nonaspirin use */
+	** shebl type main effect;
+	shebl_type_me=shebl_type;
+	if shebl_type_me=9										then shebl_type_me=.; /* unknown to missing */	
+
+	** aspirin use frequency;
+	shebl_asp_f=9; 
+	if		rf_Q10_1='1' and rf_Q10_2 in ('0','1')			then shebl_asp_f=1; /* monthly, <=3 per month */
+	else if rf_Q10_1='1' and rf_Q10_2 in ('2','3','4')		then shebl_asp_f=2; /* weekly, >=1 per week */
+	else if rf_Q10_1='1' and rf_Q10_2 in ('5','6')			then shebl_asp_f=3; /* daily, >=1 per day */
+	else if rf_Q10_1='0'									then shebl_asp_f=0; /* no aspirin */
+
+	**aspirin use indicator;
+	shebl_asp_u=9;
+	if		shebl_asp_f in (1,2,3)							then shebl_asp_u=1; /* yes aspirin use */
+	else if shebl_asp_f=0									then shebl_asp_u=0; /* no aspirin use */
+	**aspirin use main effect;
+	shebl_asp_me=shebl_asp_f;
+	if shebl_asp_me=9										then shebl_asp_me=.; /* unknown to missing */
+
+	** nonaspirin use frequency;
+	shebl_non_f=9; 
+	if		rf_Q11_1='1' and rf_Q11_2 in ('0','1')			then shebl_non_f=1; /* monthly, <=3 per month */
+	else if rf_Q11_1='1' and rf_Q11_2 in ('2','3','4')		then shebl_non_f=2; /* weekly, >=1 per week */
+	else if rf_Q11_1='1' and rf_Q11_2 in ('5','6')			then shebl_non_f=3; /* daily, >=1 per day */
+	else if rf_Q11_1='0'									then shebl_non_f=0; /* no nonaspirin */
+
+	** nonaspirin use indicator;
+	shebl_non_u=9;
+	if		shebl_non_f in (1,2,3)							then shebl_non_u=1; /* yes non-aspirin use */
+	else if shebl_non_f=0									then shebl_non_u=0; /* no non-aspirin use */
+	** nonaspirin use main effect;
+	shebl_non_me=shebl_non_f;
+	if shebl_non_me=9										then shebl_non_me=.; /* unknown to missing */
 
 	** END new NSAIDs variables **;
 	************************************************************************************************************************;
@@ -540,9 +548,9 @@ proc datasets library=work;
 			aspirin_collapse aspirin_collapsefmt.
 			ibu_collapse ibu_collapsefmt.
 			rf_Q10_1 rf_Q11_1 $rfq101fmt. rf_Q10_2 rf_Q11_2 $rfq102fmt. 
-			shebl_asp_f shebl_non_f sheblaspffmt.
+			shebl_asp_f shebl_non_f shebl_asp_me shebl_non_me sheblaspffmt.
 			shebl_asp_u shebl_non_u sheblaspufmt.
-			shebl_type shebltypefmt.
+			shebl_type shebl_type_me shebltypefmt.
 			RF_PHYS_MODVIG_CURR rfphysiccfmt.
 	;
 run;
