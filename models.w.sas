@@ -152,7 +152,7 @@ proc phreg data = melan_use multipass;
 				marriage_comb
 				utilizer_m 
 				utilizer_w 
-	/ entry = entry_age RL type3(LR); *** The RL option requests risk limits ***;
+	/ entry = entry_age RL; *** The RL option requests risk limits ***;
 	ods output ParameterEstimates=adj_type_ins;
 run;
 data adj_type_ins; set adj_type_ins;
@@ -196,7 +196,7 @@ proc phreg data = melan_use multipass;
 				marriage_comb
 				utilizer_m 
 				utilizer_w 
-	/ entry = entry_age RL type3(LR); *** The RL option requests risk limits ***;
+	/ entry = entry_age RL ; *** The RL option requests risk limits ***;
 	ods output ParameterEstimates=adj_asp_ins;
 run;
 data adj_asp_ins; set adj_asp_ins;
@@ -240,7 +240,7 @@ proc phreg data = melan_use multipass;
 				marriage_comb
 				utilizer_m 
 				utilizer_w 
-	/ entry = entry_age RL type3(LR); *** The RL option requests risk limits ***;
+	/ entry = entry_age RL ; *** The RL option requests risk limits ***;
 	ods output ParameterEstimates=adj_non_ins;
 run;
 data adj_non_ins; set adj_non_ins;
@@ -291,7 +291,7 @@ proc phreg data = melan_use multipass;
 				marriage_comb
 				utilizer_m 
 				utilizer_w 
-	/ entry = entry_age RL type3(LR); *** The RL option requests risk limits ***;
+	/ entry = entry_age RL ; *** The RL option requests risk limits ***;
 	ods output ParameterEstimates=adj_type_mal;
 run;
 data adj_type_mal; set adj_type_mal;
@@ -335,7 +335,7 @@ proc phreg data = melan_use multipass;
 				marriage_comb
 				utilizer_m 
 				utilizer_w 
-	/ entry = entry_age RL type3(LR); *** The RL option requests risk limits ***;
+	/ entry = entry_age RL ; *** The RL option requests risk limits ***;
 	ods output ParameterEstimates=adj_asp_mal;
 run;
 data adj_asp_mal; set adj_asp_mal;
@@ -379,7 +379,7 @@ proc phreg data = melan_use multipass;
 				marriage_comb
 				utilizer_m 
 				utilizer_w 
-	/ entry = entry_age RL type3(LR); *** The RL option requests risk limits ***;
+	/ entry = entry_age RL ; *** The RL option requests risk limits ***;
 	ods output ParameterEstimates=adj_non_mal;
 run;
 data adj_non_mal; set adj_non_mal;
