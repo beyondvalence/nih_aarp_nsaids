@@ -10,7 +10,7 @@
 # note: using new rexp dataset above
 #
 # Created: April 13 2015
-# Updated: v20151221MON WTL
+# Updated: v20151229TUE WTL
 # Under git version control
 # Used IMS: anchovy server
 # Warning: original IMS datasets are in LINUX latin1 encoding
@@ -525,7 +525,7 @@ proc datasets library=work;
 			smoke_quit smokequitfmt. smoke_dose smokedosefmt. 
 			smoke_quit_dose smokequitdosefmt.
 			coffee_c coffeefmt. 
-
+			birth_cohort birthcohortfmt.
 			sex sexfmt.
 			UVRQ uvrqfmt.
 			alcohol_comb alcoholfmt.
