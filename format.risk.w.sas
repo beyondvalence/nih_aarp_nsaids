@@ -13,6 +13,11 @@ proc format;
 									2='Malignant melanoma';
 	value melanomafmt 				0='No melanoma' 
 									1='Melanoma';
+	value birthcohortfmt			1='1925 to 1928'
+									2='1928 to 1931'
+									3='1931 to 1935'
+									4='1935 to 1939'
+									5='1939 to 1945';
 	value nsaidbifmt				9='Missing'
 									0='No reported NSAID use'
 									1='Reported NSAID use';
