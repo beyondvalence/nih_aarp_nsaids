@@ -227,7 +227,8 @@ proc phreg data = melan_use multipass;
 				nap_comb 
 				marriage_comb
 				utilizer_m 
-				utilizer_w;
+				utilizer_w
+				;
 	model exit_age*melanoma_ins(0)=shebl_non_f 
 				SEX
 				birth_cohort 
@@ -247,6 +248,7 @@ proc phreg data = melan_use multipass;
 				marriage_comb
 				utilizer_m 
 				utilizer_w 
+				shebl_non_f*SEX
 	/ entry = entry_age RL ; *** The RL option requests risk limits ***;
 	ods output ParameterEstimates=adj_non_ins;
 run;
@@ -335,6 +337,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				physic_c
+				physic_1518_c
 				UVRQ
 				htension
 				HEART 
