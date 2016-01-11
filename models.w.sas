@@ -405,7 +405,7 @@ ods html close; ods html;
 
 
 **************************************************************************;
-********* 		P trend using likelihood ratio type3 test		**********;
+********* 		P trend using wald type3 test		**********;
 **************************************************************************;
 proc phreg data = melan_use multipass;
 	class 
