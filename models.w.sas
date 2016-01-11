@@ -119,7 +119,6 @@ ods html close; ods html;
 proc phreg data = melan_use multipass;
 	class shebl_type (ref='1. Neither NSAID use')
 				SEX
-				birth_cohort 
 				educm_comb
 				SMOKE_FORMER
 				alcohol_comb
@@ -138,7 +137,7 @@ proc phreg data = melan_use multipass;
 				utilizer_w;
 	model exit_age*melanoma_ins(0)=shebl_type 
 				SEX
-				birth_cohort 
+				yob
 				educm_comb
 				SMOKE_FORMER
 				alcohol_comb
@@ -165,7 +164,6 @@ run;
 proc phreg data = melan_use multipass;
 	class shebl_asp_f (ref='1. Non User')
 				SEX
-				birth_cohort 
 				educm_comb
 				SMOKE_FORMER
 				alcohol_comb
@@ -184,7 +182,7 @@ proc phreg data = melan_use multipass;
 				utilizer_w;
 	model exit_age*melanoma_ins(0)=shebl_asp_f 
 				SEX
-				birth_cohort 
+				yob
 				educm_comb
 				SMOKE_FORMER
 				alcohol_comb
@@ -211,7 +209,6 @@ run;
 proc phreg data = melan_use multipass;
 	class shebl_non_f (ref='1. Non User')
 				SEX
-				birth_cohort 
 				educm_comb
 				SMOKE_FORMER
 				alcohol_comb
@@ -227,11 +224,10 @@ proc phreg data = melan_use multipass;
 				nap_comb 
 				marriage_comb
 				utilizer_m 
-				utilizer_w
-				;
+				utilizer_w;
 	model exit_age*melanoma_ins(0)=shebl_non_f 
 				SEX
-				birth_cohort 
+				yob
 				educm_comb
 				SMOKE_FORMER
 				alcohol_comb
@@ -248,7 +244,6 @@ proc phreg data = melan_use multipass;
 				marriage_comb
 				utilizer_m 
 				utilizer_w 
-				shebl_non_f*SEX
 	/ entry = entry_age RL ; *** The RL option requests risk limits ***;
 	ods output ParameterEstimates=adj_non_ins;
 run;
@@ -266,7 +261,6 @@ run;
 proc phreg data = melan_use multipass;
 	class shebl_type (ref='1. Neither NSAID use')
 				SEX
-				birth_cohort 
 				educm_comb
 				SMOKE_FORMER
 				alcohol_comb
@@ -285,7 +279,7 @@ proc phreg data = melan_use multipass;
 				utilizer_w;
 	model exit_age*melanoma_mal(0)=shebl_type 
 				SEX
-				birth_cohort 
+				yob
 				educm_comb
 				SMOKE_FORMER
 				alcohol_comb
@@ -312,7 +306,6 @@ run;
 proc phreg data = melan_use multipass;
 	class shebl_asp_f (ref='1. Non User')
 				SEX
-				birth_cohort 
 				educm_comb
 				SMOKE_FORMER
 				alcohol_comb
@@ -331,7 +324,7 @@ proc phreg data = melan_use multipass;
 				utilizer_w;
 	model exit_age*melanoma_mal(0)=shebl_asp_f 
 				SEX
-				birth_cohort 
+				yob
 				educm_comb
 				SMOKE_FORMER
 				alcohol_comb
@@ -358,7 +351,6 @@ run;
 proc phreg data = melan_use multipass;
 	class shebl_non_f (ref='1. Non User')
 				SEX
-				birth_cohort 
 				educm_comb
 				SMOKE_FORMER
 				alcohol_comb
@@ -377,7 +369,7 @@ proc phreg data = melan_use multipass;
 				utilizer_w;
 	model exit_age*melanoma_mal(0)=shebl_non_f 
 				SEX
-				birth_cohort 
+				yob
 				educm_comb
 				SMOKE_FORMER
 				alcohol_comb
@@ -412,10 +404,10 @@ data apriori_model;
 		adj_non_mal
 ; run;
 data apriori_model; 
-title2'with physic_1518_c';
+title2'with yob, physic_1518_c, and no birth_cohort';
 set apriori_model
 (Keep= variable HazardRatio HRLowerCL HRUpperCL Label ClassVal0); run;
-ods html file='C:\REB\NSAIDS melanoma AARP\Results\Main_effects\apriori\apriori_model_2.xls' style=minimal;
+ods html file='C:\REB\NSAIDS melanoma AARP\Results\Main_effects\apriori\apriori_model_yob.xls' style=minimal;
 proc print data= apriori_model; run; 
 ods html close; ods html;
 
