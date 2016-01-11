@@ -10,7 +10,7 @@
 # note: using new rexp dataset above
 #
 # Created: April 13 2015
-# Updated: v20151229TUE WTL
+# Updated: v20160111MON WTL
 # Under git version control
 # Used IMS: anchovy server
 # Warning: original IMS datasets are in LINUX latin1 encoding
@@ -374,6 +374,15 @@ data melan_use;
 	else if physic=5     						then physic_c=4; /* 5+ per week */
 	else if physic=9	 						then physic_c=9; /* missing */
 
+	** physical exercise between ages 15 and 18 cat;
+	physic_1518_c=9;
+	if      physic_1518 in (0,1)					then physic_1518_c=0; /* rarely */
+	else if physic_1518=2 	 						then physic_1518_c=1; /* 1-3 per month */
+	else if physic_1518=3 	 						then physic_1518_c=2; /* 1-2 per week */
+	else if physic_1518=4     						then physic_1518_c=3; /* 3-4 per week */
+	else if physic_1518=5     						then physic_1518_c=4; /* 5+ per week */
+	else if physic_1518=9	 						then physic_1518_c=9; /* missing */
+
 	** coffee drinking;
 	coffee_c=9;
 	if		qp12b='0'							then coffee_c=0; 	/* none */
@@ -495,6 +504,7 @@ proc datasets library=work;
 			physic_c = "level of physical activity"	
 			bmi_c = "bmi, rough"
 			physic_c = "physical activity in past 12 months"
+			physic_1518_c = "physical activity at ages 15-18"
 
 			smoke_former ="Smoking Status"
 			smoke_quit = 'Quit smoking status'
@@ -530,7 +540,8 @@ proc datasets library=work;
 			UVRQ uvrqfmt.
 			alcohol_comb alcoholfmt.
 			smoke_former smokeformerfmt.
-			physic_c physicfmt. physic physiccfmt.
+			physic_c physic_1518_c physicfmt. 
+			physic physic_1518 physiccfmt.
 			coffee_c coffeefmt. qp12b $qp12bfmt.
 			tv_comb tvfmt. RF_PHYS_TV rftvfmt.
 			nap_comb napfmt. RF_PHYS_NAP rfnapfmt.
