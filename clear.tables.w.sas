@@ -105,6 +105,9 @@ proc freq data=melan_use;
 		physic_c*physic
 		physic_c*melanoma_c
 		physic_c*sex
+		physic_1581_c*physic_1518
+		physic_1518_c*melanoma_c
+		physic_1518_c*sex
 		coffee_c*qp12b
 		coffee_c*melanoma_c
 		coffee_c*sex
