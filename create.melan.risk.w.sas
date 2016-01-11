@@ -376,12 +376,12 @@ data melan_use;
 
 	** physical exercise between ages 15 and 18 cat;
 	physic_1518_c=9;
-	if      physic_1518 in (0,1)					then physic_1518_c=0; /* rarely */
-	else if physic_1518=2 	 						then physic_1518_c=1; /* 1-3 per month */
-	else if physic_1518=3 	 						then physic_1518_c=2; /* 1-2 per week */
-	else if physic_1518=4     						then physic_1518_c=3; /* 3-4 per week */
-	else if physic_1518=5     						then physic_1518_c=4; /* 5+ per week */
-	else if physic_1518=9	 						then physic_1518_c=9; /* missing */
+	if      physic_1518 in (0,1)				then physic_1518_c=0; /* rarely */
+	else if physic_1518=2 	 					then physic_1518_c=1; /* 1-3 per month */
+	else if physic_1518=3 	 					then physic_1518_c=2; /* 1-2 per week */
+	else if physic_1518=4     					then physic_1518_c=3; /* 3-4 per week */
+	else if physic_1518=5     					then physic_1518_c=4; /* 5+ per week */
+	else if physic_1518=9	 					then physic_1518_c=9; /* missing */
 
 	** coffee drinking;
 	coffee_c=9;
