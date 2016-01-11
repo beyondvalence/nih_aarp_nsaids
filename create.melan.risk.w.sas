@@ -202,6 +202,7 @@ data melan_r; ** name the output of the first primary analysis include to melan_
   	exit_age = round(((exit_dt-f_dob)/365.25),.001);
   	personyrs = round(((exit_dt-entry_dt)/365.25),.001);
 	rf_personyrs = round(((exit_dt-rf_entry_dt)/365.25),.001);
+	yob=year(F_DOB);
 
 	format exit_dt entry_dt rf_entry_dt f_dob dod cancer_dxdt raadate Date9.;
 run;
