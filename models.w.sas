@@ -9,7 +9,8 @@
 # uses melan_use dataset
 # 
 # Created: July 30, 2015
-# Updated: 20151223WED WTL
+# Updated: v20160111MON WTL
+# Under git version control
 #
 *******************************************************************/
 libname conv 'C:\REB\NSAIDS melanoma AARP\Data\converted';
@@ -110,7 +111,7 @@ ods html close; ods html;
 *****************************************************************************;
 ** first set: in situ (type, asp_f, non_f);
 ** second set: malignant (type, asp_f, non_f);
-** asp_f and non_f both have type3(LT) likelihood ratio outputs;
+** asp_f and non_f both have type3 Wald outputs;
 
 ********************************************************;
 ********* 			IN SITU					************;
@@ -124,6 +125,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				physic_c
+				physic_1518_c
 				UVRQ
 				htension
 				HEART 
@@ -142,6 +144,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				physic_c
+				physic_1518_c
 				UVRQ
 				htension
 				HEART 
@@ -168,6 +171,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				physic_c
+				physic_1518_c
 				UVRQ
 				htension
 				HEART 
@@ -186,6 +190,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				physic_c
+				physic_1518_c
 				UVRQ
 				htension
 				HEART 
@@ -212,6 +217,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				physic_c
+				physic_1518_c
 				UVRQ
 				htension
 				HEART 
@@ -230,6 +236,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				physic_c
+				physic_1518_c
 				UVRQ
 				htension
 				HEART 
@@ -263,6 +270,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				physic_c
+				physic_1518_c
 				UVRQ
 				htension
 				HEART 
@@ -281,6 +289,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				physic_c
+				physic_1518_c
 				UVRQ
 				htension
 				HEART 
@@ -307,6 +316,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				physic_c
+				physic_1518_c
 				UVRQ
 				htension
 				HEART 
@@ -351,6 +361,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				physic_c
+				physic_1518_c
 				UVRQ
 				htension
 				HEART 
@@ -369,6 +380,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				physic_c
+				physic_1518_c
 				UVRQ
 				htension
 				HEART 
@@ -397,15 +409,16 @@ data apriori_model;
 		adj_non_mal
 ; run;
 data apriori_model; 
+title2'with physic_1518_c';
 set apriori_model
 (Keep= variable HazardRatio HRLowerCL HRUpperCL Label ClassVal0); run;
-ods html file='C:\REB\NSAIDS melanoma AARP\Results\Main_effects\apriori\apriori_model.xls' style=minimal;
+ods html file='C:\REB\NSAIDS melanoma AARP\Results\Main_effects\apriori\apriori_model_2.xls' style=minimal;
 proc print data= apriori_model; run; 
 ods html close; ods html;
 
 
 **************************************************************************;
-********* 		P trend using wald type3 test		**********;
+************** 			P trend using wald type3 test		**************;
 **************************************************************************;
 proc phreg data = melan_use multipass;
 	class 
@@ -416,6 +429,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				physic_c
+				physic_1518_c
 				UVRQ
 				htension
 				HEART 
@@ -434,6 +448,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				physic_c
+				physic_1518_c
 				UVRQ
 				htension
 				HEART 
@@ -457,6 +472,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				physic_c
+				physic_1518_c
 				UVRQ
 				htension
 				HEART 
@@ -475,6 +491,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				physic_c
+				physic_1518_c
 				UVRQ
 				htension
 				HEART 
@@ -499,6 +516,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				physic_c
+				physic_1518_c
 				UVRQ
 				htension
 				HEART 
@@ -517,6 +535,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				physic_c
+				physic_1518_c
 				UVRQ
 				htension
 				HEART 
@@ -540,6 +559,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				physic_c
+				physic_1518_c
 				UVRQ
 				htension
 				HEART 
@@ -558,6 +578,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				physic_c
+				physic_1518_c
 				UVRQ
 				htension
 				HEART 
