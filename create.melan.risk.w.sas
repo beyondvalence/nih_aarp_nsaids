@@ -555,8 +555,6 @@ proc datasets library=work;
 			rf_abnet_ibuprofen rf_abnet_ibuprofenfmt. 
 			rf_abnet_cat_aspirin rf_abnet_cat_aspirinfmt.
             rf_abnet_cat_ibuprofen rf_abnet_cat_ibuprofenfmt.
-			aspirin_collapse aspirin_collapsefmt.
-			ibu_collapse ibu_collapsefmt.
 			rf_Q10_1 rf_Q11_1 $rfq101fmt. rf_Q10_2 rf_Q11_2 $rfq102fmt. 
 			shebl_asp_f shebl_non_f shebl_asp_me shebl_non_me sheblaspffmt.
 			shebl_asp_u shebl_non_u sheblaspufmt.
