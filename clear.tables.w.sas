@@ -97,4 +97,25 @@ proc freq data=melan_use;
 		utilizer_m*melanoma_c
 		utilizer_m*sex
 	/missing nocol norow nopercent;
+run; 
+proc means data=melan_use missing;
+	title2 'RF entry age age category';
+	class agecat;
+	var rf_entry_age;
 run;
+proc freq data=melan_use;
+	tables
+		agecat*melanoma_c
+		agecat*sex
+	/missing nocol norow nopercent;
+proc means data=melan_use missing;
+	title2 'year of birth';
+	class yob;
+	var F_DOB;
+run;
+proc freq data=melan_use;
+	tables
+		yob*melanoma_c
+		yob*sex
+	/missing nocol norow nopercent;
+title;
