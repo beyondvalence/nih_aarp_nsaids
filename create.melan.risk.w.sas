@@ -460,6 +460,20 @@ data melan_use;
 	else if -9053  <= F_DOB < -7543   			then birth_cohort=4;
 	else if -7543  <= F_DOB <= -5267  			then birth_cohort=5;
 
+	** entry age quartiles;
+	entry_age_c=.;
+	if		50.283 <= entry_age < 58.114		then entry_age_c=1;
+	else if 58.114 <= entry_age < 62.973		then entry_age_c=2;
+	else if 62.973 <= entry_age < 66.804		then entry_age_c=3;
+	else if 66.804 <= entry_age <= 71.477		then entry_age_c=4;
+
+	** entry age quartiles, rounded cutoffs;
+	bc_cat=.;
+	if		1925 <= yob < 1930			then bc_cat=1;
+	else if 1930 <= yob < 1935			then bc_cat=2;
+	else if 1935 <= yob < 1940			then bc_cat=3;
+	else if 1940 <= yob <= 1945			then bc_cat=4;
+
 	** (rf) physical exercise how often participate mod-vig activites in past 10 years;
 	rf_physic_c=9;
 	if		rf_phys_modvig_curr in (0,1)		then rf_physic_c=0;	/* none-rarely */
