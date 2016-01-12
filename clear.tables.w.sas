@@ -6,41 +6,6 @@ ods html close; ods html;
 title1 'RFQ clearance tables';
 title2 'nsaid exposures';
 proc freq data=melan_use;
-	tables
-		nsaid_bi*rf_abnet_aspirin*rf_abnet_ibuprofen
-		nsaid*rf_abnet_cat_aspirin*rf_abnet_cat_ibuprofen
-	/missing nocol norow nopercent list;
-run;
-proc freq data=melan_use;
-	tables
-		nsaid_bi*melanoma_c
-		nsaid_bi*sex
-		nsaid*melanoma_c
-		nsaid*sex
-		nsaid_bi_me*nsaid_bi
-		nsaid_bi_me*melanoma_c
-		nsaid_bi_me*sex
-		nsaid_me*nsaid
-		nsaid_me*melanoma_c
-		nsaid_me*sex
-		/missing nocol norow nopercent;
-run;
-proc freq data=melan_use;
-	title3'murphy variables with regular/non users';
-	tables
-		murphy_asp*rf_Q10_1*rf_Q10_2
-		murphy_non*rf_Q11_1*rf_Q11_2
-	/missing nocol norow nopercent list;
-run;
-proc freq data=melan_use;
-	tables
-		murphy_asp*melanoma_c
-		murphy_asp*sex
-		murphy_non*melanoma_c
-		murphy_non*sex
-	/missing nocol norow nopercent;
-run;
-proc freq data=melan_use;
 	title3'shebl variables with freq';
 	tables
 		shebl_asp_f*rf_Q10_1*rf_Q10_2
@@ -62,23 +27,6 @@ proc freq data=melan_use;
 		shebl_type*sex
 	/missing nocol norow nopercent;
 run;
-proc freq data=melan_use;
-	title3'liu variables with both freq';
-	tables
-		liu_combo*shebl_type
-		liu_combo*melanoma_c
-		liu_combo*sex
-		liu_asp_only*(rf_Q10_1 rf_Q11_1 rf_Q10_2)
-		liu_asp_only*melanoma_c
-		liu_asp_only*sex
-		liu_non_only*(rf_Q10_1 rf_Q11_1 rf_Q11_2)
-		liu_non_only*melanoma_c
-		liu_non_only*sex
-		liu_both*(rf_Q10_1 rf_Q11_1 liu_combo rf_Q10_2 rf_Q11_2)
-		liu_both*melanoma_c
-		liu_both*sex
-	/missing nocol norow nopercent;
-run;
 title2 'confounders'; title3;
 proc means data=melan_use missing;
 	class UVRQ;
@@ -90,6 +38,15 @@ proc freq data=melan_use;
 		UVRQ*sex
 	/missing nocol norow nopercent;
 run;
+proc means data=melan_use missing;
+	class bmi_c;
+	var bmi_cur;
+run;
+proc freq data=melan_use;
+	tables
+		bmi_c*melanoma_c
+		bmi_c*sex
+	/missing nocol norow nopercent;
 proc means data=melan_use missing;
 	class alcohol_comb;
 	var mped_a_bev;
@@ -141,33 +98,3 @@ proc freq data=melan_use;
 		utilizer_m*sex
 	/missing nocol norow nopercent;
 run;
-title2 'additional variables';
-proc means data=melan_use missing;
-	class birth_cohort;
-	var F_DOB;
-run;
-proc freq data=melan_use;
-	tables
-		birth_cohort*melanoma_c
-		birth_cohort*sex
-	/missing nocol norow nopercent;
-run;
-proc means data=melan_use missing;
-	class bmi_c;
-	var bmi_cur;
-run;
-proc freq data=melan_use;
-	tables
-		bmi_c*melanoma_c
-		bmi_c*sex
-		rf_physic_c*rf_phys_modvig_curr
-		rf_physic_c*melanoma_c
-		rf_physic_c*sex
-		aspirin_collapse*RF_ABNET_CAT_ASPIRIN
-		aspirin_collapse*melanoma_c
-		aspirin_coolapse*sex
-		ibu_collapse*RF_ABNET_CAT_IBUPROFEN
-		ibu_collapse*melanoma_c
-		ibu_collapse*sex
-	/missing nocol norow nopercent;
-title;
