@@ -8,13 +8,15 @@ title2 'nsaid exposures';
 proc freq data=melan_use;
 	title3'shebl variables with freq';
 	tables
+		shebl_type*rf_Q10_1*rf_Q11_1 
 		shebl_asp_f*rf_Q10_1*rf_Q10_2
 		shebl_non_f*rf_Q11_1*rf_Q11_2
-		shebl_type*rf_Q10_1*rf_Q11_1 
 	/missing nocol norow nopercent list;
 run;
 proc freq data=melan_use;
 	tables
+		shebl_type*melanoma_c
+		shebl_type*sex
 		shebl_asp_f*melanoma_c
 		shebl_asp_f*sex
 		shebl_non_f*melanoma_c
@@ -23,8 +25,6 @@ proc freq data=melan_use;
 		shebl_asp_u*sex
 		shebl_non_u*melanoma_c
 		shebl_non_u*sex
-		shebl_type*melanoma_c
-		shebl_type*sex
 	/missing nocol norow nopercent;
 run;
 title2 'confounders'; title3;
