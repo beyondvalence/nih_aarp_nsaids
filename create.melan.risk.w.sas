@@ -436,7 +436,7 @@ data melan_use;
 	else if rf_Q15C='1'							then utilizer_m=1; /* did not utilize */
 	else if rf_Q15D='1'							then utilizer_m=1; /* did not utilize */
 
-	** bmi three categories;
+	** bmi four categories;
 	bmi_c=9;
 	if            bmi_cur<18.5 					then bmi_c=1; /* <18.5, underweight */
    	else if 18.5<=bmi_cur<25					then bmi_c=2; /* 18.5-24.9, normal */
@@ -462,15 +462,15 @@ data melan_use;
 
 	** RF entry age quartiles;
 	agecat=.;
-	if		51 <= rf_entry_age < 60		then agecat=1; /* 51-60 */
-	else if 60 <= rf_entry_age < 65		then agecat=2; /* 60-65 */
+	if		51 <= rf_entry_age < 60		then agecat=1; /* 51-59 */
+	else if 60 <= rf_entry_age < 65		then agecat=2; /* 60-64 */
 	else if 65 <= rf_entry_age 			then agecat=3; /* 65+ */
 
 	** 5 yr year of birth categories;
 	bc_cat=.;
-	if		1925 <= yob < 1930			then bc_cat=1; /* 1925-1930 */
-	else if 1930 <= yob < 1935			then bc_cat=2; /* 1930-1935 */
-	else if 1935 <= yob < 1940			then bc_cat=3; /* 1935-1940 */
+	if		1925 <= yob < 1930			then bc_cat=1; /* 1925-1929 */
+	else if 1930 <= yob < 1935			then bc_cat=2; /* 1930-1934 */
+	else if 1935 <= yob < 1940			then bc_cat=3; /* 1935-1939 */
 	else if 1940 <= yob <= 1945			then bc_cat=4; /* 1940-1945 */
 
 	** (rf) physical exercise how often participate mod-vig activites in past 10 years;
@@ -484,21 +484,6 @@ data melan_use;
 	else 											 rf_physic_c=9;
 
 	/****************************************************************/
-	** not sure if below variables are required **;
-
-	aspirin_collapse=9;
-	if RF_ABNET_CAT_ASPIRIN=0					then aspirin_collapse=0; /* no use */
-	else if RF_ABNET_CAT_ASPIRIN=1				then aspirin_collapse=1; /* monthly use */
-	else if RF_ABNET_CAT_ASPIRIN>=2				then aspirin_collapse=2; /* >monthly use */
-
-	ibu_collapse=9;
-	if RF_ABNET_CAT_IBUPROFEN=0					then ibu_collapse=0; /* no use */
-	else if RF_ABNET_CAT_IBUPROFEN=1			then ibu_collapse=1; /* monthly use */
-	else if RF_ABNET_CAT_IBUPROFEN>=2			then ibu_collapse=2; /* >monthly use */
-
-	utilizer=9; *combine utilizer_m (colonoscopy) and utilizer_w (mammogram) into single variable;
-	if			utilizer_m=1 | utilizer_w=1			then utilizer=1; *either yes;
-	else if		utilizer_m=0 and utilizer_w=0		then utilizer=0; *both no = utilizer no;
 run;
 
 ** add labels;
