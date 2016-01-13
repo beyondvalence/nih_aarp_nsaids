@@ -62,7 +62,7 @@ proc freq data=melan_use;
 		physic_c*physic
 		physic_c*melanoma_c
 		physic_c*sex
-		physic_1581_c*physic_1518
+		physic_1518_c*physic_1518
 		physic_1518_c*melanoma_c
 		physic_1518_c*sex
 		coffee_c*qp12b
@@ -107,15 +107,5 @@ proc freq data=melan_use;
 	tables
 		agecat*melanoma_c
 		agecat*sex
-	/missing nocol norow nopercent;
-proc means data=melan_use missing;
-	title2 'year of birth';
-	class yob;
-	var F_DOB;
-run;
-proc freq data=melan_use;
-	tables
-		yob*melanoma_c
-		yob*sex
 	/missing nocol norow nopercent;
 title;
