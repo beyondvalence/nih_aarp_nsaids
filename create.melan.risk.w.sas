@@ -373,7 +373,6 @@ data melan_use;
 	else if physic=3 	 						then physic_c=2; /* 1-2 per week */
 	else if physic=4     						then physic_c=3; /* 3-4 per week */
 	else if physic=5     						then physic_c=4; /* 5+ per week */
-	else if physic=9	 						then physic_c=9; /* missing */
 
 	** physical exercise between ages 15 and 18 cat;
 	physic_1518_c=9;
@@ -382,7 +381,6 @@ data melan_use;
 	else if physic_1518=3 	 					then physic_1518_c=2; /* 1-2 per week */
 	else if physic_1518=4     					then physic_1518_c=3; /* 3-4 per week */
 	else if physic_1518=5     					then physic_1518_c=4; /* 5+ per week */
-	else if physic_1518=9	 					then physic_1518_c=9; /* missing */
 
 	** coffee drinking;
 	coffee_c=9;
@@ -398,14 +396,12 @@ data melan_use;
 	else if		RF_PHYS_TV=2					then TV_comb=2; *1-2 hours/day *;
 	else if		RF_PHYS_TV=3					then TV_comb=3; *3-4 hours/day *;
 	else if		RF_PHYS_TV in (4,5,6)			then TV_comb=4; *>=5 hours/day *;
-	else if		RF_PHYS_TV=9					then TV_comb=9; *unknown*;
 
 	/* napping duration */
 	nap_comb=9;
 	if			RF_PHYS_NAP=0					then nap_comb=0; *never naps *;
 	else if		RF_PHYS_NAP=1					then nap_comb=1; *<1 hour/day *;
 	else if		RF_PHYS_NAP in (2,3,4)			then nap_comb=2; *naps >=1 hour/day *;
-	else if		RF_PHYS_NAP=9					then nap_comb=9; *unknown/missing*;
 
 	/* marriage status */
 	marriage_comb=9;
@@ -413,7 +409,6 @@ data melan_use;
 	else if		MARRIAGE=2						then marriage_comb=2; *widowed*;
 	else if		MARRIAGE in (3,4)				then marriage_comb=3; *divorced or separated*;
 	else if		MARRIAGE=5						then marriage_comb=4; *never married*;
-	else if		MARRIAGE=9						then marriage_comb=9; *unknown*;
 
 	/* education attained */
 	educm_comb=9;
@@ -421,7 +416,6 @@ data melan_use;
 	else if		EDUCM=3							then educm_comb=2; *post high school*;
 	else if		EDUCM=4							then educm_comb=3; *some college*;
 	else if		EDUCM=5							then educm_comb=4; *college graduate*;
-	else if		EDUCM=9							then educm_comb=9; *unknown*;
 
 	/* hospital utilization-mammograms */
 	utilizer_w=9;
@@ -442,13 +436,11 @@ data melan_use;
    	else if 18.5<=bmi_cur<25					then bmi_c=2; /* 18.5-24.9, normal */
    	else if 25  <=bmi_cur<30					then bmi_c=3; /* 25-29.9, overweight */
 	else if 30  <=bmi_cur						then bmi_c=4; /* >=30, obese */
-	else 											 bmi_c=9; /* missing or extreme */
 
 	** hypertension as told by doctor?;
 	htension=9;
 	if		rf_Q47_1='1'						then htension=1; /* yes to hypertension */
 	else if rf_Q47_1='0'						then htension=0; /* no to hypertension*/
-	else 											 htension=9; /* unknown */
 
 /*************************************************************************************************/
 	** RF entry age quartiles;
