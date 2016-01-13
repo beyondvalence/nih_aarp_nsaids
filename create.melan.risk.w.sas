@@ -451,15 +451,6 @@ data melan_use;
 	else 											 htension=9; /* unknown */
 
 /*************************************************************************************************/
-
-	** birth cohort date of birth quintile; /*CHECKED, fixed again, 20151214MON WTL */
-	birth_cohort=9;
-	if      -12571 <= F_DOB < -11400  			then birth_cohort=1;
-	else if -11400 <= F_DOB < -10327 			then birth_cohort=2;
-	else if -10327 <= F_DOB < -9053   			then birth_cohort=3;
-	else if -9053  <= F_DOB < -7543   			then birth_cohort=4;
-	else if -7543  <= F_DOB <= -5267  			then birth_cohort=5;
-
 	** RF entry age quartiles;
 	agecat=.;
 	if		51 <= rf_entry_age < 60		then agecat=1; /* 51-59 */
@@ -480,8 +471,6 @@ data melan_use;
 	else if rf_phys_modvig_curr=3				then rf_physic_c=2; /* 1-3 hr/week */
 	else if rf_phys_modvig_curr=4				then rf_physic_c=3; /* 4-7 hr/week */
 	else if rf_phys_modvig_curr=5				then rf_physic_c=4; /* >7 hr/week */
-	else if rf_phys_modvig_curr=9				then rf_physic_c=9; /* missing */
-	else 											 rf_physic_c=9;
 
 	/****************************************************************/
 run;
