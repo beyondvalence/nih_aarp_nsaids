@@ -26,11 +26,9 @@ proc format;
 									1='Monthly NSAID user'
 									2='Weekly NSAID user'
 									3='Daily NSAID user';
-	value agecatfmt 				1='<55 years' 
-									2='55-59 years' 
-									3='60-64 years' 
-									4='65-69 years' 
-									5='>=70 years';
+	value agecatfmt 				1='1. 51-59 years' 
+									2='2. 60-64 years' 
+									3='3. 65+ years';
 	value uvrqfmt					9='Missing'
 									1='1. >176 and <=186.255'
 									2='2. >186.255 and <=236.805'
