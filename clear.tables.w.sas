@@ -25,9 +25,27 @@ proc freq data=melan_use;
 		shebl_asp_u*sex
 		shebl_non_u*melanoma_c
 		shebl_non_u*sex
-	/missing nocol norow nopercent;
+	/missing  nopercent;
+run; title3;
+
+proc means data=melan_use;
+	title2 'age at entry mean (SD)';
+	var rf_entry_age;
 run;
-title2 'confounders'; title3;
+proc means data=melan_use;
+	class shebl_type;
+	var rf_entry_age;
+run;
+proc univariate data=melan_use;
+	title2 'follow up median (IQR)';
+	var rf_personyrs;
+run;
+proc univariate data=melan_use;
+	class shebl_type;
+	var rf_personyrs;
+run;
+
+title2 'confounders';
 proc means data=melan_use missing;
 	class UVRQ;
 	var exposure_jul_78_05;
@@ -36,7 +54,7 @@ proc freq data=melan_use;
 	tables
 		UVRQ*melanoma_c
 		UVRQ*sex
-	/missing nocol norow nopercent;
+	/missing  norow nopercent;
 run;
 proc means data=melan_use missing;
 	class bmi_c;
@@ -46,7 +64,7 @@ proc freq data=melan_use;
 	tables
 		bmi_c*melanoma_c
 		bmi_c*sex
-	/missing nocol norow nopercent;
+	/missing  norow nopercent;
 proc means data=melan_use missing;
 	class alcohol_comb;
 	var mped_a_bev;
@@ -55,7 +73,7 @@ proc freq data=melan_use;
 	tables
 		alcohol_comb*melanoma_c
 		alcohol_comb*sex
-	/missing nocol norow nopercent;
+	/missing  norow nopercent;
 run;
 proc freq data=melan_use;
 	tables
@@ -83,8 +101,9 @@ proc freq data=melan_use;
 		utilizer_w*rf_Q44
 		utilizer_w*melanoma_c
 		utilizer_w*sex
-	/missing nocol norow nopercent;
+	/missing  norow nopercent;
 run;
+
 proc freq data=melan_use;
 	title2 'Had any procedure on colon or rectum in past 3 years?';
 	tables
@@ -96,8 +115,9 @@ proc freq data=melan_use;
 	tables
 		utilizer_m*melanoma_c
 		utilizer_m*sex
-	/missing nocol norow nopercent;
+	/missing  norow nopercent;
 run; 
+
 proc means data=melan_use missing;
 	title2 'RF entry age age category';
 	class agecat;
@@ -107,5 +127,6 @@ proc freq data=melan_use;
 	tables
 		agecat*melanoma_c
 		agecat*sex
-	/missing nocol norow nopercent;
+	/missing  norow nopercent;
+run;
 title;
