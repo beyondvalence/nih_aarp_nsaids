@@ -4,44 +4,7 @@
 /******************************/
 ods html close; ods html;
 title1 'RFQ clearance tables';
-title2 'nsaid exposures';
-proc freq data=melan_use;
-	title3'shebl variables with freq';
-	tables
-		shebl_type*rf_Q10_1*rf_Q11_1 
-		shebl_asp_f*rf_Q10_1*rf_Q10_2
-		shebl_non_f*rf_Q11_1*rf_Q11_2
-	/missing nocol norow nopercent list;
-run;
-proc freq data=melan_use;
-	tables
-		shebl_type*melanoma_c
-		shebl_type*sex
-		shebl_asp_f*melanoma_c
-		shebl_asp_f*sex
-		shebl_non_f*melanoma_c
-		shebl_non_f*sex
-	/missing ;
-run; title3;
-
-proc means data=melan_use;
-	title2 'age at entry mean (SD)';
-	var rf_entry_age;
-run;
-proc means data=melan_use;
-	class shebl_type;
-	var rf_entry_age;
-run;
-proc univariate data=melan_use;
-	title2 'follow up median (IQR)';
-	var rf_personyrs;
-run;
-proc univariate data=melan_use;
-	class shebl_type;
-	var rf_personyrs;
-run;
-
-title2 'confounders';
+title2 'from special UVR dataset';
 proc means data=melan_use missing;
 	class UVRQ;
 	var exposure_jul_78_05;
@@ -51,6 +14,11 @@ proc freq data=melan_use;
 		UVRQ*melanoma_c
 		UVRQ*sex
 		UVRQ*shebl_type
+	/missing  norow ;
+run;
+title2 'from baseline dataset';
+proc freq data=melan_use;
+	tables
 		educm_comb*EDUCM
 		educm_comb*melanoma_c
 		educm_comb*sex
@@ -97,6 +65,25 @@ proc freq data=melan_use;
 		marriage_comb*melanoma_c
 		marriage_comb*sex
 		marriage_comb*shebl_type
+	/missing  norow ;
+run;
+title2 'from RF dataset';
+proc freq data=melan_use;
+	title3'nsaid exposures';
+	tables
+		shebl_type*rf_Q10_1*rf_Q11_1 
+		shebl_asp_f*rf_Q10_1*rf_Q10_2
+		shebl_non_f*rf_Q11_1*rf_Q11_2
+	/missing nocol norow nopercent list;
+run;
+proc freq data=melan_use;
+	tables
+		shebl_type*melanoma_c
+		shebl_type*sex
+		shebl_asp_f*melanoma_c
+		shebl_asp_f*sex
+		shebl_non_f*melanoma_c
+		shebl_non_f*sex
 		TV_comb*RF_PHYS_TV
 		TV_comb*melanoma_c
 		TV_comb*sex
@@ -105,9 +92,8 @@ proc freq data=melan_use;
 		nap_comb*melanoma_c
 		nap_comb*sex
 		nap_comb*shebl_type
-	/missing  norow ;
-run;
-
+	/missing ;
+run; title3;
 proc freq data=melan_use;
 	title2 'Had any procedure on colon or rectum in past 3 years?';
 	tables
@@ -138,5 +124,22 @@ proc freq data=melan_use;
 		agecat*sex
 		agecat*shebl_type
 	/missing  norow nopercent;
+run;
+
+proc means data=melan_use;
+	title2 'RF age at entry mean (SD)';
+	var rf_entry_age;
+run;
+proc means data=melan_use;
+	class shebl_type;
+	var rf_entry_age;
+run;
+proc univariate data=melan_use;
+	title2 'RF follow up median (IQR)';
+	var rf_personyrs;
+run;
+proc univariate data=melan_use;
+	class shebl_type;
+	var rf_personyrs;
 run;
 title;
