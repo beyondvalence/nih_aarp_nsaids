@@ -325,10 +325,6 @@ data melan_use;
 	else if rf_Q10_1='1' and rf_Q10_2 in ('5','6')			then shebl_asp_f=3; /* daily, >=1 per day */
 	else if rf_Q10_1='0'									then shebl_asp_f=0; /* no aspirin */
 
-	**aspirin use indicator;
-	shebl_asp_u=9;
-	if		shebl_asp_f in (1,2,3)							then shebl_asp_u=1; /* yes aspirin use */
-	else if shebl_asp_f=0									then shebl_asp_u=0; /* no aspirin use */
 	**aspirin use main effect;
 	shebl_asp_me=shebl_asp_f;
 	if shebl_asp_me=9										then shebl_asp_me=.; /* unknown to missing */
@@ -340,10 +336,6 @@ data melan_use;
 	else if rf_Q11_1='1' and rf_Q11_2 in ('5','6')			then shebl_non_f=3; /* daily, >=1 per day */
 	else if rf_Q11_1='0'									then shebl_non_f=0; /* no nonaspirin */
 
-	** nonaspirin use indicator;
-	shebl_non_u=9;
-	if		shebl_non_f in (1,2,3)							then shebl_non_u=1; /* yes non-aspirin use */
-	else if shebl_non_f=0									then shebl_non_u=0; /* no non-aspirin use */
 	** nonaspirin use main effect;
 	shebl_non_me=shebl_non_f;
 	if shebl_non_me=9										then shebl_non_me=.; /* unknown to missing */
