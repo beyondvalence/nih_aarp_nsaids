@@ -10,7 +10,7 @@
 # note: using new rexp dataset above
 #
 # Created: April 13 2015
-# Updated: v20160111MON WTL
+# Updated: v20160114THU WTL
 # Under git version control
 # Used IMS: anchovy server
 # Warning: original IMS datasets are in LINUX latin1 encoding
@@ -26,13 +26,6 @@ filename uv_pub 'C:\REB\NSAIDS melanoma AARP\Data\uv_public.v9x';
 ** import the UVR with file extension v9x from the anchovy folder;
 proc cimport data=uv_pub1 infile=uv_pub; 
 run;
-/***************************************************
-** use baseline census tract for higher resolution;
-proc means data=uv_pub1;
-	title "Comparing UVR exposure means";
-	var exposure_jul_78_93 exposure_jul_96_05 exposure_jul_78_05;
-	var exposure_net_78_93 exposure_net_96_05 exposure_net_78_05;
-run; */
 
 ** keep the july 1978-2005 UVR data only;
 data conv.uv_pub1;
@@ -67,7 +60,6 @@ data ranalysis;
 			cancer_behv /* for cancer staging */
 			cancer_siterec3
 
-			
 			self_other /* required for excl macro, for self reported cancers */
 
 			health /* required for excl macro */
@@ -87,7 +79,6 @@ data ranalysis;
 			BF_SMOKE_EVER
 			BF_SMOKE_FORMER
 
-			
 			rel_1d_cancer			/* family history of cancer - any 1st degree relatives ever diagnosed with cancer (nnmsc)*/
 			/*FAM_CANCER				 Any blood relatives diagnosed with cancer?*/
 
@@ -101,14 +92,14 @@ data ranalysis;
 			rf_q23_2_2a
 
 			/* add more variables here */
-			rf_Q44					/*mammogram*/
-			rf_Q15A					/*colonoscopy*/
+			rf_Q44					/* mammogram */
+			rf_Q15A					/* colonoscopy */
 			rf_Q15B
 			rf_Q15C
 			rf_Q15D
 			rf_Q15E
-			HEART					/*baseline Q40C */
-			DIABETES				/*baseline Q40B self-report diabetes y/n*/
+			HEART					/* baseline Q40C */
+			DIABETES				/* baseline Q40B self-report diabetes y/n */
 			MARRIAGE
 			BMI_CUR					/* current bmi kg/m2*/
 			qp12b 					/* coffee drinking */
@@ -120,7 +111,7 @@ data ranalysis;
 			q30b2					/* amount: beta-carotene */
 			q30d1					/* how often: vitamin e */
 			q30d2					/* amount: vitamin e */
-			rf_Q47_1				/* Ever been told by doctor to have  */
+			rf_Q47_1				/* Ever been told by doctor to have hypertension */
 			rf_Q48					/* have you had a physically demanding job? */
 			rf_Q49					/* how many physically demanding jobs have you ever held? */
 			rf_Q50					/* what is the total number of years that you worked in physically demanding jobs? */
