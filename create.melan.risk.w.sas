@@ -154,6 +154,13 @@ data ranalysis;
 ;
 run;
 
+** merge the melan_r dataset with the UV data;
+data melan_r;
+	merge melan_r (in=frodo) conv.uv_pub1 ;
+	by westatid;
+	if frodo;
+run;
+
 /* check point for merging the exposure and outcome data */
 ** copy and save the ranalysis dataset to the converted folder;
 proc copy noclone in=Work out=conv;
@@ -198,12 +205,7 @@ data melan_r; ** name the output of the first primary analysis include to melan_
 	format exit_dt entry_dt rf_entry_dt f_dob dod cancer_dxdt raadate Date9.;
 run;
 
-** merge the melan_r dataset with the UV data;
-data melan_r;
-	merge melan_r (in=frodo) conv.uv_pub1 ;
-	by westatid;
-	if frodo;
-run;
+
 
 **** Exclusions risk macro;
 
