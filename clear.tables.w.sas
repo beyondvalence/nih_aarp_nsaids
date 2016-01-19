@@ -1,9 +1,9 @@
 /******************************/
 /** NSAIDS clearance tables ***/
-** 20151223WED WTL ************;
+** created: 20151223WED WTL ***;
 /******************************/
 ods html close; ods html;
-title1 'RFQ clearance tables';
+title1 'RFQ clearance tables 20160119TUE';
 title2 'from special UVR dataset';
 proc means data=melan_use missing;
 	class UVRQ;
@@ -92,6 +92,10 @@ proc freq data=melan_use;
 		nap_comb*melanoma_c
 		nap_comb*sex
 		nap_comb*shebl_type
+		htension*rf_Q47_1
+		htension*melanoma_c
+		htension*sex
+		htension*shebl_type
 	/missing ;
 run; title3;
 proc freq data=melan_use;
