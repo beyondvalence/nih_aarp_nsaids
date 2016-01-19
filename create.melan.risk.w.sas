@@ -155,8 +155,8 @@ data ranalysis;
 run;
 
 ** merge the melan_r dataset with the UV data;
-data melan_r;
-	merge melan_r (in=frodo) conv.uv_pub1 ;
+data ranalysis;
+	merge ranalysis (in=frodo) conv.uv_pub1 ;
 	by westatid;
 	if frodo;
 run;
@@ -167,9 +167,12 @@ proc copy noclone in=Work out=conv;
 	select ranalysis;
 run;
 
-/**********/
+/******************************************************************************************/
 /* start2 */
-/**********/
+/* create melanoma outcome variables
+/* exit dates, person years
+/* use exclusions macro, exclude non-whites, exclude LE zero personyears
+/******************************************************************************************/
 ods _all_ close; ods html;
 %include 'C:\REB\NSAIDS melanoma AARP\Analysis\format.risk.w.sas';
 libname conv 'C:\REB\NSAIDS melanoma AARP\Data\converted';
@@ -206,9 +209,7 @@ data melan_r; ** name the output of the first primary analysis include to melan_
 run;
 
 
-
 **** Exclusions risk macro;
-
 *Start here to run macro to get exclusion;
 ods _all_ close; ods html;
 %include 'C:\REB\NSAIDS melanoma AARP\Analysis\anchovy\exclusions.first.primary.risk.macro.sas';
@@ -270,8 +271,8 @@ proc freq data= melan_r;
 run;
 title;
 
-*END HERE for exclusion counts**;
 
+/******************************************************************************************/
 ** find the cutoffs for the percentiles of UVR- exposure_jul_78_05 ;
 /*proc univariate data=conv.melan_r;
 	var exposure_jul_78_05; 
@@ -285,13 +286,13 @@ run; */
 
 	** need to change the exposure percentiles after exclusions;
 	** uvr exposure;
-	** Quartiles: 176.095 <= Q1 <= 186.255 < Q2 <= 236.805 < Q3 <= 253.731 < Q4 <= 289.463
-
+	** Quartiles: 176.095 <= Q1 <= 186.255 < Q2 <= 236.805 < Q3 <= 253.731 < Q4 <= 289.463;
 /******************************************************************************************/
-** create the UVR, and confounder variables by quartile/categories;
-** for both baseline and riskfactor questionnaire variables;
-/* cat=categorical ************************************************************************/
-
+/** start3
+/** create the UVR, and confounder variables by quartile/categories
+/** for both baseline and riskfactor questionnaire variables
+/** cat=categorical **/
+/******************************************************************************************/
 data melan_use;
 	set melan_r;
 	
@@ -489,8 +490,6 @@ proc datasets library=work;
 			rf_1d_cancer = "Family History of Cancer"
 			shebl_asp_f="Shebl coded aspirin freq"
 			shebl_non_f="Shebl coded non-aspirin freq"
-			shebl_asp_u="Shebl coded aspirin indicator"
-			shebl_non_u="Shebl coded non-aspirin indicator"
 			shebl_type="Shebl coded NSAID use type"
 	;
 	** set variable value labels;
@@ -500,7 +499,6 @@ proc datasets library=work;
 			smoke_quit smokequitfmt. smoke_dose smokedosefmt. 
 			smoke_quit_dose smokequitdosefmt.
 			coffee_c coffeefmt. 
-			birth_cohort birthcohortfmt.
 			sex sexfmt.
 			UVRQ uvrqfmt.
 			alcohol_comb alcoholfmt.
@@ -523,7 +521,6 @@ proc datasets library=work;
             rf_abnet_cat_ibuprofen rf_abnet_cat_ibuprofenfmt.
 			rf_Q10_1 rf_Q11_1 $rfq101fmt. rf_Q10_2 rf_Q11_2 $rfq102fmt. 
 			shebl_asp_f shebl_non_f shebl_asp_me shebl_non_me sheblaspffmt.
-			shebl_asp_u shebl_non_u sheblaspufmt.
 			shebl_type shebl_type_me shebltypefmt.
 			RF_PHYS_MODVIG_CURR rfphysiccfmt.
 	;
