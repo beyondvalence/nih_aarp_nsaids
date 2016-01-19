@@ -292,10 +292,71 @@ run; */
 /** create the UVR, and confounder variables by quartile/categories
 /** for both baseline and riskfactor questionnaire variables
 /** cat=categorical **/
+/** reordered 20160119TUE **/
 /******************************************************************************************/
 data melan_use;
 	set melan_r;
 	
+	** UVR TOMS quartile;
+	UVRQ=9;
+	if      176.000 < exposure_jul_78_05 <= 186.255 	then UVRQ=1; /* Q1 lowest*/
+	else if 186.255 < exposure_jul_78_05 <= 236.805 	then UVRQ=2; /* Q2 */
+	else if 236.805 < exposure_jul_78_05 <= 253.731 	then UVRQ=3; /* Q3 */
+	else if 253.731 < exposure_jul_78_05 <  290			then UVRQ=4; /* Q4 highest */
+
+	/* education attained */
+	educm_comb=9;
+	if			EDUCM in (1,2)					then educm_comb=1; *high school graduate*;
+	else if		EDUCM=3							then educm_comb=2; *post high school*;
+	else if		EDUCM=4							then educm_comb=3; *some college*;
+	else if		EDUCM=5							then educm_comb=4; *college graduate*;
+
+	/* alcohol consumption */
+	** edited to weekly, 20151223WED ;
+	alcohol_comb=9;
+	if 		mped_a_bev=0						then alcohol_comb=0; /* none */
+	else if 0<mped_a_bev<0.142857				then alcohol_comb=1; /* <=1, <1 drink per week */
+	else if 0.142857<=mped_a_bev<1				then alcohol_comb=2; /* >1-<=2 drinks, 1-6 per week */
+	else if 1<=mped_a_bev						then alcohol_comb=3; /* 2< drinks, 7+ per week */
+
+	** bmi four categories;
+	bmi_c=9;
+	if            bmi_cur<18.5 					then bmi_c=1; /* <18.5, underweight */
+   	else if 18.5<=bmi_cur<25					then bmi_c=2; /* 18.5-24.9, normal */
+   	else if 25  <=bmi_cur<30					then bmi_c=3; /* 25-29.9, overweight */
+	else if 30  <=bmi_cur						then bmi_c=4; /* >=30, obese */
+
+	** physical exercise cat;
+	physic_c=9;
+	if      physic in (0,1)						then physic_c=0; /* rarely */
+	else if physic=2 	 						then physic_c=1; /* 1-3 per month */
+	else if physic=3 	 						then physic_c=2; /* 1-2 per week */
+	else if physic=4     						then physic_c=3; /* 3-4 per week */
+	else if physic=5     						then physic_c=4; /* 5+ per week */
+
+	** physical exercise between ages 15 and 18 cat;
+	physic_1518_c=9;
+	if      physic_1518 in (0,1)				then physic_1518_c=0; /* rarely */
+	else if physic_1518=2 	 					then physic_1518_c=1; /* 1-3 per month */
+	else if physic_1518=3 	 					then physic_1518_c=2; /* 1-2 per week */
+	else if physic_1518=4     					then physic_1518_c=3; /* 3-4 per week */
+	else if physic_1518=5     					then physic_1518_c=4; /* 5+ per week */
+
+	** coffee drinking;
+	coffee_c=9;
+	if		qp12b='0'							then coffee_c=0; 	/* none */
+	else if qp12b in ('1','2','3','4','5','6')	then coffee_c=1; 	/* <=1/day */
+	else if qp12b='7'							then coffee_c=2; 	/* 2-3/day */
+	else if qp12b in ('8','9')					then coffee_c=3; 	/* >=4/day */
+	else if qp12b in ('E','M')					then coffee_c=9;	/* missing */
+
+	/* marriage status */
+	marriage_comb=9;
+	if			MARRIAGE=1						then marriage_comb=1; *married or living as married *;
+	else if		MARRIAGE=2						then marriage_comb=2; *widowed*;
+	else if		MARRIAGE in (3,4)				then marriage_comb=3; *divorced or separated*;
+	else if		MARRIAGE=5						then marriage_comb=4; *never married*;
+
 	**********************************************************************************************************;
 	** new NSAID variables below **;
 
@@ -337,45 +398,6 @@ data melan_use;
 	** END new NSAIDs variables **;
 	************************************************************************************************************************;
 
-	** UVR TOMS quartile;
-	UVRQ=9;
-	if      176.000 < exposure_jul_78_05 <= 186.255 	then UVRQ=1; /* Q1 lowest*/
-	else if 186.255 < exposure_jul_78_05 <= 236.805 	then UVRQ=2; /* Q2 */
-	else if 236.805 < exposure_jul_78_05 <= 253.731 	then UVRQ=3; /* Q3 */
-	else if 253.731 < exposure_jul_78_05 <  290			then UVRQ=4; /* Q4 highest */
-
-	/* alcohol consumption */
-	** edited to weekly, 20151223WED ;
-	alcohol_comb=9;
-	if 		mped_a_bev=0						then alcohol_comb=0; /* none */
-	else if 0<mped_a_bev<0.142857				then alcohol_comb=1; /* <=1, <1 drink per week */
-	else if 0.142857<=mped_a_bev<1				then alcohol_comb=2; /* >1-<=2 drinks, 1-6 per week */
-	else if 1<=mped_a_bev						then alcohol_comb=3; /* 2< drinks, 7+ per week */
-
-	** physical exercise cat;
-	physic_c=9;
-	if      physic in (0,1)						then physic_c=0; /* rarely */
-	else if physic=2 	 						then physic_c=1; /* 1-3 per month */
-	else if physic=3 	 						then physic_c=2; /* 1-2 per week */
-	else if physic=4     						then physic_c=3; /* 3-4 per week */
-	else if physic=5     						then physic_c=4; /* 5+ per week */
-
-	** physical exercise between ages 15 and 18 cat;
-	physic_1518_c=9;
-	if      physic_1518 in (0,1)				then physic_1518_c=0; /* rarely */
-	else if physic_1518=2 	 					then physic_1518_c=1; /* 1-3 per month */
-	else if physic_1518=3 	 					then physic_1518_c=2; /* 1-2 per week */
-	else if physic_1518=4     					then physic_1518_c=3; /* 3-4 per week */
-	else if physic_1518=5     					then physic_1518_c=4; /* 5+ per week */
-
-	** coffee drinking;
-	coffee_c=9;
-	if		qp12b='0'							then coffee_c=0; 	/* none */
-	else if qp12b in ('1','2','3','4','5','6')	then coffee_c=1; 	/* <=1/day */
-	else if qp12b='7'							then coffee_c=2; 	/* 2-3/day */
-	else if qp12b in ('8','9')					then coffee_c=3; 	/* >=4/day */
-	else if qp12b in ('E','M')					then coffee_c=9;	/* missing */
-
 	/* Television watched */
 	TV_comb=9;
 	if			RF_PHYS_TV in (0,1)				then TV_comb=1; *none/<1 hr/day *;
@@ -389,25 +411,11 @@ data melan_use;
 	else if		RF_PHYS_NAP=1					then nap_comb=1; *<1 hour/day *;
 	else if		RF_PHYS_NAP in (2,3,4)			then nap_comb=2; *naps >=1 hour/day *;
 
-	/* marriage status */
-	marriage_comb=9;
-	if			MARRIAGE=1						then marriage_comb=1; *married or living as married *;
-	else if		MARRIAGE=2						then marriage_comb=2; *widowed*;
-	else if		MARRIAGE in (3,4)				then marriage_comb=3; *divorced or separated*;
-	else if		MARRIAGE=5						then marriage_comb=4; *never married*;
+	** hypertension as told by doctor?;
+	htension=9;
+	if		rf_Q47_1='1'						then htension=1; /* yes to hypertension */
+	else if rf_Q47_1='0'						then htension=0; /* no to hypertension*/
 
-	/* education attained */
-	educm_comb=9;
-	if			EDUCM in (1,2)					then educm_comb=1; *high school graduate*;
-	else if		EDUCM=3							then educm_comb=2; *post high school*;
-	else if		EDUCM=4							then educm_comb=3; *some college*;
-	else if		EDUCM=5							then educm_comb=4; *college graduate*;
-
-	/* hospital utilization-mammograms */
-	utilizer_w=9;
-	if rf_Q44='1' | rf_Q44='2'					then utilizer_w=1; /* yes once and more mammograms in last 3 years*/
-	else if rf_Q44='0' 							then utilizer_w=0;	/* no mamograms in last 3 years */
-	
 	/* hospital utilization-colonoscopy, sigmoidoscopy, proctoscopy in past 3 years */
 	utilizer_m=9;
 	if rf_Q15E='1'								then utilizer_m=0; /* yes, utilized */
@@ -416,24 +424,18 @@ data melan_use;
 	else if rf_Q15C='1'							then utilizer_m=1; /* did not utilize */
 	else if rf_Q15D='1'							then utilizer_m=1; /* did not utilize */
 
-	** bmi four categories;
-	bmi_c=9;
-	if            bmi_cur<18.5 					then bmi_c=1; /* <18.5, underweight */
-   	else if 18.5<=bmi_cur<25					then bmi_c=2; /* 18.5-24.9, normal */
-   	else if 25  <=bmi_cur<30					then bmi_c=3; /* 25-29.9, overweight */
-	else if 30  <=bmi_cur						then bmi_c=4; /* >=30, obese */
-
-	** hypertension as told by doctor?;
-	htension=9;
-	if		rf_Q47_1='1'						then htension=1; /* yes to hypertension */
-	else if rf_Q47_1='0'						then htension=0; /* no to hypertension*/
-
-/*************************************************************************************************/
+	/* hospital utilization-mammograms */
+	utilizer_w=9;
+	if rf_Q44='1' | rf_Q44='2'					then utilizer_w=1; /* yes once and more mammograms in last 3 years*/
+	else if rf_Q44='0' 							then utilizer_w=0;	/* no mamograms in last 3 years */
+	
 	** RF entry age quartiles;
 	agecat=.;
 	if		51 <= rf_entry_age < 60		then agecat=1; /* 51-59 */
 	else if 60 <= rf_entry_age < 65		then agecat=2; /* 60-64 */
 	else if 65 <= rf_entry_age 			then agecat=3; /* 65+ */
+
+	/*************************************************************************************************/
 
 	** 5 yr year of birth categories;
 	bc_cat=.;
@@ -450,7 +452,7 @@ data melan_use;
 	else if rf_phys_modvig_curr=4				then rf_physic_c=3; /* 4-7 hr/week */
 	else if rf_phys_modvig_curr=5				then rf_physic_c=4; /* >7 hr/week */
 
-	/****************************************************************/
+	/*************************************************************************************************/
 run;
 
 ** add labels;
