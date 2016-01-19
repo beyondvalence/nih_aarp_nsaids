@@ -48,7 +48,6 @@ data ranalysis;
 			rf_entry_age
 			entry_dt
 			f_dob
-			AGECAT /*nu*/
 			racem /* for race exclusions */
 			SEX
 			raadate /* date moved outside of Registry Ascertainment Area */
