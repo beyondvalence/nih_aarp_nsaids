@@ -150,11 +150,10 @@ data ranalysis;
 			RF_ABNET_CAT_ASPIRIN	/*Frequency of Aspirin use during the past 12 months*/
 			RF_ABNET_IBUPROFEN		/*Ever take Ibuprofen during the past 12 months?*/
 			RF_ABNET_CAT_IBUPROFEN	/*Frequency of Ibuprofen use during the past 12 months*/
-
 ;
 run;
 
-** merge the melan_r dataset with the UV data;
+** merge the melan_r dataset with special UVR dataset;
 data ranalysis;
 	merge ranalysis (in=frodo) conv.uv_pub1 ;
 	by westatid;
@@ -271,7 +270,6 @@ proc freq data= melan_r;
 run;
 title;
 
-
 /******************************************************************************************/
 ** find the cutoffs for the percentiles of UVR- exposure_jul_78_05 ;
 /*proc univariate data=conv.melan_r;
@@ -284,7 +282,7 @@ proc print data=blu;
 	title 'UVR exposure percentiles';
 run; */
 
-	** need to change the exposure percentiles after exclusions;
+	** need to change the exposure percentiles after exclusion change;
 	** uvr exposure;
 	** Quartiles: 176.095 <= Q1 <= 186.255 < Q2 <= 236.805 < Q3 <= 253.731 < Q4 <= 289.463;
 /******************************************************************************************/
