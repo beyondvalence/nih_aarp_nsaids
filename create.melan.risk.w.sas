@@ -230,9 +230,9 @@ title 'exclusion macro, rfq';
 /***************************************************************************************/      
 title 'exclusion non non-Hispanic whites';
 data melan_r;
-   set melan_r;
-   excl_1_race=0;
-   if racem NE 1 then excl_1_race=1;
+    set melan_r;
+    excl_1_race=0;
+    if racem NE 1 then excl_1_race=1;
 run;
 proc freq data= melan_r;
 	title 'excl_1_race: exclude non-whites';
@@ -249,9 +249,9 @@ run;
 /***************************************************************************************/      
 title 'exclusion person years <=0';
 data melan_r;
-   set melan_r;
-   excl_2_pyr=0;
-   if rf_personyrs <= 0 then excl_2_pyr=1;
+    set melan_r;
+    excl_2_pyr=0;
+    if rf_personyrs <= 0 then excl_2_pyr=1;
 run;
 proc freq data= melan_r ;
 	title 'excl_2_pyr: exclude 0 or negative person years';
