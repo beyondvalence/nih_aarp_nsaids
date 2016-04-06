@@ -4,13 +4,13 @@
 #
 # creates the melanoma file with cancer, smoking,
 # NSAID, UVR variables
-# !!!! for risk factors dataset !!!!!
+# !!!!! for risk factors dataset !!!!!
 #
 # uses the uv_public, rout09jan14, rexp16feb15 datasets
 # note: using new rexp dataset above
 #
 # Created: April 13 2015
-# Updated: v20160114THU WTL
+# Updated: v20160406WED WTL
 # Under git version control
 # Used IMS: anchovy server
 # Warning: original IMS datasets are in LINUX latin1 encoding
