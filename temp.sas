@@ -13,26 +13,6 @@ proc freq data=melan_use;
 	/missing nocol norow nopercent;
 run;
 
-*******************************;
-* check murphy code for aspirin;
-proc freq data=melan_use;
-	title 'murphy aspirin';
-	table rf_Q10_1*murphy_asp*rf_Q10_2
-	/missing nocol norow nopercent;
-run;
-* check murphy code for non-aspirin;
-proc freq data=melan_use;
-	title 'murphy nonaspirin';
-	table rf_Q11_1*murphy_non*rf_Q11_2
-	/missing nocol norow nopercent;
-run;
-* check murphy code for cross tab of aspirin and non-aspirin;
-proc freq data=melan_use;
-	title 'murphy asp*non crosstab';
-	table murphy_non*murphy_asp
-	/missing ;
-run;
-
 **************************;
 *check shebl freq, aspirin;
 proc freq data=melan_use;
