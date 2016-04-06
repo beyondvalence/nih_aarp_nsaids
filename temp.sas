@@ -46,45 +46,10 @@ proc freq data=melan_use;
 	table rf_Q11_1*shebl_non_f*rf_Q11_2
 	/missing nocol norow nopercent;
 run;
-*check shebl indicator, aspirin, non-aspirin;
-proc freq data=melan_use;
-	title 'shebl aspirin, nonasp indicator';
-	table shebl_asp_u*rf_Q10_1 shebl_non_u*rf_Q11_1 
-	/missing nocol norow nopercent;
-run;
 *check shebl type, aspirin, non-aspirin;
 proc freq data=melan_use;
 	title 'shebl nsaid type';
 	table shebl_type*rf_Q10_1*rf_Q11_1 
-	/missing nocol norow nopercent;
-run;
-
-****************;
-* check liu type;
-proc freq data=melan_use;
-	title 'Asp, non, both, liu_combo';
-	table liu_combo*shebl_type 
-	/missing nocol norow nopercent;
-run;
-
-* check liu aspirin only;
-proc freq data=melan_use;
-	title 'Aspirin only freq, liu_asp_only';
-	table liu_asp_only*(rf_Q10_1 rf_Q11_1 rf_Q10_2)
-	/missing nocol norow nopercent;
-run;
-
-* check liu nonaspirin only;
-proc freq data=melan_use;
-	title 'Nonaspirin only freq, liu_non_only';
-	table liu_non_only*(rf_Q10_1 rf_Q11_1 rf_Q11_2)
-	/missing nocol norow nopercent;
-run;
-
-* check liu both aspirin, nonaspirin ;
-proc freq data=melan_use;
-	title 'Both asp and non freq, liu_both';
-	table liu_both*(rf_Q10_1 rf_Q11_1 liu_combo rf_Q10_2 rf_Q11_2)
 	/missing nocol norow nopercent;
 run;
 
@@ -93,17 +58,9 @@ ods html close; ods html;
 proc freq data=melan_use;
 	table 
 		(RF_ABNET_CAT_ASPIRIN
-		murphy_asp
-		murphy_non
 		shebl_asp_f
 		shebl_non_f
-		shebl_asp_u
-		shebl_non_u
-		shebl_type
-		liu_combo
-		liu_asp_only
-		liu_non_only
-		liu_both)*melanoma_c
+		shebl_type)*melanoma_c
 	/missing nocol norow nopercent;
 run;
 
