@@ -4,8 +4,9 @@
 ** updated: 20160406WED WTL ***;
 /******************************/
 ods html close; ods html;
-title1 'RFQ clearance tables 20160406WED';
+title1 'RFQ clearance tables 20160414THU';
 title2 'from special UVR dataset';
+title3 'file: clear.tables.w.sas';
 proc means data=melan_use missing;
 	class UVRQ;
 	var exposure_jul_78_05;
@@ -24,6 +25,7 @@ proc freq data=melan_use;
 		educm_comb*melanoma_c
 		educm_comb*sex
 		educm_comb*shebl_type
+		SMOKE_FORMER*shebl_type
 	/missing  norow ;
 run;
 proc means data=melan_use missing;
@@ -58,6 +60,8 @@ proc freq data=melan_use;
 		physic_1518_c*melanoma_c
 		physic_1518_c*sex
 		physic_1518_c*shebl_type
+		HEART*shebl_type
+		rf_1d_cancer*shebl_type
 		coffee_c*qp12b
 		coffee_c*melanoma_c
 		coffee_c*sex

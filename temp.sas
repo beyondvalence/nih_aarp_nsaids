@@ -5,10 +5,12 @@
 /******************************/
 
 ods html close; ods html;
-
+title1 'NSAID test freqs';
+title2 'Abnet and Shebl checks';
+title3 'file: temp.sas';
 * check abnet nsaids freq code for aspirin and non-aspirin;
 proc freq data=melan_use;
-	title 'Abnet code checks';
+	title2 'Abnet code checks';
 	table rf_Q10_1 rf_Q10_2*RF_ABNET_CAT_ASPIRIN rf_Q11_1 rf_Q11_2*RF_ABNET_CAT_IBUPROFEN 
 	/missing nocol norow nopercent;
 run;
@@ -16,26 +18,27 @@ run;
 **************************;
 *check shebl freq, aspirin;
 proc freq data=melan_use;
-	title 'shebl aspirin freq';
+	title2 'shebl aspirin freq';
 	table rf_Q10_1*shebl_asp_f*rf_Q10_2
 	/missing nocol norow nopercent;
 run;
 *check shebl freq, non-aspirin;
 proc freq data=melan_use;
-	title 'shebl nonaspirin freq';
+	title2 'shebl nonaspirin freq';
 	table rf_Q11_1*shebl_non_f*rf_Q11_2
 	/missing nocol norow nopercent;
 run;
 *check shebl type, aspirin, non-aspirin;
 proc freq data=melan_use;
-	title 'shebl nsaid type';
+	title2 'shebl nsaid type';
 	table shebl_type*rf_Q10_1*rf_Q11_1 
 	/missing nocol norow nopercent;
 run;
 
 
-ods html close; ods html;
+*ods html close; *ods html;
 proc freq data=melan_use;
+	title2 'abnett shebl cross checks';
 	table 
 		(RF_ABNET_CAT_ASPIRIN
 		shebl_asp_f
@@ -45,9 +48,9 @@ proc freq data=melan_use;
 run;
 
 proc freq data=melan_use;
+	title2 'variables by shebl type';
 	table
-				shebl_type
-				SEX 
+				(SEX 
 				educm_comb
 				SMOKE_FORMER
 				alcohol_comb
@@ -62,7 +65,7 @@ proc freq data=melan_use;
 				nap_comb 
 				marriage_comb
 				utilizer_m 
-				utilizer_w
+				utilizer_w)*shebl_type
 	/missing;
 run;
 title;
