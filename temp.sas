@@ -6,14 +6,14 @@
 
 ods html close; ods html;
 title1 'NSAID test freqs';
-title2 'Abnet and Shebl checks';
+title2 'Shebl checks';
 title3 'file: temp.sas';
-* check abnet nsaids freq code for aspirin and non-aspirin;
+/* check abnet nsaids freq code for aspirin and non-aspirin;
 proc freq data=melan_use;
 	title2 'Abnet code checks';
 	table rf_Q10_1 rf_Q10_2*RF_ABNET_CAT_ASPIRIN rf_Q11_1 rf_Q11_2*RF_ABNET_CAT_IBUPROFEN 
 	/missing nocol norow nopercent;
-run;
+run;*/
 
 **************************;
 *check shebl freq, aspirin;
