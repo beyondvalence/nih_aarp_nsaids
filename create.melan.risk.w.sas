@@ -6,11 +6,11 @@
 # NSAID, UVR variables
 # !!!!! for risk factors dataset !!!!!
 #
-# uses the uv_public, rout09jan14, rexp16feb15 datasets
+# uses the uv_public, rout25mar16, rexp23feb16 datasets
 # note: using new rexp dataset above
 #
 # Created: April 13 2015
-# Updated: v20160406WED WTL
+# Updated: v20160421THU WTL
 # Under git version control
 # Used IMS: anchovy server
 # Warning: original IMS datasets are in LINUX latin1 encoding
@@ -20,7 +20,7 @@ options nocenter yearcutoff=1900 errors=1;
 title1 'NIH-AARP NSAIDs UVR Melanoma Study';
 
 libname conv 'C:\REB\NSAIDS melanoma AARP\Data\converted';
-
+libname new 'C:\REB\NSAIDS melanoma AARP\Data\new';
 filename uv_pub 'C:\REB\NSAIDS melanoma AARP\Data\uv_public.v9x';
 
 ** import the UVR with file extension v9x from the anchovy folder;
@@ -35,13 +35,14 @@ data conv.uv_pub1;
 run;
 
 ** input: first primary cancer _risk; 
-** output: analysis;
-** uses rexp16feb15, rout09jan14, uv_pub1;
+** output: ranalysis;
+** uses rout25mar16, rexp23feb16, uv_pub1;
 ** riskfactor dataset;
 **%include 'C:\REB\AARP_HRTandMelanoma\Analysis\anchovy\first.primary.analysis.risk.include.sas';
 
 data ranalysis;  
-  merge conv.rout09jan14 (in=ino) conv.rexp16feb15 (in=ine);
+  *merge conv.rout09jan14 (in=ino) conv.rexp16feb15 (in=ine);
+  merge new.rout25mar16 (in=ino) new.rexp23feb16 (in=ine);
   by westatid;
 	keep	westatid
 			rf_entry_dt
