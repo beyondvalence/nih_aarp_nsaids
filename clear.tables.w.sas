@@ -3,6 +3,9 @@
 ** created: 20151223WED WTL ***;
 ** updated: 20160421THU WTL ***;
 /******************************/
+
+** added shebl coded NSAID checks;
+
 ods html close; ods html;
 title1 'RFQ clearance tables 20160421THU';
 title2 'from special UVR dataset';
