@@ -10,19 +10,6 @@ title1 'NSAID table1 checks';
 title2 '';
 title3 'file: shebl_check.sas';
 
-proc means data=melan_use missing;
-	title2 'RF entry age age category';
-	class agecat;
-	var rf_entry_age;
-run;
-proc freq data=melan_use;
-	tables
-		agecat*melanoma_c
-		agecat*sex
-		agecat*shebl_type
-	/missing  norow nopercent;
-run;
-
 proc means data=melan_use;
 	title2 'RF age at entry mean (SD)';
 	var rf_entry_age;
