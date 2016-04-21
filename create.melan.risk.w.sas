@@ -20,8 +20,8 @@ options nocenter yearcutoff=1900 errors=1;
 title1 'NIH-AARP NSAIDs UVR Melanoma Study';
 
 libname conv 'C:\REB\NSAIDS melanoma AARP\Data\converted';
-libname new 'C:\REB\NSAIDS melanoma AARP\Data\new';
-filename uv_pub 'C:\REB\NSAIDS melanoma AARP\Data\uv_public.v9x';
+libname anchovy 'C:\REB\NSAIDS melanoma AARP\Data\anchovy';
+filename uv_pub 'C:\REB\NSAIDS melanoma AARP\Data\anchovy\uv_public.v9x';
 
 ** import the UVR with file extension v9x from the anchovy folder;
 proc cimport data=uv_pub1 infile=uv_pub; 
@@ -38,11 +38,10 @@ run;
 ** output: ranalysis;
 ** uses rout25mar16, rexp23feb16, uv_pub1;
 ** riskfactor dataset;
-**%include 'C:\REB\AARP_HRTandMelanoma\Analysis\anchovy\first.primary.analysis.risk.include.sas';
 
 data ranalysis;  
   *merge conv.rout09jan14 (in=ino) conv.rexp16feb15 (in=ine);
-  merge new.rout25mar16 (in=ino) new.rexp23feb16 (in=ine);
+  merge anchovy.rout25mar16 (in=ino) anchovy.rexp23feb16 (in=ine);
   by westatid;
 	keep	westatid
 			rf_entry_dt
