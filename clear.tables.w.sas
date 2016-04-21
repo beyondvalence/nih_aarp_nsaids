@@ -122,33 +122,33 @@ proc freq data=melan_use;
 	/missing  norow ;
 run; 
 
-proc means data=melan_use missing;
-	title2 'RF entry age age category';
-	class agecat;
-	var rf_entry_age;
-run;
+
+**************************;
+*check shebl freq, aspirin;
 proc freq data=melan_use;
-	tables
-		agecat*melanoma_c
-		agecat*sex
-		agecat*shebl_type
-	/missing  norow nopercent;
+	title2 'shebl aspirin freq';
+	table rf_Q10_1*shebl_asp_f*rf_Q10_2
+	/missing nocol norow nopercent;
+run;
+*check shebl freq, non-aspirin;
+proc freq data=melan_use;
+	title2 'shebl nonaspirin freq';
+	table rf_Q11_1*shebl_non_f*rf_Q11_2
+	/missing nocol norow nopercent;
+run;
+*check shebl type, aspirin, non-aspirin;
+proc freq data=melan_use;
+	title2 'shebl nsaid type';
+	table shebl_type*rf_Q10_1*rf_Q11_1 
+	/missing nocol norow nopercent;
 run;
 
-proc means data=melan_use;
-	title2 'RF age at entry mean (SD)';
-	var rf_entry_age;
-run;
-proc means data=melan_use;
-	class shebl_type;
-	var rf_entry_age;
-run;
-proc univariate data=melan_use;
-	title2 'RF follow up median (IQR)';
-	var rf_personyrs;
-run;
-proc univariate data=melan_use;
-	class shebl_type;
-	var rf_personyrs;
+proc freq data=melan_use;
+	title2 'shebl cross checks';
+	table 
+		(shebl_asp_f
+		shebl_non_f
+		shebl_type)*melanoma_c
+	/missing nocol norow nopercent;
 run;
 title;
