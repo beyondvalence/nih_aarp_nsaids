@@ -1,13 +1,14 @@
-/******************************/
-/** NSAIDs test file **********/
-/** contains various checks ***/
-/** updated: 20151221MON WTL **/
-/******************************/
+/***************************************/
+/** NSAIDs test file *******************/
+/** contains various checks ************/
+/** now only SHEBL type NSAID coding ***/
+/** updated: 20151221 WTL **************/
+/***************************************/
 
 ods html close; ods html;
 title1 'NSAID test freqs';
 title2 'Shebl checks';
-title3 'file: temp.sas';
+title3 'file: shebl_check.sas';
 /* check abnet nsaids freq code for aspirin and non-aspirin;
 proc freq data=melan_use;
 	title2 'Abnet code checks';
@@ -35,13 +36,11 @@ proc freq data=melan_use;
 	/missing nocol norow nopercent;
 run;
 
-
 *ods html close; *ods html;
 proc freq data=melan_use;
-	title2 'abnett shebl cross checks';
+	title2 'shebl cross checks';
 	table 
-		(RF_ABNET_CAT_ASPIRIN
-		shebl_asp_f
+		(shebl_asp_f
 		shebl_non_f
 		shebl_type)*melanoma_c
 	/missing nocol norow nopercent;
