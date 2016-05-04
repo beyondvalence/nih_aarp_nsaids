@@ -123,7 +123,7 @@ proc phreg data = melan_use multipass;
 				SMOKE_FORMER
 				alcohol_comb
 				bmi_c
-				physic_c
+				
 				physic_1518_c
 				UVRQ
 				htension
@@ -142,7 +142,7 @@ proc phreg data = melan_use multipass;
 				SMOKE_FORMER
 				alcohol_comb
 				bmi_c
-				physic_c
+				
 				physic_1518_c
 				UVRQ
 				htension
@@ -168,7 +168,7 @@ proc phreg data = melan_use multipass;
 				SMOKE_FORMER
 				alcohol_comb
 				bmi_c
-				physic_c
+				
 				physic_1518_c
 				UVRQ
 				htension
@@ -187,7 +187,7 @@ proc phreg data = melan_use multipass;
 				SMOKE_FORMER
 				alcohol_comb
 				bmi_c
-				physic_c
+				
 				physic_1518_c
 				UVRQ
 				htension
@@ -213,7 +213,7 @@ proc phreg data = melan_use multipass;
 				SMOKE_FORMER
 				alcohol_comb
 				bmi_c
-				physic_c
+				
 				physic_1518_c
 				UVRQ
 				htension
@@ -232,7 +232,7 @@ proc phreg data = melan_use multipass;
 				SMOKE_FORMER
 				alcohol_comb
 				bmi_c
-				physic_c
+				
 				physic_1518_c
 				UVRQ
 				htension
@@ -265,7 +265,7 @@ proc phreg data = melan_use multipass;
 				SMOKE_FORMER
 				alcohol_comb
 				bmi_c
-				physic_c
+				
 				physic_1518_c
 				UVRQ
 				htension
@@ -284,7 +284,7 @@ proc phreg data = melan_use multipass;
 				SMOKE_FORMER
 				alcohol_comb
 				bmi_c
-				physic_c
+				
 				physic_1518_c
 				UVRQ
 				htension
@@ -310,7 +310,7 @@ proc phreg data = melan_use multipass;
 				SMOKE_FORMER
 				alcohol_comb
 				bmi_c
-				physic_c
+				
 				physic_1518_c
 				UVRQ
 				htension
@@ -329,7 +329,7 @@ proc phreg data = melan_use multipass;
 				SMOKE_FORMER
 				alcohol_comb
 				bmi_c
-				physic_c
+				
 				physic_1518_c
 				UVRQ
 				htension
@@ -355,7 +355,7 @@ proc phreg data = melan_use multipass;
 				SMOKE_FORMER
 				alcohol_comb
 				bmi_c
-				physic_c
+				
 				physic_1518_c
 				UVRQ
 				htension
@@ -374,7 +374,7 @@ proc phreg data = melan_use multipass;
 				SMOKE_FORMER
 				alcohol_comb
 				bmi_c
-				physic_c
+				
 				physic_1518_c
 				UVRQ
 				htension
@@ -404,10 +404,10 @@ data apriori_model;
 		adj_non_mal
 ; run;
 data apriori_model; 
-title2'with yob, physic_1518_c, and no birth_cohort';
+title2'with yob, physic_1518_c only, and no birth_cohort';
 set apriori_model
 (Keep= variable HazardRatio HRLowerCL HRUpperCL Label ClassVal0); run;
-ods html file='C:\REB\NSAIDS melanoma AARP\Results\Main_effects\apriori\apriori_model_yob.xls' style=minimal;
+ods html file='C:\REB\NSAIDS melanoma AARP\Results\Main_effects\apriori\apriori_model_yob_1518.xls' style=minimal;
 proc print data= apriori_model; run; 
 ods html close; ods html;
 
@@ -418,12 +418,12 @@ ods html close; ods html;
 proc phreg data = melan_use multipass;
 	class 
 				SEX
-				
+				yob
 				educm_comb
 				SMOKE_FORMER
 				alcohol_comb
 				bmi_c
-				physic_c
+				
 				physic_1518_c
 				UVRQ
 				htension
@@ -437,12 +437,12 @@ proc phreg data = melan_use multipass;
 				utilizer_w;
 	model exit_age*melanoma_ins(0)=shebl_asp_me 
 				SEX
-				 
+				yob
 				educm_comb
 				SMOKE_FORMER
 				alcohol_comb
 				bmi_c
-				physic_c
+				
 				physic_1518_c
 				UVRQ
 				htension
@@ -461,12 +461,12 @@ run;
 proc phreg data = melan_use multipass;
 	class 
 				SEX
-				birth_cohort 
+				yob
 				educm_comb
 				SMOKE_FORMER
 				alcohol_comb
 				bmi_c
-				physic_c
+				
 				physic_1518_c
 				UVRQ
 				htension
@@ -480,12 +480,12 @@ proc phreg data = melan_use multipass;
 				utilizer_w;
 	model exit_age*melanoma_ins(0)=shebl_non_me 
 				SEX
-				birth_cohort 
+				yob 
 				educm_comb
 				SMOKE_FORMER
 				alcohol_comb
 				bmi_c
-				physic_c
+				
 				physic_1518_c
 				UVRQ
 				htension
@@ -505,12 +505,12 @@ run;
 proc phreg data = melan_use multipass;
 	class 
 				SEX
-				birth_cohort 
+				yob
 				educm_comb
 				SMOKE_FORMER
 				alcohol_comb
 				bmi_c
-				physic_c
+				
 				physic_1518_c
 				UVRQ
 				htension
@@ -524,12 +524,12 @@ proc phreg data = melan_use multipass;
 				utilizer_w;
 	model exit_age*melanoma_mal(0)=shebl_asp_me
 				SEX
-				birth_cohort 
+				yob
 				educm_comb
 				SMOKE_FORMER
 				alcohol_comb
 				bmi_c
-				physic_c
+				
 				physic_1518_c
 				UVRQ
 				htension
@@ -548,12 +548,12 @@ run;
 proc phreg data = melan_use multipass;
 	class 
 				SEX
-				birth_cohort 
+				yob
 				educm_comb
 				SMOKE_FORMER
 				alcohol_comb
 				bmi_c
-				physic_c
+				
 				physic_1518_c
 				UVRQ
 				htension
@@ -567,12 +567,12 @@ proc phreg data = melan_use multipass;
 				utilizer_w;
 	model exit_age*melanoma_mal(0)=shebl_non_me 
 				SEX
-				birth_cohort 
+				yob
 				educm_comb
 				SMOKE_FORMER
 				alcohol_comb
 				bmi_c
-				physic_c
+				
 				physic_1518_c
 				UVRQ
 				htension
