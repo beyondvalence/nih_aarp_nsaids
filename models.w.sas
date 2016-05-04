@@ -418,7 +418,7 @@ ods html close; ods html;
 proc phreg data = melan_use multipass;
 	class 
 				SEX
-				birth_cohort 
+				
 				educm_comb
 				SMOKE_FORMER
 				alcohol_comb
@@ -437,7 +437,7 @@ proc phreg data = melan_use multipass;
 				utilizer_w;
 	model exit_age*melanoma_ins(0)=shebl_asp_me 
 				SEX
-				birth_cohort 
+				 
 				educm_comb
 				SMOKE_FORMER
 				alcohol_comb
