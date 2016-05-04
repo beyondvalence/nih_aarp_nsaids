@@ -28,7 +28,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				physic_c
-				physic_1518_c
+				
 				UVRQ
 				htension
 				HEART 
@@ -73,7 +73,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				physic_c
-				physic_1518_c
+				
 				UVRQ
 				htension
 				HEART 
@@ -101,7 +101,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				physic_c
-				physic_1518_c
+				
 				UVRQ
 				htension
 				HEART 
@@ -121,7 +121,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				physic_c
-				physic_1518_c
+				
 				UVRQ
 				htension
 				HEART 
@@ -155,7 +155,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				physic_c
-				physic_1518_c
+				
 				UVRQ
 				htension
 				HEART 
@@ -174,7 +174,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				physic_c
-				physic_1518_c
+				
 				UVRQ
 				htension
 				HEART 
@@ -200,7 +200,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				physic_c
-				physic_1518_c
+				
 				UVRQ
 				htension
 				HEART 
@@ -219,7 +219,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				physic_c
-				physic_1518_c
+				
 				UVRQ
 				htension
 				HEART 
@@ -245,7 +245,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				physic_c
-				physic_1518_c
+				
 				UVRQ
 				htension
 				HEART 
@@ -264,7 +264,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				physic_c
-				physic_1518_c
+				
 				UVRQ
 				htension
 				HEART 
@@ -293,10 +293,10 @@ data apriori_model;
 		adj_non_mal
 ; run;
 data apriori_model; 
-title2'with yob, physic_1518_c, and no birth_cohort';
+title2'with yob, physic_c, and no birth_cohort';
 set apriori_model
 (Keep= variable HazardRatio HRLowerCL HRUpperCL Label ClassVal0); run;
-ods html file='C:\REB\NSAIDS melanoma AARP\Results\Main_effects\apriori\apriori_model_yob.xls' style=minimal;
+ods html file='C:\REB\NSAIDS melanoma AARP\Results\Main_effects\apriori\apriori_model_yob_physic_c.xls' style=minimal;
 proc print data= apriori_model; run; 
 ods html close; ods html;
 
@@ -311,7 +311,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				physic_c
-				physic_1518_c
+				
 				UVRQ
 				htension
 				HEART 
@@ -329,7 +329,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				physic_c
-				physic_1518_c
+				
 				UVRQ
 				htension
 				HEART 
@@ -355,7 +355,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				physic_c
-				physic_1518_c
+				
 				UVRQ
 				htension
 				HEART 
@@ -373,7 +373,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				physic_c
-				physic_1518_c
+				
 				UVRQ
 				htension
 				HEART 
@@ -399,7 +399,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				physic_c
-				physic_1518_c
+				
 				UVRQ
 				htension
 				HEART 
@@ -417,7 +417,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				physic_c
-				physic_1518_c
+				
 				UVRQ
 				htension
 				HEART 
@@ -450,7 +450,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				physic_c
-				physic_1518_c
+				
 				UVRQ
 				htension
 				HEART 
@@ -468,7 +468,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				physic_c
-				physic_1518_c
+				
 				UVRQ
 				htension
 				HEART 
@@ -494,7 +494,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				physic_c
-				physic_1518_c
+				
 				UVRQ
 				htension
 				HEART 
@@ -512,7 +512,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				physic_c
-				physic_1518_c
+				
 				UVRQ
 				htension
 				HEART 
@@ -538,7 +538,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				physic_c
-				physic_1518_c
+				
 				UVRQ
 				htension
 				HEART 
@@ -556,7 +556,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				physic_c
-				physic_1518_c
+				
 				UVRQ
 				htension
 				HEART 
@@ -585,10 +585,10 @@ data apriori_model;
 		adj_non_mal
 ; run;
 data apriori_model; 
-title2'with no yob, physic_1518_c, and no birth_cohort';
+title2'with no yob, physic_c, and no birth_cohort';
 set apriori_model
 (Keep= variable HazardRatio HRLowerCL HRUpperCL Label ClassVal0); run;
-ods html file='C:\REB\NSAIDS melanoma AARP\Results\Main_effects\apriori\apriori_model_noYob.xls' style=minimal;
+ods html file='C:\REB\NSAIDS melanoma AARP\Results\Main_effects\apriori\apriori_model_noYob_physic_c.xls' style=minimal;
 proc print data= apriori_model; run; 
 ods html close; ods html;
 
@@ -603,3 +603,8 @@ run;
 proc freq data=melan_use;
 	table (bmi_c agecat rf_physic_c)*shebl_type /missing norow ;
 run;
+
+proc freq data=melan_use;
+	table (shebl_type shebl_asp_f shebl_non_f)*melanoma_c /missing norow ;
+run;
+
