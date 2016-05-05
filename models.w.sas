@@ -111,8 +111,9 @@ ods html close; ods html;
 *****************************************************************************;
 ** first set: in situ (type, asp_f, non_f);
 ** second set: malignant (type, asp_f, non_f);
-** asp_f and non_f both have type3 Wald outputs;
-
+** asp_f and non_f both have type3 Wald ptrend outputs;
+ods html close; ods html;
+title1 'in situ adjusted physic_c';
 ********************************************************;
 ********* 			IN SITU					************;
 ********************************************************;
@@ -124,7 +125,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				
-				physic_1518_c
+				physic_c
 				UVRQ
 				htension
 				HEART 
@@ -143,7 +144,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				
-				physic_1518_c
+				physic_c
 				UVRQ
 				htension
 				HEART 
@@ -169,7 +170,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				
-				physic_1518_c
+				physic_c
 				UVRQ
 				htension
 				HEART 
@@ -188,7 +189,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				
-				physic_1518_c
+				physic_c
 				UVRQ
 				htension
 				HEART 
@@ -214,7 +215,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				
-				physic_1518_c
+				physic_c
 				UVRQ
 				htension
 				HEART 
@@ -233,7 +234,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				
-				physic_1518_c
+				physic_c
 				UVRQ
 				htension
 				HEART 
@@ -255,7 +256,7 @@ run;
 ***********************************************;
 ********* 	   Malignant melanoma	***********;
 ***********************************************;
-
+title1 'malignant adjusted physic_c';
 *** model: exit_age*melanoma_mal(0)=rf_abnet_aspirin SEX birth_cohort utilizer_m utilizer_w exposure_jul_78_05;
 
 proc phreg data = melan_use multipass;
@@ -266,7 +267,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				
-				physic_1518_c
+				physic_c
 				UVRQ
 				htension
 				HEART 
@@ -285,7 +286,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				
-				physic_1518_c
+				physic_c
 				UVRQ
 				htension
 				HEART 
@@ -311,7 +312,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				
-				physic_1518_c
+				physic_c
 				UVRQ
 				htension
 				HEART 
@@ -330,7 +331,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				
-				physic_1518_c
+				physic_c
 				UVRQ
 				htension
 				HEART 
@@ -356,7 +357,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				
-				physic_1518_c
+				physic_c
 				UVRQ
 				htension
 				HEART 
@@ -375,7 +376,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				
-				physic_1518_c
+				physic_c
 				UVRQ
 				htension
 				HEART 
@@ -404,10 +405,10 @@ data apriori_model;
 		adj_non_mal
 ; run;
 data apriori_model; 
-title2'with yob, physic_1518_c only, and no birth_cohort';
+title2 'with yob, physic_c only, and no birth_cohort';
 set apriori_model
 (Keep= variable HazardRatio HRLowerCL HRUpperCL Label ClassVal0); run;
-ods html file='C:\REB\NSAIDS melanoma AARP\Results\Main_effects\apriori\apriori_model_yob_1518.xls' style=minimal;
+ods html file='C:\REB\NSAIDS melanoma AARP\Results\Main_effects\apriori\apriori_model_yob_physic.xls' style=minimal;
 proc print data= apriori_model; run; 
 ods html close; ods html;
 
@@ -415,16 +416,18 @@ ods html close; ods html;
 **************************************************************************;
 ************** 			P trend using wald type3 test		**************;
 **************************************************************************;
+ods html close; ods html;
 proc phreg data = melan_use multipass;
+	title 'NSAID, ptrend using wald type3 tests, physic_c';
 	class 
 				SEX
-				yob
+				
 				educm_comb
 				SMOKE_FORMER
 				alcohol_comb
 				bmi_c
 				
-				physic_1518_c
+				physic_c
 				UVRQ
 				htension
 				HEART 
@@ -443,7 +446,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				
-				physic_1518_c
+				physic_c
 				UVRQ
 				htension
 				HEART 
@@ -461,13 +464,13 @@ run;
 proc phreg data = melan_use multipass;
 	class 
 				SEX
-				yob
+				
 				educm_comb
 				SMOKE_FORMER
 				alcohol_comb
 				bmi_c
 				
-				physic_1518_c
+				physic_c
 				UVRQ
 				htension
 				HEART 
@@ -480,13 +483,13 @@ proc phreg data = melan_use multipass;
 				utilizer_w;
 	model exit_age*melanoma_ins(0)=shebl_non_me 
 				SEX
-				yob 
+				
 				educm_comb
 				SMOKE_FORMER
 				alcohol_comb
 				bmi_c
 				
-				physic_1518_c
+				physic_c
 				UVRQ
 				htension
 				HEART 
@@ -505,13 +508,13 @@ run;
 proc phreg data = melan_use multipass;
 	class 
 				SEX
-				yob
+				
 				educm_comb
 				SMOKE_FORMER
 				alcohol_comb
 				bmi_c
 				
-				physic_1518_c
+				physic_c
 				UVRQ
 				htension
 				HEART 
@@ -530,7 +533,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				
-				physic_1518_c
+				physic_c
 				UVRQ
 				htension
 				HEART 
@@ -548,13 +551,13 @@ run;
 proc phreg data = melan_use multipass;
 	class 
 				SEX
-				yob
+				
 				educm_comb
 				SMOKE_FORMER
 				alcohol_comb
 				bmi_c
 				
-				physic_1518_c
+				physic_c
 				UVRQ
 				htension
 				HEART 
@@ -573,7 +576,7 @@ proc phreg data = melan_use multipass;
 				alcohol_comb
 				bmi_c
 				
-				physic_1518_c
+				physic_c
 				UVRQ
 				htension
 				HEART 
