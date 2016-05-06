@@ -1,9 +1,9 @@
-/***************************************/
-/** NSAIDs test file *******************/
-/** contains various checks ************/
-/** now only SHEBL type NSAID coding ***/
-/** updated: 20151221 WTL **************/
-/***************************************/
+/******************************************/
+/**** NSAIDs test file ********************/
+/**** contains various checks *************/
+/**** now only SHEBL type NSAID coding ****/
+/**** updated: 20160506FRI WTL ************/
+/******************************************/
 
 ods html close; ods html;
 title1 'NSAID table1 checks';

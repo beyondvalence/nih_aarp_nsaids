@@ -1,13 +1,13 @@
 /******************************/
 /** NSAIDS clearance tables ***/
 ** created: 20151223WED WTL ***;
-** updated: 20160421THU WTL ***;
+** updated: 20160506FRI WTL ***;
 /******************************/
 
 ** added shebl coded NSAID checks;
 
 ods html close; ods html;
-title1 'RFQ clearance tables 20160421THU';
+title1 'RFQ clearance tables 20160506FRI';
 title2 'from special UVR dataset';
 title3 'file: clear.tables.w.sas';
 proc means data=melan_use missing;
@@ -124,7 +124,6 @@ proc freq data=melan_use;
 		utilizer_w*shebl_type
 	/missing  norow ;
 run; 
-
 
 **************************;
 *check shebl freq, aspirin;
