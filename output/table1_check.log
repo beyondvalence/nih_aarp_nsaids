@@ -1,20 +1,20 @@
-5033  /***************************************/
-5034  /** NSAIDs test file *******************/
-5035  /** contains various checks ************/
-5036  /** now only SHEBL type NSAID coding ***/
-5037  /** updated: 20151221 WTL **************/
-5038  /***************************************/
-5039
-5040  ods html close; ods html;
-NOTE: Writing HTML Body file: sashtml19.htm
-5041  title1 'NSAID table1 checks';
-5042  title2 '';
-5043  title3 'file: shebl_check.sas';
-5044
-5045  proc means data=melan_use;
-5046      title2 'RF age at entry mean (SD)';
-5047      var rf_entry_age;
-5048  run;
+4222  /******************************************/
+4223  /**** NSAIDs test file ********************/
+4224  /**** contains various checks *************/
+4225  /**** now only SHEBL type NSAID coding ****/
+4226  /**** updated: 20160506FRI WTL ************/
+4227  /******************************************/
+4228
+4229  ods html close; ods html;
+NOTE: Writing HTML Body file: sashtml14.htm
+4230  title1 'NSAID table1 checks';
+4231  title2 '';
+4232  title3 'file: shebl_check.sas';
+4233
+4234  proc means data=melan_use;
+4235      title2 'RF age at entry mean (SD)';
+4236      var rf_entry_age;
+4237  run;
 
 NOTE: There were 281257 observations read from the data set WORK.MELAN_USE.
 NOTE: PROCEDURE MEANS used (Total process time):
@@ -22,66 +22,66 @@ NOTE: PROCEDURE MEANS used (Total process time):
       cpu time            0.15 seconds
 
 
-5049  proc means data=melan_use;
-5050      class shebl_type;
-5051      var rf_entry_age;
-5052  run;
+4238  proc means data=melan_use;
+4239      class shebl_type;
+4240      var rf_entry_age;
+4241  run;
 
 NOTE: There were 281257 observations read from the data set WORK.MELAN_USE.
 NOTE: PROCEDURE MEANS used (Total process time):
       real time           0.12 seconds
-      cpu time            0.12 seconds
+      cpu time            0.14 seconds
 
 
-5053  proc univariate data=melan_use;
-5054      title2 'RF follow up median (IQR)';
-5055      var rf_personyrs;
-5056  run;
+4242  proc univariate data=melan_use;
+4243      title2 'RF follow up median (IQR)';
+4244      var rf_personyrs;
+4245  run;
 
 NOTE: PROCEDURE UNIVARIATE used (Total process time):
       real time           0.22 seconds
       cpu time            0.21 seconds
 
 
-5057  proc univariate data=melan_use;
-5058      class shebl_type;
-5059      var rf_personyrs;
-5060  run;
+4246  proc univariate data=melan_use;
+4247      class shebl_type;
+4248      var rf_personyrs;
+4249  run;
 
 NOTE: PROCEDURE UNIVARIATE used (Total process time):
-      real time           0.28 seconds
-      cpu time            0.28 seconds
+      real time           0.31 seconds
+      cpu time            0.25 seconds
 
 
-5061
-5062  proc freq data=melan_use;
-5063      title2 'variables by shebl type';
-5064      table
-5065                  (SEX
-5066                  educm_comb
-5067                  SMOKE_FORMER
-5068                  alcohol_comb
-5069                  bmi_c
-5070                  physic_c
-5071                  physic_1518_c
-5072                  UVRQ
-5073                  htension
-5074                  HEART
-5075                  rel_1d_cancer
-5076                  coffee_c
-5077                  TV_comb
-5078                  nap_comb
-5079                  marriage_comb
-5080                  utilizer_m
-5081                  utilizer_w)*shebl_type
-5082      /missing;
-5083  run;
+4250
+4251  proc freq data=melan_use;
+4252      title2 'variables by shebl type';
+4253      table
+4254                  (SEX
+4255                  educm_comb
+4256                  SMOKE_FORMER
+4257                  alcohol_comb
+4258                  bmi_c
+4259                  physic_c
+4260                  physic_1518_c
+4261                  UVRQ
+4262                  htension
+4263                  HEART
+4264                  rel_1d_cancer
+4265                  coffee_c
+4266                  TV_comb
+4267                  nap_comb
+4268                  marriage_comb
+4269                  utilizer_m
+4270                  utilizer_w)*shebl_type
+4271      /missing;
+4272  run;
 
 NOTE: There were 281257 observations read from the data set WORK.MELAN_USE.
 NOTE: PROCEDURE FREQ used (Total process time):
-      real time           1.02 seconds
-      cpu time            1.03 seconds
+      real time           1.04 seconds
+      cpu time            1.06 seconds
 
 
-5084  title;
-5085  ods html;
+4273  title;
+4274  ods html;

@@ -1,236 +1,236 @@
-5086  /******************************************************************
-5087  #      NIH-AARP UVR- NSAIDs- Melanoma Study
-5088  *******************************************************************
-5089  #
-5090  # creates the melanoma file with cancer, smoking,
-5091  # NSAID, UVR variables
-5092  # !!!!! for risk factors dataset !!!!!
-5093  #
-5094  # uses the uv_public, rout25mar16, rexp23feb16 datasets
-5095  # note: using new rexp dataset above
-5096  #
-5097  # Created: April 13 2015
-5098  # Updated: v20160421THU WTL
-5099  # Under git version control
-5100  # Used IMS: anchovy server
-5101  # Warning: original IMS datasets are in LINUX latin1 encoding
-5102  *******************************************************************/
-5103
-5104  options nocenter yearcutoff=1900 errors=1;
-5105  title1 'NIH-AARP NSAIDs UVR Melanoma Study';
-5106
-5107  libname conv 'C:\REB\NSAIDS melanoma AARP\Data\converted';
+3079  /******************************************************************
+3080  #      NIH-AARP UVR- NSAIDs- Melanoma Study
+3081  *******************************************************************
+3082  #
+3083  # creates the melanoma file with cancer, smoking,
+3084  # NSAID, UVR variables
+3085  # !!!!! for risk factors dataset !!!!!
+3086  #
+3087  # uses the uv_public, rout25mar16, rexp23feb16 datasets
+3088  # note: using new rexp dataset above
+3089  #
+3090  # Created: April 13 2015
+3091  # Updated: v20160506FRI WTL
+3092  # Under git version control
+3093  # Used IMS: anchovy server
+3094  # Warning: original IMS datasets are in LINUX latin1 encoding
+3095  *******************************************************************/
+3096
+3097  options nocenter yearcutoff=1900 errors=1;
+3098  title1 'NIH-AARP NSAIDs UVR Melanoma Study';
+3099
+3100  libname conv 'C:\REB\NSAIDS melanoma AARP\Data\converted';
 NOTE: Libref CONV was successfully assigned as follows:
       Engine:        V9
       Physical Name: C:\REB\NSAIDS melanoma AARP\Data\converted
-5108  libname anchovy 'C:\REB\NSAIDS melanoma AARP\Data\anchovy';
+3101  libname anchovy 'C:\REB\NSAIDS melanoma AARP\Data\anchovy';
 NOTE: Libref ANCHOVY was successfully assigned as follows:
       Engine:        V9
       Physical Name: C:\REB\NSAIDS melanoma AARP\Data\anchovy
-5109  filename uv_pub 'C:\REB\NSAIDS melanoma AARP\Data\anchovy\uv_public.v9x';
-5110
-5111  ** import the UVR with file extension v9x from the anchovy folder;
-5112  proc cimport data=uv_pub1 infile=uv_pub;
-5113  run;
+3102  filename uv_pub 'C:\REB\NSAIDS melanoma AARP\Data\anchovy\uv_public.v9x';
+3103
+3104  ** import the UVR with file extension v9x from the anchovy folder;
+3105  proc cimport data=uv_pub1 infile=uv_pub;
+3106  run;
 
 NOTE: PROC CIMPORT begins to create/update data set WORK.uv_pub1
 NOTE: Data set contains 38 variables and 566398 observations.
       Logical record length is 304
 
 NOTE: PROCEDURE CIMPORT used (Total process time):
-      real time           1.43 seconds
-      cpu time            1.48 seconds
+      real time           2.60 seconds
+      cpu time            1.40 seconds
 
 
-5114
-5115  ** keep the july 1978-2005 UVR data only;
-5116  data conv.uv_pub1;
-5117      set uv_pub1;
-5118      keep    westatid
-5119              exposure_jul_78_05;
-5120  run;
+3107
+3108  ** keep the july 1978-2005 UVR data only;
+3109  data conv.uv_pub1;
+3110      set uv_pub1;
+3111      keep    westatid
+3112              exposure_jul_78_05;
+3113  run;
 
 NOTE: There were 566398 observations read from the data set WORK.UV_PUB1.
 NOTE: The data set CONV.UV_PUB1 has 566398 observations and 2 variables.
 NOTE: DATA statement used (Total process time):
-      real time           0.12 seconds
-      cpu time            0.10 seconds
+      real time           0.17 seconds
+      cpu time            0.17 seconds
 
 
-5121
-5122  ** input: first primary cancer _risk;
-5123  ** output: ranalysis;
-5124  ** uses rout25mar16, rexp23feb16, uv_pub1;
-5125  ** riskfactor dataset;
-5126
-5127  data ranalysis;
-5128    *merge conv.rout09jan14 (in=ino) conv.rexp16feb15 (in=ine);
-5129    merge anchovy.rout25mar16 (in=ino) anchovy.rexp23feb16 (in=ine);
+3114
+3115  ** input: first primary cancer _risk;
+3116  ** output: ranalysis;
+3117  ** uses rout25mar16, rexp23feb16, uv_pub1;
+3118  ** riskfactor dataset;
+3119
+3120  data ranalysis;
+3121    *merge conv.rout09jan14 (in=ino) conv.rexp16feb15 (in=ine);
+3122    merge anchovy.rout25mar16 (in=ino) anchovy.rexp23feb16 (in=ine);
 NOTE: Data file ANCHOVY.ROUT25MAR16.DATA is in a format that is native to another host, or the file
       encoding does not match the session encoding. Cross Environment Data Access will be used, which
       might require additional CPU resources and might reduce performance.
 NOTE: Data file ANCHOVY.REXP23FEB16.DATA is in a format that is native to another host, or the file
       encoding does not match the session encoding. Cross Environment Data Access will be used, which
       might require additional CPU resources and might reduce performance.
-5130    by westatid;
-5131      keep    westatid
-5132              rf_entry_dt
-5133              rf_entry_age
-5134              entry_dt
-5135              f_dob
-5136              racem /* for race exclusions */
-5137              SEX
-5138              raadate /* date moved outside of Registry Ascertainment Area */
-5139              entry_age
-5140              entry_dt
-5141              cancer
-5142              cancer_dxdt
-5143              cancer_seergroup
-5144              cancer_behv /* for cancer staging */
-5145              cancer_siterec3
-5146
-5147              self_other /* required for excl macro, for self reported cancers */
-5148
-5149              health /* required for excl macro */
-5150              DOD /* date of death */
-5151              EDUCM
-5152              fl_proxy /* for proxy responder exclusions */
-5153
-5154              /* smoking */
-5155              smoke_former
-5156              smoke_quit
-5157              smoke_dose
-5158              smoke_quit_dose
-5159
-5160              BF_COMB_SELF_CANCER
-5161              BF_HORMEVER
-5162              BF_HORMTYPE
-5163              BF_SMOKE_EVER
-5164              BF_SMOKE_FORMER
-5165
-5166              rel_1d_cancer           /* family history of cancer - any 1st degree relatives ever
-5166! diagnosed with cancer (nnmsc)*/
-5167              /*FAM_CANCER                 Any blood relatives diagnosed with cancer?*/
-5168
-5169          /******** riskfactor characteristics variables ********/
-5170              rf_agecat
-5171              rf_1d_cancer
-5172
-5173              /* necessary for exclusions */
-5174              fl_rf_proxy
-5175              rf_q23_2_1a
-5176              rf_q23_2_2a
-5177
-5178              /* add more variables here */
-5179              rf_Q44                  /* mammogram */
-5180              rf_Q15A                 /* colonoscopy */
-5181              rf_Q15B
-5182              rf_Q15C
-5183              rf_Q15D
-5184              rf_Q15E
-5185              HEART                   /* baseline Q40C */
-5186              DIABETES                /* baseline Q40B self-report diabetes y/n */
-5187              MARRIAGE
-5188              BMI_CUR                 /* current bmi kg/m2*/
-5189              qp12b                   /* coffee drinking */
-5190              physic                  /* physical activity >=20 min in past 12 months */
-5191              physic_1518             /* physical activity >=20 min in past 12 months during ages
-5191! 15-18 */
-5192              mped_a_bev              /* total alcohol per day including food sources */
-5193              q29c                    /* single supplement: selenium */
-5194              q30b1                   /* how often: beta-carotene */
-5195              q30b2                   /* amount: beta-carotene */
-5196              q30d1                   /* how often: vitamin e */
-5197              q30d2                   /* amount: vitamin e */
-5198              rf_Q47_1                /* Ever been told by doctor to have hypertension */
-5199              rf_Q48                  /* have you had a physically demanding job? */
-5200              rf_Q49                  /* how many physically demanding jobs have you ever held? */
-5201              rf_Q50                  /* what is the total number of years that you worked in
-5201! physically demanding jobs? */
-5202              rf_Q51_1                /* have you had a job where you walked or biked most days of
-5202! the week? */
-5203              rf_Q51_2                /* total number of years that you walked or biked to work most
-5203! days of the week */
-5204              rf_Q52                  /* in a typical 24 hr period, how often do you watch TV or
-5204! movies in the past 12mo */
-5205              rf_Q53_B                /* number of hours spent napping per day */
-5206              rf_Q53_C                /* number of hours spent sitting per day */
-5207              rf_Q54_1                /* hours of light activity ages 15-18 */
-5208              rf_Q54_2                /* hours of light activity ages 19-29 */
-5209              rf_Q54_3                /* hours of light activity ages 30-39 */
-5210              rf_Q54_4                /* hours of light activity past 10 years */
-5211              rf_Q55_1                /* hours of moderate to vigorous activity ages 15-18 */
-5212              rf_Q55_2                /* hours of moderate to vigorous activity ages 19-29 */
-5213              rf_Q55_3                /* hours of moderate to vigorous activity ages 30-39 */
-5214              rf_Q55_4                /* hours of moderate to vigorous activity past 10 years*/
-5215
-5216              RF_PHYS_MODVIG_15_18    /*How often did you participate in moderate to vigorous
-5216! activities between the ages of 15 & 18?*/
-5217              RF_PHYS_MODVIG_19_29    /*How often did you participate in moderate to vigorous
-5217! activities between the ages of 19 & 29?*/
-5218              RF_PHYS_MODVIG_35_39    /*How often did you participate in moderate to vigorous
-5218! activities between the ages of 35 & 39?*/
-5219              RF_PHYS_MODVIG_CURR     /*How often did you participate in moderate to vigorous
-5219! activities in the past 10 years?*/
-5220              RF_PHYS_JOB             /*Number of physically demanding jobs (0=None, 1=1-2, 2=3-5,
-5220! 3=6+, 9=Unk)*/
-5221              RF_PHYS_JOBYRS          /*Number of years with a physically demanding job (0=<1, 1=1-2,
-5221!  2=3-5, 3=6-9, 4=10+, 9=Unk)*/
-5222              RF_PHYS_JOBWALK         /*Number of years walked or biked to work most days (0=None,
-5222! 1=<1, 2=1-2, 3=3-5, 4=6-9, 5=10+, 9=Unk)*/
-5223              RF_PHYS_TV              /*Hours spent watching tv/videos during typical 24 hour period
-5223! in past 12 months (0=None, 1=<1, 2=1-2, 3=3-4, 4=5-6, 5=7-8, 6=9+, 9=Unk)*/
-5224              RF_PHYS_SLEEP           /*Hours spent sleeping at night during typical 24 hour period
-5224! in past 12 months (0=<5, 1=5-6, 2=7-8, 3=9+, 9=Unk)*/
-5225              RF_PHYS_NAP             /*Hours spent napping during typical 24 hour period in past 12
-5225! months (0=None, 1=<1, 2=1-2, 3=3-4, 4=5-6, 9=Unk)*/
-5226              RF_PHYS_SIT             /*Hours spent sitting during typical 24 hour period in past 12
-5226! months (0=<3, 1=3-4, 2=5-6, 3=7-8, 4=9+, 9=Unk)*/
-5227
-5228              /** NSAID variables **/
-5229              rf_Q10_1                /* During the past 12 mo, did you take generic aspirin, bayer,
-5229! bufferin, anacin, ecotrin, or excedrin? */
-5230              rf_Q10_2                /* How often? */
-5231              rf_Q11_1                /* During the past 12 mo, did you take generic ibuprofen,
-5231! advil, nuprin, motrin, aleve, etc */
-5232              rf_Q11_2                /* How often? */
-5233              RF_ABNET_ASPIRIN        /*Ever take Aspirin during the past 12 months?*/
-5234              RF_ABNET_CAT_ASPIRIN    /*Frequency of Aspirin use during the past 12 months*/
-5235              RF_ABNET_IBUPROFEN      /*Ever take Ibuprofen during the past 12 months?*/
-5236              RF_ABNET_CAT_IBUPROFEN  /*Frequency of Ibuprofen use during the past 12 months*/
-5237  ;
-5238  run;
+3123    by westatid;
+3124      keep    westatid
+3125              rf_entry_dt
+3126              rf_entry_age
+3127              entry_dt
+3128              f_dob
+3129              racem /* for race exclusions */
+3130              SEX
+3131              raadate /* date moved outside of Registry Ascertainment Area */
+3132              entry_age
+3133              entry_dt
+3134              cancer
+3135              cancer_dxdt
+3136              cancer_seergroup
+3137              cancer_behv /* for cancer staging */
+3138              cancer_siterec3
+3139
+3140              self_other /* required for excl macro, for self reported cancers */
+3141
+3142              health /* required for excl macro */
+3143              DOD /* date of death */
+3144              EDUCM
+3145              fl_proxy /* for proxy responder exclusions */
+3146
+3147              /* smoking */
+3148              smoke_former
+3149              smoke_quit
+3150              smoke_dose
+3151              smoke_quit_dose
+3152
+3153              BF_COMB_SELF_CANCER
+3154              BF_HORMEVER
+3155              BF_HORMTYPE
+3156              BF_SMOKE_EVER
+3157              BF_SMOKE_FORMER
+3158
+3159              rel_1d_cancer           /* family history of cancer - any 1st degree relatives ever
+3159! diagnosed with cancer (nnmsc)*/
+3160              /*FAM_CANCER                 Any blood relatives diagnosed with cancer?*/
+3161
+3162          /******** riskfactor characteristics variables ********/
+3163              rf_agecat
+3164              rf_1d_cancer
+3165
+3166              /* necessary for exclusions */
+3167              fl_rf_proxy
+3168              rf_q23_2_1a
+3169              rf_q23_2_2a
+3170
+3171              /* add more variables here */
+3172              rf_Q44                  /* mammogram */
+3173              rf_Q15A                 /* colonoscopy */
+3174              rf_Q15B
+3175              rf_Q15C
+3176              rf_Q15D
+3177              rf_Q15E
+3178              HEART                   /* baseline Q40C */
+3179              DIABETES                /* baseline Q40B self-report diabetes y/n */
+3180              MARRIAGE
+3181              BMI_CUR                 /* current bmi kg/m2*/
+3182              qp12b                   /* coffee drinking */
+3183              physic                  /* physical activity >=20 min in past 12 months */
+3184              physic_1518             /* physical activity >=20 min in past 12 months during ages
+3184! 15-18 */
+3185              mped_a_bev              /* total alcohol per day including food sources */
+3186              q29c                    /* single supplement: selenium */
+3187              q30b1                   /* how often: beta-carotene */
+3188              q30b2                   /* amount: beta-carotene */
+3189              q30d1                   /* how often: vitamin e */
+3190              q30d2                   /* amount: vitamin e */
+3191              rf_Q47_1                /* Ever been told by doctor to have hypertension */
+3192              rf_Q48                  /* have you had a physically demanding job? */
+3193              rf_Q49                  /* how many physically demanding jobs have you ever held? */
+3194              rf_Q50                  /* what is the total number of years that you worked in
+3194! physically demanding jobs? */
+3195              rf_Q51_1                /* have you had a job where you walked or biked most days of
+3195! the week? */
+3196              rf_Q51_2                /* total number of years that you walked or biked to work most
+3196! days of the week */
+3197              rf_Q52                  /* in a typical 24 hr period, how often do you watch TV or
+3197! movies in the past 12mo */
+3198              rf_Q53_B                /* number of hours spent napping per day */
+3199              rf_Q53_C                /* number of hours spent sitting per day */
+3200              rf_Q54_1                /* hours of light activity ages 15-18 */
+3201              rf_Q54_2                /* hours of light activity ages 19-29 */
+3202              rf_Q54_3                /* hours of light activity ages 30-39 */
+3203              rf_Q54_4                /* hours of light activity past 10 years */
+3204              rf_Q55_1                /* hours of moderate to vigorous activity ages 15-18 */
+3205              rf_Q55_2                /* hours of moderate to vigorous activity ages 19-29 */
+3206              rf_Q55_3                /* hours of moderate to vigorous activity ages 30-39 */
+3207              rf_Q55_4                /* hours of moderate to vigorous activity past 10 years*/
+3208
+3209              RF_PHYS_MODVIG_15_18    /*How often did you participate in moderate to vigorous
+3209! activities between the ages of 15 & 18?*/
+3210              RF_PHYS_MODVIG_19_29    /*How often did you participate in moderate to vigorous
+3210! activities between the ages of 19 & 29?*/
+3211              RF_PHYS_MODVIG_35_39    /*How often did you participate in moderate to vigorous
+3211! activities between the ages of 35 & 39?*/
+3212              RF_PHYS_MODVIG_CURR     /*How often did you participate in moderate to vigorous
+3212! activities in the past 10 years?*/
+3213              RF_PHYS_JOB             /*Number of physically demanding jobs (0=None, 1=1-2, 2=3-5,
+3213! 3=6+, 9=Unk)*/
+3214              RF_PHYS_JOBYRS          /*Number of years with a physically demanding job (0=<1, 1=1-2,
+3214!  2=3-5, 3=6-9, 4=10+, 9=Unk)*/
+3215              RF_PHYS_JOBWALK         /*Number of years walked or biked to work most days (0=None,
+3215! 1=<1, 2=1-2, 3=3-5, 4=6-9, 5=10+, 9=Unk)*/
+3216              RF_PHYS_TV              /*Hours spent watching tv/videos during typical 24 hour period
+3216! in past 12 months (0=None, 1=<1, 2=1-2, 3=3-4, 4=5-6, 5=7-8, 6=9+, 9=Unk)*/
+3217              RF_PHYS_SLEEP           /*Hours spent sleeping at night during typical 24 hour period
+3217! in past 12 months (0=<5, 1=5-6, 2=7-8, 3=9+, 9=Unk)*/
+3218              RF_PHYS_NAP             /*Hours spent napping during typical 24 hour period in past 12
+3218! months (0=None, 1=<1, 2=1-2, 3=3-4, 4=5-6, 9=Unk)*/
+3219              RF_PHYS_SIT             /*Hours spent sitting during typical 24 hour period in past 12
+3219! months (0=<3, 1=3-4, 2=5-6, 3=7-8, 4=9+, 9=Unk)*/
+3220
+3221              /** NSAID variables **/
+3222              rf_Q10_1                /* During the past 12 mo, did you take generic aspirin, bayer,
+3222! bufferin, anacin, ecotrin, or excedrin? */
+3223              rf_Q10_2                /* How often? */
+3224              rf_Q11_1                /* During the past 12 mo, did you take generic ibuprofen,
+3224! advil, nuprin, motrin, aleve, etc */
+3225              rf_Q11_2                /* How often? */
+3226              RF_ABNET_ASPIRIN        /*Ever take Aspirin during the past 12 months?*/
+3227              RF_ABNET_CAT_ASPIRIN    /*Frequency of Aspirin use during the past 12 months*/
+3228              RF_ABNET_IBUPROFEN      /*Ever take Ibuprofen during the past 12 months?*/
+3229              RF_ABNET_CAT_IBUPROFEN  /*Frequency of Ibuprofen use during the past 12 months*/
+3230  ;
+3231  run;
 
 NOTE: There were 334905 observations read from the data set ANCHOVY.ROUT25MAR16.
 NOTE: There were 334905 observations read from the data set ANCHOVY.REXP23FEB16.
 NOTE: The data set WORK.RANALYSIS has 334905 observations and 89 variables.
 NOTE: DATA statement used (Total process time):
-      real time           1:25.77
-      cpu time            1:25.63
+      real time           1:58.80
+      cpu time            1:27.08
 
 
-5239
-5240  ** merge the melan_r dataset with special UVR dataset;
-5241  data ranalysis;
-5242      merge ranalysis (in=frodo) conv.uv_pub1 ;
-5243      by westatid;
-5244      if frodo;
-5245  run;
+3232
+3233  ** merge the melan_r dataset with special UVR dataset;
+3234  data ranalysis;
+3235      merge ranalysis (in=frodo) conv.uv_pub1 ;
+3236      by westatid;
+3237      if frodo;
+3238  run;
 
 NOTE: There were 334905 observations read from the data set WORK.RANALYSIS.
 NOTE: There were 566398 observations read from the data set CONV.UV_PUB1.
 NOTE: The data set WORK.RANALYSIS has 334905 observations and 90 variables.
 NOTE: DATA statement used (Total process time):
-      real time           0.39 seconds
-      cpu time            0.37 seconds
+      real time           0.40 seconds
+      cpu time            0.40 seconds
 
 
-5246
-5247  /* check point for merging the exposure and outcome data */
-5248  ** copy and save the ranalysis dataset to the converted folder;
-5249  proc copy noclone in=Work out=conv;
-5250      select ranalysis;
-5251  run;
+3239
+3240  /* check point for merging the exposure and outcome data */
+3241  ** copy and save the ranalysis dataset to the converted folder;
+3242  proc copy noclone in=Work out=conv;
+3243      select ranalysis;
+3244  run;
 
 NOTE: Copying WORK.RANALYSIS to CONV.RANALYSIS (memtype=DATA).
 NOTE: System Options for BUFSIZE and REUSE were used at user's request.
@@ -240,19 +240,19 @@ NOTE: There were 334905 observations read from the data set WORK.RANALYSIS.
 NOTE: The data set CONV.RANALYSIS has 334905 observations and 90 variables.
 NOTE: PROCEDURE COPY used (Total process time):
       real time           0.19 seconds
-      cpu time            0.20 seconds
+      cpu time            0.17 seconds
 
 
-5252
-5253  /******************************************************************************************/
-5254  /* start2 */
-5255  /* create melanoma outcome variables
-5256  /* exit dates, person years
-5257  /* use exclusions macro, exclude non-whites, exclude LE zero personyears
-5258  /******************************************************************************************/
-5259  ods _all_ close; ods html;
-NOTE: Writing HTML Body file: sashtml20.htm
-5260  %include 'C:\REB\NSAIDS melanoma AARP\Analysis\format.risk.w.sas';
+3245
+3246  /******************************************************************************************/
+3247  /* start2 */
+3248  /* create melanoma outcome variables
+3249  /* exit dates, person years
+3250  /* use exclusions macro, exclude non-whites, exclude LE zero personyears
+3251  /******************************************************************************************/
+3252  ods _all_ close; ods html;
+NOTE: Writing HTML Body file: sashtml11.htm
+3253  %include 'C:\REB\NSAIDS melanoma AARP\Analysis\format.risk.w.sas';
 NOTE: Format SEXFMT is already on the library.
 NOTE: Format SEXFMT has been output.
 NOTE: Format MELANFMT is already on the library.
@@ -360,72 +360,72 @@ NOTE: Format EXCLUDEFMT has been output.
 
 NOTE: PROCEDURE FORMAT used (Total process time):
       real time           0.04 seconds
-      cpu time            0.04 seconds
+      cpu time            0.03 seconds
 
 
-5498  libname conv 'C:\REB\NSAIDS melanoma AARP\Data\converted';
+3491  libname conv 'C:\REB\NSAIDS melanoma AARP\Data\converted';
 NOTE: Libref CONV was successfully assigned as follows:
       Engine:        V9
       Physical Name: C:\REB\NSAIDS melanoma AARP\Data\converted
-5499  ** uses the pre-created analysis_use from above checkpoint;
-5500  data melan_r; ** name the output of the first primary analysis include to melan_r;
-5501      set conv.ranalysis;
-5502      ****** Define melanoma - pulled from allcancer-coffee analysis ******;
-5503      ** create the melanoma case variable from the cancer ICD-O-3 and SEER coding of 25010;
-5504      ** contains both melanoma subtypes;
-5505      melanoma_c = .;
-5506      * in situ melanoma =1;
-5507      if cancer_behv='2' and cancer_seergroup = 18 and cancer_siterec3=25010
-5508          then melanoma_c = 1;
-5509      * malignant melanoma =2;
-5510      else if cancer_behv='3' and cancer_seergroup = 18 and cancer_siterec3=25010
-5511          then melanoma_c = 2;
-5512      else melanoma_c = 0;
-5513
-5514      melanoma_ins=0;
-5515      if      melanoma_c=1        then melanoma_ins=1;
-5516      melanoma_mal=0;
-5517      if      melanoma_c=2        then melanoma_mal=1;
-5518
-5519      ****  Create exit date, exit age, and person years for First Primary Cancer;
-5520      ** with first primary cancer as skin cancer;
-5521      * Chooses the earliest of 4 possible exit dates for skin cancer;
-5522      exit_dt = min(mdy(12,31,2006), cancer_dxdt, dod, raadate);
-5523      exit_age = round(((exit_dt-f_dob)/365.25),.001);
-5524      personyrs = round(((exit_dt-entry_dt)/365.25),.001);
-5525      rf_personyrs = round(((exit_dt-rf_entry_dt)/365.25),.001);
-5526      yob=year(F_DOB);
-5527
-5528      format exit_dt entry_dt rf_entry_dt f_dob dod cancer_dxdt raadate Date9.;
-5529  run;
+3492  ** uses the pre-created analysis_use from above checkpoint;
+3493  data melan_r; ** name the output of the first primary analysis include to melan_r;
+3494      set conv.ranalysis;
+3495      ****** Define melanoma - pulled from allcancer-coffee analysis ******;
+3496      ** create the melanoma case variable from the cancer ICD-O-3 and SEER coding of 25010;
+3497      ** contains both melanoma subtypes;
+3498      melanoma_c = .;
+3499      * in situ melanoma =1;
+3500      if cancer_behv='2' and cancer_seergroup = 18 and cancer_siterec3=25010
+3501          then melanoma_c = 1;
+3502      * malignant melanoma =2;
+3503      else if cancer_behv='3' and cancer_seergroup = 18 and cancer_siterec3=25010
+3504          then melanoma_c = 2;
+3505      else melanoma_c = 0;
+3506
+3507      melanoma_ins=0;
+3508      if      melanoma_c=1        then melanoma_ins=1;
+3509      melanoma_mal=0;
+3510      if      melanoma_c=2        then melanoma_mal=1;
+3511
+3512      ****  Create exit date, exit age, and person years for First Primary Cancer;
+3513      ** with first primary cancer as skin cancer;
+3514      * Chooses the earliest of 4 possible exit dates for skin cancer;
+3515      exit_dt = min(mdy(12,31,2006), cancer_dxdt, dod, raadate);
+3516      exit_age = round(((exit_dt-f_dob)/365.25),.001);
+3517      personyrs = round(((exit_dt-entry_dt)/365.25),.001);
+3518      rf_personyrs = round(((exit_dt-rf_entry_dt)/365.25),.001);
+3519      yob=year(F_DOB);
+3520
+3521      format exit_dt entry_dt rf_entry_dt f_dob dod cancer_dxdt raadate Date9.;
+3522  run;
 
 NOTE: There were 334905 observations read from the data set CONV.RANALYSIS.
 NOTE: The data set WORK.MELAN_R has 334905 observations and 98 variables.
 NOTE: DATA statement used (Total process time):
-      real time           0.39 seconds
+      real time           0.56 seconds
       cpu time            0.40 seconds
 
 
-5530
-5531
-5532  **** Exclusions risk macro;
-5533  *Start here to run macro to get exclusion;
-5534  ods _all_ close; ods html;
-NOTE: Writing HTML Body file: sashtml21.htm
-5535  %include 'C:\REB\NSAIDS melanoma AARP\Analysis\anchovy\exclusions.first.primary.risk.macro.sas';
-5756
-5757  **** Use the exclusion macro to make "standard" exclusions and get counts of excluded subjects;
-5758  title 'exclusion macro, rfq';
-5759  %exclude(data               = melan_r,
-5760           ex_proxy           = 1,
-5761           ex_rf_proxy        = 1,
-5762           ex_sex             = ,
-5763           ex_selfother       = 1,
-5764           ex_rf_selfbreast   = 1,
-5765           ex_rf_selfovary    = 1,
-5766           ex_health          = ,
-5767           ex_prevcan         = 1,
-5768           ex_deathcan        = 1);
+3523
+3524
+3525  **** Exclusions risk macro;
+3526  *Start here to run macro to get exclusion;
+3527  ods _all_ close; ods html;
+NOTE: Writing HTML Body file: sashtml12.htm
+3528  %include 'C:\REB\NSAIDS melanoma AARP\Analysis\anchovy\exclusions.first.primary.risk.macro.sas';
+3749
+3750  **** Use the exclusion macro to make "standard" exclusions and get counts of excluded subjects;
+3751  title 'exclusion macro, rfq';
+3752  %exclude(data               = melan_r,
+3753           ex_proxy           = 1,
+3754           ex_rf_proxy        = 1,
+3755           ex_sex             = ,
+3756           ex_selfother       = 1,
+3757           ex_rf_selfbreast   = 1,
+3758           ex_rf_selfovary    = 1,
+3759           ex_health          = ,
+3760           ex_prevcan         = 1,
+3761           ex_deathcan        = 1);
 NOTE: Format EXFLAGF is already on the library.
 NOTE: Format EXFLAGF has been output.
 
@@ -439,23 +439,23 @@ NOTE: There were 334905 observations read from the data set WORK.MELAN_R.
 NOTE: The data set WORK.MELAN_R has 304416 observations and 99 variables.
 NOTE: The data set WORK.EXCLUSIONS has 30489 observations and 99 variables.
 NOTE: DATA statement used (Total process time):
-      real time           0.38 seconds
-      cpu time            0.36 seconds
+      real time           0.40 seconds
+      cpu time            0.37 seconds
 
 
 
 NOTE: There were 30489 observations read from the data set WORK.EXCLUSIONS.
 NOTE: PROCEDURE FREQ used (Total process time):
-      real time           0.36 seconds
-      cpu time            0.04 seconds
+      real time           0.04 seconds
+      cpu time            0.01 seconds
 
 
 
 NOTE: There were 30489 observations read from the data set WORK.EXCLUSIONS.
 NOTE: The data set WORK.EXCLUSIONS has 30489 observations and 99 variables.
 NOTE: PROCEDURE SORT used (Total process time):
-      real time           0.06 seconds
-      cpu time            0.06 seconds
+      real time           0.04 seconds
+      cpu time            0.04 seconds
 
 
 
@@ -463,413 +463,413 @@ NOTE: No observations were selected from data set WORK.EXCLUSIONS.
 NOTE: There were 0 observations read from the data set WORK.EXCLUSIONS.
       WHERE ex_flag=14;
 NOTE: PROCEDURE PRINT used (Total process time):
-      real time           0.01 seconds
+      real time           0.00 seconds
       cpu time            0.00 seconds
 
 
-5769
-5770  /***************************************************************************************/
-5771  /*   Exclude if not 'non-Hispanic White'                                               */
-5772  /***************************************************************************************/
-5773  title 'exclusion non non-Hispanic whites';
+3762
+3763  /***************************************************************************************/
+3764  /*   Exclude if not 'non-Hispanic White'                                               */
+3765  /***************************************************************************************/
+3766  title 'exclusion non non-Hispanic whites';
 
 NOTE: DATA statement used (Total process time):
       real time           0.00 seconds
       cpu time            0.00 seconds
 
 
-5774  data melan_r;
-5775      set melan_r;
-5776      excl_1_race=0;
-5777      if racem NE 1 then excl_1_race=1;
-5778  run;
+3767  data melan_r;
+3768      set melan_r;
+3769      excl_1_race=0;
+3770      if racem NE 1 then excl_1_race=1;
+3771  run;
 
 NOTE: There were 304416 observations read from the data set WORK.MELAN_R.
 NOTE: The data set WORK.MELAN_R has 304416 observations and 100 variables.
 NOTE: DATA statement used (Total process time):
-      real time           0.25 seconds
+      real time           0.26 seconds
       cpu time            0.26 seconds
 
 
-5779  proc freq data= melan_r;
-5780      title 'excl_1_race: exclude non-whites';
-5781      tables  excl_1_race
-5782              excl_1_race*melanoma_c /missing;
-5783  run;
+3772  proc freq data= melan_r;
+3773      title 'excl_1_race: exclude non-whites';
+3774      tables  excl_1_race
+3775              excl_1_race*melanoma_c /missing;
+3776  run;
 
 NOTE: There were 304416 observations read from the data set WORK.MELAN_R.
 NOTE: PROCEDURE FREQ used (Total process time):
-      real time           0.13 seconds
-      cpu time            0.12 seconds
+      real time           0.37 seconds
+      cpu time            0.09 seconds
 
 
-5784  data melan_r;
-5785      set melan_r;
-5786      where excl_1_race=0;
-5787  run;
+3777  data melan_r;
+3778      set melan_r;
+3779      where excl_1_race=0;
+3780  run;
 
 NOTE: There were 281285 observations read from the data set WORK.MELAN_R.
       WHERE excl_1_race=0;
 NOTE: The data set WORK.MELAN_R has 281285 observations and 100 variables.
 NOTE: DATA statement used (Total process time):
-      real time           0.36 seconds
-      cpu time            0.37 seconds
+      real time           0.27 seconds
+      cpu time            0.28 seconds
 
 
-5788
-5789  /***************************************************************************************/
-5790  /*   Exclude if person-years <= 0                                                       */
-5791  /***************************************************************************************/
-5792  title 'exclusion person years <=0';
-5793  data melan_r;
-5794      set melan_r;
-5795      excl_2_pyr=0;
-5796      if rf_personyrs <= 0 then excl_2_pyr=1;
-5797  run;
+3781
+3782  /***************************************************************************************/
+3783  /*   Exclude if person-years <= 0                                                       */
+3784  /***************************************************************************************/
+3785  title 'exclusion person years <=0';
+3786  data melan_r;
+3787      set melan_r;
+3788      excl_2_pyr=0;
+3789      if rf_personyrs <= 0 then excl_2_pyr=1;
+3790  run;
 
 NOTE: There were 281285 observations read from the data set WORK.MELAN_R.
 NOTE: The data set WORK.MELAN_R has 281285 observations and 101 variables.
 NOTE: DATA statement used (Total process time):
-      real time           0.24 seconds
-      cpu time            0.25 seconds
+      real time           0.25 seconds
+      cpu time            0.26 seconds
 
 
-5798  proc freq data= melan_r ;
-5799      title 'excl_2_pyr: exclude 0 or negative person years';
-5800      tables  excl_2_pyr
-5801              excl_2_pyr*melanoma_c /missing;
-5802  run;
+3791  proc freq data= melan_r ;
+3792      title 'excl_2_pyr: exclude 0 or negative person years';
+3793      tables  excl_2_pyr
+3794              excl_2_pyr*melanoma_c /missing;
+3795  run;
 
 NOTE: There were 281285 observations read from the data set WORK.MELAN_R.
 NOTE: PROCEDURE FREQ used (Total process time):
-      real time           0.11 seconds
+      real time           0.17 seconds
       cpu time            0.09 seconds
 
 
-5803  data melan_r;
-5804      set melan_r;
-5805      where excl_2_pyr=0;
-5806  run;
+3796  data melan_r;
+3797      set melan_r;
+3798      where excl_2_pyr=0;
+3799  run;
 
 NOTE: There were 281257 observations read from the data set WORK.MELAN_R.
       WHERE excl_2_pyr=0;
 NOTE: The data set WORK.MELAN_R has 281257 observations and 101 variables.
 NOTE: DATA statement used (Total process time):
-      real time           0.26 seconds
-      cpu time            0.25 seconds
+      real time           0.27 seconds
+      cpu time            0.26 seconds
 
 
-5807
-5808  proc freq data= melan_r;
-5809      title 'RFQ counts';
-5810      tables melanoma_c*sex /missing;
-5811  run;
+3800
+3801  proc freq data= melan_r;
+3802      title 'RFQ counts';
+3803      tables melanoma_c*sex /missing;
+3804  run;
 
 NOTE: There were 281257 observations read from the data set WORK.MELAN_R.
 NOTE: PROCEDURE FREQ used (Total process time):
-      real time           0.40 seconds
-      cpu time            0.07 seconds
+      real time           0.10 seconds
+      cpu time            0.09 seconds
 
 
-5812  title;
-5813
-5814  /******************************************************************************************/
-5815  ** find the cutoffs for the percentiles of UVR- exposure_jul_78_05 ;
-5816  /*proc univariate data=conv.melan_r;
-5817      var exposure_jul_78_05;
-5818      output  out=blu
-5819              pctlpts= 0 20 40 60 80 100
-5820              pctlpre=p;
-5821  run;
-5822  proc print data=blu;
-5823      title 'UVR exposure percentiles';
-5824  run; */
-5825
-5826      ** need to change the exposure percentiles after exclusion change;
-5827      ** uvr exposure;
-5828      ** Quartiles: 176.095 <= Q1 <= 186.255 < Q2 <= 236.805 < Q3 <= 253.731 < Q4 <= 289.463;
-5829  /******************************************************************************************/
-5830  /** start3
-5831  /** create the UVR, and confounder variables by quartile/categories
-5832  /** for both baseline and riskfactor questionnaire variables
-5833  /** cat=categorical **/
-5834  /** reordered 20160119TUE **/
-5835  /******************************************************************************************/
-5836  data melan_use;
-5837      set melan_r;
-5838
-5839      ** UVR TOMS quartile;
-5840      UVRQ=9;
-5841      if      176.000 < exposure_jul_78_05 <= 186.255     then UVRQ=1; /* Q1 lowest*/
-5842      else if 186.255 < exposure_jul_78_05 <= 236.805     then UVRQ=2; /* Q2 */
-5843      else if 236.805 < exposure_jul_78_05 <= 253.731     then UVRQ=3; /* Q3 */
-5844      else if 253.731 < exposure_jul_78_05 <  290         then UVRQ=4; /* Q4 highest */
-5845
-5846      /* education attained */
-5847      educm_comb=9;
-5848      if          EDUCM in (1,2)                  then educm_comb=1; *high school graduate*;
-5849      else if     EDUCM=3                         then educm_comb=2; *post high school*;
-5850      else if     EDUCM=4                         then educm_comb=3; *some college*;
-5851      else if     EDUCM=5                         then educm_comb=4; *college graduate*;
-5852
-5853      /* alcohol consumption */
-5854      ** edited to weekly, 20151223WED ;
-5855      alcohol_comb=9;
-5856      if      mped_a_bev=0                        then alcohol_comb=0; /* none */
-5857      else if 0<mped_a_bev<0.142857               then alcohol_comb=1; /* <=1, <1 drink per week */
-5858      else if 0.142857<=mped_a_bev<1              then alcohol_comb=2; /* >1-<=2 drinks, 1-6 per week
-5858!  */
-5859      else if 1<=mped_a_bev                       then alcohol_comb=3; /* 2< drinks, 7+ per week */
-5860
-5861      ** bmi four categories;
-5862      bmi_c=9;
-5863      if            bmi_cur<18.5                  then bmi_c=1; /* <18.5, underweight */
-5864      else if 18.5<=bmi_cur<25                    then bmi_c=2; /* 18.5-24.9, normal */
-5865      else if 25  <=bmi_cur<30                    then bmi_c=3; /* 25-29.9, overweight */
-5866      else if 30  <=bmi_cur                       then bmi_c=4; /* >=30, obese */
-5867
-5868      ** physical exercise cat;
-5869      physic_c=9;
-5870      if      physic in (0,1)                     then physic_c=0; /* rarely */
-5871      else if physic=2                            then physic_c=1; /* 1-3 per month */
-5872      else if physic=3                            then physic_c=2; /* 1-2 per week */
-5873      else if physic=4                            then physic_c=3; /* 3-4 per week */
-5874      else if physic=5                            then physic_c=4; /* 5+ per week */
-5875
-5876      ** physical exercise between ages 15 and 18 cat;
-5877      physic_1518_c=9;
-5878      if      physic_1518 in (0,1)                then physic_1518_c=0; /* rarely */
-5879      else if physic_1518=2                       then physic_1518_c=1; /* 1-3 per month */
-5880      else if physic_1518=3                       then physic_1518_c=2; /* 1-2 per week */
-5881      else if physic_1518=4                       then physic_1518_c=3; /* 3-4 per week */
-5882      else if physic_1518=5                       then physic_1518_c=4; /* 5+ per week */
-5883
-5884      ** coffee drinking;
-5885      coffee_c=9;
-5886      if      qp12b='0'                           then coffee_c=0;    /* none */
-5887      else if qp12b in ('1','2','3','4','5','6')  then coffee_c=1;    /* <=1/day */
-5888      else if qp12b='7'                           then coffee_c=2;    /* 2-3/day */
-5889      else if qp12b in ('8','9')                  then coffee_c=3;    /* >=4/day */
-5890      else if qp12b in ('E','M')                  then coffee_c=9;    /* missing */
-5891
-5892      /* marriage status */
-5893      marriage_comb=9;
-5894      if          MARRIAGE=1                      then marriage_comb=1; *married or living as married
-5894!  *;
-5895      else if     MARRIAGE=2                      then marriage_comb=2; *widowed*;
-5896      else if     MARRIAGE in (3,4)               then marriage_comb=3; *divorced or separated*;
-5897      else if     MARRIAGE=5                      then marriage_comb=4; *never married*;
-5898
-5899      ***********************************************************************************************
-5899! ***********;
-5900      ** new NSAID variables below **;
-5901
-5902      ** Shebl NSAID coding 20151217THU;
-5903      ** http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0114633 ;
-5904
-5905      ** nsaid type;
-5906      shebl_type=9;
-5907      if      rf_Q10_1='0' and rf_Q11_1='0'                   then shebl_type=1; /* neither nsaid use
-5907!  */
-5908      else if rf_Q10_1='1' and rf_Q11_1='0'                   then shebl_type=2; /* apsirin use only
-5908! */
-5909      else if rf_Q10_1='0' and rf_Q11_1='1'                   then shebl_type=3; /* nonaspirin use
-5909! only */
-5910      else if rf_Q10_1='1' and rf_Q11_1='1'                   then shebl_type=4; /* both aspirin and
-5910! nonaspirin use */
-5911      ** shebl type main effect;
-5912      shebl_type_me=shebl_type;
-5913      if shebl_type_me=9                                      then shebl_type_me=.; /* unknown to
-5913! missing */
-5914
-5915      ** aspirin use frequency;
-5916      shebl_asp_f=9;
-5917      if      rf_Q10_1='1' and rf_Q10_2 in ('0','1')          then shebl_asp_f=1; /* monthly, <=3 per
-5917!  month */
-5918      else if rf_Q10_1='1' and rf_Q10_2 in ('2','3','4')      then shebl_asp_f=2; /* weekly, >=1 per
-5918! week */
-5919      else if rf_Q10_1='1' and rf_Q10_2 in ('5','6')          then shebl_asp_f=3; /* daily, >=1 per
-5919! day */
-5920      else if rf_Q10_1='0'                                    then shebl_asp_f=0; /* no aspirin */
-5921
-5922      **aspirin use main effect;
-5923      shebl_asp_me=shebl_asp_f;
-5924      if shebl_asp_me=9                                       then shebl_asp_me=.; /* unknown to
-5924! missing */
-5925
-5926      ** nonaspirin use frequency;
-5927      shebl_non_f=9;
-5928      if      rf_Q11_1='1' and rf_Q11_2 in ('0','1')          then shebl_non_f=1; /* monthly, <=3 per
-5928!  month */
-5929      else if rf_Q11_1='1' and rf_Q11_2 in ('2','3','4')      then shebl_non_f=2; /* weekly, >=1 per
-5929! week */
-5930      else if rf_Q11_1='1' and rf_Q11_2 in ('5','6')          then shebl_non_f=3; /* daily, >=1 per
-5930! day */
-5931      else if rf_Q11_1='0'                                    then shebl_non_f=0; /* no nonaspirin */
-5932
-5933      ** nonaspirin use main effect;
-5934      shebl_non_me=shebl_non_f;
-5935      if shebl_non_me=9                                       then shebl_non_me=.; /* unknown to
-5935! missing */
-5936
-5937      ** END new NSAIDs variables **;
-5938      ***********************************************************************************************
-5938! *************************;
-5939
-5940      /* Television watched */
-5941      TV_comb=9;
-5942      if          RF_PHYS_TV in (0,1)             then TV_comb=1; *none/<1 hr/day *;
-5943      else if     RF_PHYS_TV=2                    then TV_comb=2; *1-2 hours/day *;
-5944      else if     RF_PHYS_TV=3                    then TV_comb=3; *3-4 hours/day *;
-5945      else if     RF_PHYS_TV in (4,5,6)           then TV_comb=4; *>=5 hours/day *;
-5946
-5947      /* napping duration */
-5948      nap_comb=9;
-5949      if          RF_PHYS_NAP=0                   then nap_comb=0; *never naps *;
-5950      else if     RF_PHYS_NAP=1                   then nap_comb=1; *<1 hour/day *;
-5951      else if     RF_PHYS_NAP in (2,3,4)          then nap_comb=2; *naps >=1 hour/day *;
-5952
-5953      ** hypertension as told by doctor?;
-5954      htension=9;
-5955      if      rf_Q47_1='1'                        then htension=1; /* yes to hypertension */
-5956      else if rf_Q47_1='0'                        then htension=0; /* no to hypertension*/
-5957
-5958      /* hospital utilization-colonoscopy, sigmoidoscopy, proctoscopy in past 3 years */
-5959      utilizer_m=9;
-5960      if rf_Q15E='1'                              then utilizer_m=0; /* yes, utilized */
-5961      else if rf_Q15A='1'                         then utilizer_m=1; /* did not utilize */
-5962      else if rf_Q15B='1'                         then utilizer_m=1; /* did not utilize */
-5963      else if rf_Q15C='1'                         then utilizer_m=1; /* did not utilize */
-5964      else if rf_Q15D='1'                         then utilizer_m=1; /* did not utilize */
-5965
-5966      /* hospital utilization-mammograms */
-5967      utilizer_w=9;
-5968      if rf_Q44='1' | rf_Q44='2'                  then utilizer_w=1; /* yes once and more mammograms
-5968! in last 3 years*/
-5969      else if rf_Q44='0'                          then utilizer_w=0;  /* no mamograms in last 3 years
-5969!  */
-5970
-5971      ** RF entry age quartiles;
-5972      agecat=.;
-5973      if      51 <= rf_entry_age < 60     then agecat=1; /* 51-59 */
-5974      else if 60 <= rf_entry_age < 65     then agecat=2; /* 60-64 */
-5975      else if 65 <= rf_entry_age          then agecat=3; /* 65+ */
-5976
-5977      /**********************************************************************************************
-5977! ***/
-5978
-5979      ** 5 yr year of birth categories;
-5980      bc_cat=.;
-5981      if      1925 <= yob < 1930          then bc_cat=1; /* 1925-1929 */
-5982      else if 1930 <= yob < 1935          then bc_cat=2; /* 1930-1934 */
-5983      else if 1935 <= yob < 1940          then bc_cat=3; /* 1935-1939 */
-5984      else if 1940 <= yob <= 1945         then bc_cat=4; /* 1940-1945 */
-5985
-5986      ** (rf) physical exercise how often participate mod-vig activites in past 10 years;
-5987      rf_physic_c=9;
-5988      if      rf_phys_modvig_curr in (0,1)        then rf_physic_c=0; /* none-rarely */
-5989      else if rf_phys_modvig_curr=2               then rf_physic_c=1; /* <1 hr/week */
-5990      else if rf_phys_modvig_curr=3               then rf_physic_c=2; /* 1-3 hr/week */
-5991      else if rf_phys_modvig_curr=4               then rf_physic_c=3; /* 4-7 hr/week */
-5992      else if rf_phys_modvig_curr=5               then rf_physic_c=4; /* >7 hr/week */
-5993
-5994      /**********************************************************************************************
-5994! ***/
-5995  run;
+3805  title;
+3806
+3807  /******************************************************************************************/
+3808  ** find the cutoffs for the percentiles of UVR- exposure_jul_78_05 ;
+3809  /*proc univariate data=conv.melan_r;
+3810      var exposure_jul_78_05;
+3811      output  out=blu
+3812              pctlpts= 0 20 40 60 80 100
+3813              pctlpre=p;
+3814  run;
+3815  proc print data=blu;
+3816      title 'UVR exposure percentiles';
+3817  run; */
+3818
+3819      ** need to change the exposure percentiles after exclusion change;
+3820      ** uvr exposure;
+3821      ** Quartiles: 176.095 <= Q1 <= 186.255 < Q2 <= 236.805 < Q3 <= 253.731 < Q4 <= 289.463;
+3822  /******************************************************************************************/
+3823  /** start3
+3824  /** create the UVR, and confounder variables by quartile/categories
+3825  /** for both baseline and riskfactor questionnaire variables
+3826  /** cat=categorical **/
+3827  /** reordered 20160119TUE **/
+3828  /******************************************************************************************/
+3829  data melan_use;
+3830      set melan_r;
+3831
+3832      ** UVR TOMS quartile;
+3833      UVRQ=9;
+3834      if      176.000 < exposure_jul_78_05 <= 186.255     then UVRQ=1; /* Q1 lowest*/
+3835      else if 186.255 < exposure_jul_78_05 <= 236.805     then UVRQ=2; /* Q2 */
+3836      else if 236.805 < exposure_jul_78_05 <= 253.731     then UVRQ=3; /* Q3 */
+3837      else if 253.731 < exposure_jul_78_05 <  290         then UVRQ=4; /* Q4 highest */
+3838
+3839      /* education attained */
+3840      educm_comb=9;
+3841      if          EDUCM in (1,2)                  then educm_comb=1; *high school graduate*;
+3842      else if     EDUCM=3                         then educm_comb=2; *post high school*;
+3843      else if     EDUCM=4                         then educm_comb=3; *some college*;
+3844      else if     EDUCM=5                         then educm_comb=4; *college graduate*;
+3845
+3846      /* alcohol consumption */
+3847      ** edited to weekly, 20151223WED ;
+3848      alcohol_comb=9;
+3849      if      mped_a_bev=0                        then alcohol_comb=0; /* none */
+3850      else if 0<mped_a_bev<0.142857               then alcohol_comb=1; /* <=1, <1 drink per week */
+3851      else if 0.142857<=mped_a_bev<1              then alcohol_comb=2; /* >1-<=2 drinks, 1-6 per week
+3851!  */
+3852      else if 1<=mped_a_bev                       then alcohol_comb=3; /* 2< drinks, 7+ per week */
+3853
+3854      ** bmi four categories;
+3855      bmi_c=9;
+3856      if            bmi_cur<18.5                  then bmi_c=1; /* <18.5, underweight */
+3857      else if 18.5<=bmi_cur<25                    then bmi_c=2; /* 18.5-24.9, normal */
+3858      else if 25  <=bmi_cur<30                    then bmi_c=3; /* 25-29.9, overweight */
+3859      else if 30  <=bmi_cur                       then bmi_c=4; /* >=30, obese */
+3860
+3861      ** physical exercise cat;
+3862      physic_c=9;
+3863      if      physic in (0,1)                     then physic_c=0; /* rarely */
+3864      else if physic=2                            then physic_c=1; /* 1-3 per month */
+3865      else if physic=3                            then physic_c=2; /* 1-2 per week */
+3866      else if physic=4                            then physic_c=3; /* 3-4 per week */
+3867      else if physic=5                            then physic_c=4; /* 5+ per week */
+3868
+3869      ** physical exercise between ages 15 and 18 cat;
+3870      physic_1518_c=9;
+3871      if      physic_1518 in (0,1)                then physic_1518_c=0; /* rarely */
+3872      else if physic_1518=2                       then physic_1518_c=1; /* 1-3 per month */
+3873      else if physic_1518=3                       then physic_1518_c=2; /* 1-2 per week */
+3874      else if physic_1518=4                       then physic_1518_c=3; /* 3-4 per week */
+3875      else if physic_1518=5                       then physic_1518_c=4; /* 5+ per week */
+3876
+3877      ** coffee drinking;
+3878      coffee_c=9;
+3879      if      qp12b='0'                           then coffee_c=0;    /* none */
+3880      else if qp12b in ('1','2','3','4','5','6')  then coffee_c=1;    /* <=1/day */
+3881      else if qp12b='7'                           then coffee_c=2;    /* 2-3/day */
+3882      else if qp12b in ('8','9')                  then coffee_c=3;    /* >=4/day */
+3883      else if qp12b in ('E','M')                  then coffee_c=9;    /* missing */
+3884
+3885      /* marriage status */
+3886      marriage_comb=9;
+3887      if          MARRIAGE=1                      then marriage_comb=1; *married or living as married
+3887!  *;
+3888      else if     MARRIAGE=2                      then marriage_comb=2; *widowed*;
+3889      else if     MARRIAGE in (3,4)               then marriage_comb=3; *divorced or separated*;
+3890      else if     MARRIAGE=5                      then marriage_comb=4; *never married*;
+3891
+3892      ***********************************************************************************************
+3892! ***********;
+3893      ** new NSAID variables below **;
+3894
+3895      ** Shebl NSAID coding 20151217THU;
+3896      ** http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0114633 ;
+3897
+3898      ** nsaid type;
+3899      shebl_type=9;
+3900      if      rf_Q10_1='0' and rf_Q11_1='0'                   then shebl_type=1; /* neither nsaid use
+3900!  */
+3901      else if rf_Q10_1='1' and rf_Q11_1='0'                   then shebl_type=2; /* apsirin use only
+3901! */
+3902      else if rf_Q10_1='0' and rf_Q11_1='1'                   then shebl_type=3; /* nonaspirin use
+3902! only */
+3903      else if rf_Q10_1='1' and rf_Q11_1='1'                   then shebl_type=4; /* both aspirin and
+3903! nonaspirin use */
+3904      ** shebl type main effect;
+3905      shebl_type_me=shebl_type;
+3906      if shebl_type_me=9                                      then shebl_type_me=.; /* unknown to
+3906! missing */
+3907
+3908      ** aspirin use frequency;
+3909      shebl_asp_f=9;
+3910      if      rf_Q10_1='1' and rf_Q10_2 in ('0','1')          then shebl_asp_f=1; /* monthly, <=3 per
+3910!  month */
+3911      else if rf_Q10_1='1' and rf_Q10_2 in ('2','3','4')      then shebl_asp_f=2; /* weekly, >=1 per
+3911! week */
+3912      else if rf_Q10_1='1' and rf_Q10_2 in ('5','6')          then shebl_asp_f=3; /* daily, >=1 per
+3912! day */
+3913      else if rf_Q10_1='0'                                    then shebl_asp_f=0; /* no aspirin */
+3914
+3915      **aspirin use main effect;
+3916      shebl_asp_me=shebl_asp_f;
+3917      if shebl_asp_me=9                                       then shebl_asp_me=.; /* unknown to
+3917! missing */
+3918
+3919      ** nonaspirin use frequency;
+3920      shebl_non_f=9;
+3921      if      rf_Q11_1='1' and rf_Q11_2 in ('0','1')          then shebl_non_f=1; /* monthly, <=3 per
+3921!  month */
+3922      else if rf_Q11_1='1' and rf_Q11_2 in ('2','3','4')      then shebl_non_f=2; /* weekly, >=1 per
+3922! week */
+3923      else if rf_Q11_1='1' and rf_Q11_2 in ('5','6')          then shebl_non_f=3; /* daily, >=1 per
+3923! day */
+3924      else if rf_Q11_1='0'                                    then shebl_non_f=0; /* no nonaspirin */
+3925
+3926      ** nonaspirin use main effect;
+3927      shebl_non_me=shebl_non_f;
+3928      if shebl_non_me=9                                       then shebl_non_me=.; /* unknown to
+3928! missing */
+3929
+3930      ** END new NSAIDs variables **;
+3931      ***********************************************************************************************
+3931! *************************;
+3932
+3933      /* Television watched */
+3934      TV_comb=9;
+3935      if          RF_PHYS_TV in (0,1)             then TV_comb=1; *none/<1 hr/day *;
+3936      else if     RF_PHYS_TV=2                    then TV_comb=2; *1-2 hours/day *;
+3937      else if     RF_PHYS_TV=3                    then TV_comb=3; *3-4 hours/day *;
+3938      else if     RF_PHYS_TV in (4,5,6)           then TV_comb=4; *>=5 hours/day *;
+3939
+3940      /* napping duration */
+3941      nap_comb=9;
+3942      if          RF_PHYS_NAP=0                   then nap_comb=0; *never naps *;
+3943      else if     RF_PHYS_NAP=1                   then nap_comb=1; *<1 hour/day *;
+3944      else if     RF_PHYS_NAP in (2,3,4)          then nap_comb=2; *naps >=1 hour/day *;
+3945
+3946      ** hypertension as told by doctor?;
+3947      htension=9;
+3948      if      rf_Q47_1='1'                        then htension=1; /* yes to hypertension */
+3949      else if rf_Q47_1='0'                        then htension=0; /* no to hypertension*/
+3950
+3951      /* hospital utilization-colonoscopy, sigmoidoscopy, proctoscopy in past 3 years */
+3952      utilizer_m=9;
+3953      if rf_Q15E='1'                              then utilizer_m=0; /* yes, utilized */
+3954      else if rf_Q15A='1'                         then utilizer_m=1; /* did not utilize */
+3955      else if rf_Q15B='1'                         then utilizer_m=1; /* did not utilize */
+3956      else if rf_Q15C='1'                         then utilizer_m=1; /* did not utilize */
+3957      else if rf_Q15D='1'                         then utilizer_m=1; /* did not utilize */
+3958
+3959      /* hospital utilization-mammograms */
+3960      utilizer_w=9;
+3961      if rf_Q44='1' | rf_Q44='2'                  then utilizer_w=1; /* yes once and more mammograms
+3961! in last 3 years*/
+3962      else if rf_Q44='0'                          then utilizer_w=0;  /* no mamograms in last 3 years
+3962!  */
+3963
+3964      ** RF entry age quartiles;
+3965      agecat=.;
+3966      if      51 <= rf_entry_age < 60     then agecat=1; /* 51-59 */
+3967      else if 60 <= rf_entry_age < 65     then agecat=2; /* 60-64 */
+3968      else if 65 <= rf_entry_age          then agecat=3; /* 65+ */
+3969
+3970      /**********************************************************************************************
+3970! ***/
+3971
+3972      ** 5 yr year of birth categories;
+3973      bc_cat=.;
+3974      if      1925 <= yob < 1930          then bc_cat=1; /* 1925-1929 */
+3975      else if 1930 <= yob < 1935          then bc_cat=2; /* 1930-1934 */
+3976      else if 1935 <= yob < 1940          then bc_cat=3; /* 1935-1939 */
+3977      else if 1940 <= yob <= 1945         then bc_cat=4; /* 1940-1945 */
+3978
+3979      ** (rf) physical exercise how often participate mod-vig activites in past 10 years;
+3980      rf_physic_c=9;
+3981      if      rf_phys_modvig_curr in (0,1)        then rf_physic_c=0; /* none-rarely */
+3982      else if rf_phys_modvig_curr=2               then rf_physic_c=1; /* <1 hr/week */
+3983      else if rf_phys_modvig_curr=3               then rf_physic_c=2; /* 1-3 hr/week */
+3984      else if rf_phys_modvig_curr=4               then rf_physic_c=3; /* 4-7 hr/week */
+3985      else if rf_phys_modvig_curr=5               then rf_physic_c=4; /* >7 hr/week */
+3986
+3987      /**********************************************************************************************
+3987! ***/
+3988  run;
 
 NOTE: There were 281257 observations read from the data set WORK.MELAN_R.
 NOTE: The data set WORK.MELAN_USE has 281257 observations and 123 variables.
 NOTE: DATA statement used (Total process time):
-      real time           0.47 seconds
-      cpu time            0.46 seconds
+      real time           0.45 seconds
+      cpu time            0.43 seconds
 
 
-5996
-5997  ** add labels;
-5998  proc datasets library=work;
-5999      title;
-6000      modify melan_use;
-6001
-6002      ** set variable labels;
-6003      label   /* melanoma outcomes */
-6004              melanoma_c = "Melanoma indicator by type"
-6005              melanoma_ins= "Melanoma in situ indicator"
-6006              melanoma_mal= "Malignant melanoma indicator"
-6007
-6008              /* for baseline */
-6009              uvrq = "TOMS UVR measures in quartiles"
-6010              /*educ_c = "education level"*/
-6011              physic_c = "level of physical activity"
-6012              bmi_c = "bmi, rough"
-6013              physic_c = "physical activity in past 12 months"
-6014              physic_1518_c = "physical activity at ages 15-18"
-6015
-6016              smoke_former ="Smoking Status"
-6017              smoke_quit = 'Quit smoking status'
-6018              smoke_dose = 'Smoking dose'
-6019              smoke_quit_dose = 'Smoking status and dose combined'
-6020              coffee_c = 'Coffee drinking'
-6021              alcohol_comb = 'Total alchohol per day including food sources'
-6022
-6023              /* for riskfactor */
-6024              rf_Q10_1="RFQ aspirin indicator"
-6025              rf_Q10_2="RFQ aspirin freq"
-6026              rf_Q11_1="RRQ non-aspirin indicator"
-6027              rf_Q11_2="RFQ non-aspirin freq"
-6028              rf_Q47_1="RFQ hypertension"
-6029              htension="Hypertension"
-6030              rf_physic_c = "Times engaged in moderate-vigorous physical activity"
-6031              rf_1d_cancer = "Family History of Cancer"
-6032              shebl_asp_f="Shebl coded aspirin freq"
-6033              shebl_non_f="Shebl coded non-aspirin freq"
-6034              shebl_type="Shebl coded NSAID use type"
-6035      ;
-6036      ** set variable value labels;
-6037      format  /* for outcomes */
-6038              melanoma_c melanfmt.
-6039              bmi_c bmifmt. agecat agecatfmt.
-6040              smoke_quit smokequitfmt. smoke_dose smokedosefmt.
-6041              smoke_quit_dose smokequitdosefmt.
-6042              coffee_c coffeefmt.
-6043              sex sexfmt.
-6044              UVRQ uvrqfmt.
-6045              alcohol_comb alcoholfmt.
-6046              smoke_former smokeformerfmt.
-6047              physic_c physic_1518_c physicfmt.
-6048              physic physic_1518 physiccfmt.
-6049              coffee_c coffeefmt. qp12b $qp12bfmt.
-6050              tv_comb tvfmt. RF_PHYS_TV rftvfmt.
-6051              nap_comb napfmt. RF_PHYS_NAP rfnapfmt.
-6052              marriage_comb marriagefmt. MARRIAGE rfmarriagefmt.
-6053              educm_comb educfmt. EDUCM rfeducfmt.
-6054              heart heartfmt.
-6055              utilizer_w utilizerwfmt. rf_Q44 $rfq44fmt.
-6056              utilizer_m utilizermfmt.
-6057              rf_Q15A $rfq15afmt. rf_Q15B $rfq15bfmt. rf_Q15C $rfq15cfmt. rf_Q15D $rfq15dfmt. rf_Q15E
-6057!  $rfq15efmt.
-6058              htension htensionfmt.
-6059              rf_abnet_aspirin rf_abnet_aspirinfmt.
-6060              rf_abnet_ibuprofen rf_abnet_ibuprofenfmt.
-6061              rf_abnet_cat_aspirin rf_abnet_cat_aspirinfmt.
-6062              rf_abnet_cat_ibuprofen rf_abnet_cat_ibuprofenfmt.
-6063              rf_Q10_1 rf_Q11_1 $rfq101fmt. rf_Q10_2 rf_Q11_2 $rfq102fmt.
-6064              shebl_asp_f shebl_non_f shebl_asp_me shebl_non_me sheblaspffmt.
-6065              shebl_type shebl_type_me shebltypefmt.
-6066              RF_PHYS_MODVIG_CURR rfphysiccfmt.
-6067      ;
-6068  run;
+3989
+3990  ** add labels;
+3991  proc datasets library=work;
+3992      title;
+3993      modify melan_use;
+3994
+3995      ** set variable labels;
+3996      label   /* melanoma outcomes */
+3997              melanoma_c = "Melanoma indicator by type"
+3998              melanoma_ins= "Melanoma in situ indicator"
+3999              melanoma_mal= "Malignant melanoma indicator"
+4000
+4001              /* for baseline */
+4002              uvrq = "TOMS UVR measures in quartiles"
+4003              /*educ_c = "education level"*/
+4004              physic_c = "level of physical activity"
+4005              bmi_c = "bmi, rough"
+4006              physic_c = "physical activity in past 12 months"
+4007              physic_1518_c = "physical activity at ages 15-18"
+4008
+4009              smoke_former ="Smoking Status"
+4010              smoke_quit = 'Quit smoking status'
+4011              smoke_dose = 'Smoking dose'
+4012              smoke_quit_dose = 'Smoking status and dose combined'
+4013              coffee_c = 'Coffee drinking'
+4014              alcohol_comb = 'Total alchohol per day including food sources'
+4015
+4016              /* for riskfactor */
+4017              rf_Q10_1="RFQ aspirin indicator"
+4018              rf_Q10_2="RFQ aspirin freq"
+4019              rf_Q11_1="RRQ non-aspirin indicator"
+4020              rf_Q11_2="RFQ non-aspirin freq"
+4021              rf_Q47_1="RFQ hypertension"
+4022              htension="Hypertension"
+4023              rf_physic_c = "Times engaged in moderate-vigorous physical activity"
+4024              rf_1d_cancer = "Family History of Cancer"
+4025              shebl_asp_f="Shebl coded aspirin freq"
+4026              shebl_non_f="Shebl coded non-aspirin freq"
+4027              shebl_type="Shebl coded NSAID use type"
+4028      ;
+4029      ** set variable value labels;
+4030      format  /* for outcomes */
+4031              melanoma_c melanfmt.
+4032              bmi_c bmifmt. agecat agecatfmt.
+4033              smoke_quit smokequitfmt. smoke_dose smokedosefmt.
+4034              smoke_quit_dose smokequitdosefmt.
+4035              coffee_c coffeefmt.
+4036              sex sexfmt.
+4037              UVRQ uvrqfmt.
+4038              alcohol_comb alcoholfmt.
+4039              smoke_former smokeformerfmt.
+4040              physic_c physic_1518_c physicfmt.
+4041              physic physic_1518 physiccfmt.
+4042              coffee_c coffeefmt. qp12b $qp12bfmt.
+4043              tv_comb tvfmt. RF_PHYS_TV rftvfmt.
+4044              nap_comb napfmt. RF_PHYS_NAP rfnapfmt.
+4045              marriage_comb marriagefmt. MARRIAGE rfmarriagefmt.
+4046              educm_comb educfmt. EDUCM rfeducfmt.
+4047              heart heartfmt.
+4048              utilizer_w utilizerwfmt. rf_Q44 $rfq44fmt.
+4049              utilizer_m utilizermfmt.
+4050              rf_Q15A $rfq15afmt. rf_Q15B $rfq15bfmt. rf_Q15C $rfq15cfmt. rf_Q15D $rfq15dfmt. rf_Q15E
+4050!  $rfq15efmt.
+4051              htension htensionfmt.
+4052              rf_abnet_aspirin rf_abnet_aspirinfmt.
+4053              rf_abnet_ibuprofen rf_abnet_ibuprofenfmt.
+4054              rf_abnet_cat_aspirin rf_abnet_cat_aspirinfmt.
+4055              rf_abnet_cat_ibuprofen rf_abnet_cat_ibuprofenfmt.
+4056              rf_Q10_1 rf_Q11_1 $rfq101fmt. rf_Q10_2 rf_Q11_2 $rfq102fmt.
+4057              shebl_asp_f shebl_non_f shebl_asp_me shebl_non_me sheblaspffmt.
+4058              shebl_type shebl_type_me shebltypefmt.
+4059              RF_PHYS_MODVIG_CURR rfphysiccfmt.
+4060      ;
+4061  run;
 
 NOTE: MODIFY was successful for WORK.MELAN_USE.DATA.
-6069
+4062
 
 NOTE: PROCEDURE DATASETS used (Total process time):
-      real time           0.59 seconds
-      cpu time            0.07 seconds
+      real time           0.50 seconds
+      cpu time            0.10 seconds
 
 
-6070  proc copy noclone in=Work out=conv;
-6071      select melan_use;
-6072  run;
+4063  proc copy noclone in=Work out=conv;
+4064      select melan_use;
+4065  run;
 
 NOTE: Copying WORK.MELAN_USE to CONV.MELAN_USE (memtype=DATA).
 NOTE: System Options for BUFSIZE and REUSE were used at user's request.
@@ -878,7 +878,7 @@ NOTE: Libname and/or system options for compress, pointobs, data representation 
 NOTE: There were 281257 observations read from the data set WORK.MELAN_USE.
 NOTE: The data set CONV.MELAN_USE has 281257 observations and 123 variables.
 NOTE: PROCEDURE COPY used (Total process time):
-      real time           0.29 seconds
+      real time           0.48 seconds
       cpu time            0.28 seconds
 
 
