@@ -10,7 +10,7 @@
 # note: using new rexp dataset above
 #
 # Created: April 13 2015
-# Updated: v20160506FRI WTL
+# Updated: v20160510TUE WTL
 # Under git version control
 # Used IMS: anchovy server
 # Warning: original IMS datasets are in LINUX latin1 encoding
@@ -197,7 +197,7 @@ data melan_r; ** name the output of the first primary analysis include to melan_
 	****  Create exit date, exit age, and person years for First Primary Cancer;
 	** with first primary cancer as skin cancer;
 	* Chooses the earliest of 4 possible exit dates for skin cancer;
-  	exit_dt = min(mdy(12,31,2006), cancer_dxdt, dod, raadate); 
+  	exit_dt = min(mdy(12,31,2011), cancer_dxdt, dod, raadate); 
   	exit_age = round(((exit_dt-f_dob)/365.25),.001);
   	personyrs = round(((exit_dt-entry_dt)/365.25),.001);
 	rf_personyrs = round(((exit_dt-rf_entry_dt)/365.25),.001);
