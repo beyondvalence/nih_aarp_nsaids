@@ -1,0 +1,87 @@
+5177  /******************************************/
+5178  /**** NSAIDs test file ********************/
+5179  /**** contains various checks *************/
+5180  /**** now only SHEBL type NSAID coding ****/
+5181  /**** updated: 20160513FRI WTL ************/
+5182  /******************************************/
+5183
+5184  ods html close; ods html;
+NOTE: Writing HTML Body file: sashtml18.htm
+5185  title1 'NSAID table1 checks';
+5186  title2 '';
+5187  title3 'file: shebl_check.sas';
+5188
+5189  proc means data=melan_use;
+5190      title2 'RF age at entry mean (SD)';
+5191      var rf_entry_age;
+5192  run;
+
+NOTE: There were 280066 observations read from the data set WORK.MELAN_USE.
+NOTE: PROCEDURE MEANS used (Total process time):
+      real time           0.12 seconds
+      cpu time            0.17 seconds
+
+
+5193  proc means data=melan_use;
+5194      class shebl_type;
+5195      var rf_entry_age;
+5196  run;
+
+NOTE: There were 280066 observations read from the data set WORK.MELAN_USE.
+NOTE: PROCEDURE MEANS used (Total process time):
+      real time           0.12 seconds
+      cpu time            0.20 seconds
+
+
+5197  proc univariate data=melan_use;
+5198      title2 'RF follow up median (IQR)';
+5199      var rf_personyrs;
+5200  run;
+
+NOTE: PROCEDURE UNIVARIATE used (Total process time):
+      real time           0.22 seconds
+      cpu time            0.23 seconds
+
+
+5201  proc univariate data=melan_use;
+5202      class shebl_type;
+5203      var rf_personyrs;
+5204  run;
+
+NOTE: PROCEDURE UNIVARIATE used (Total process time):
+      real time           0.30 seconds
+      cpu time            0.29 seconds
+
+
+5205
+5206  proc freq data=melan_use;
+5207      title2 'variables by shebl type';
+5208      table
+5209                  (SEX
+5210                  educm_comb
+5211                  SMOKE_FORMER
+5212                  alcohol_comb
+5213                  bmi_c
+5214                  physic_c
+5215                  physic_1518_c
+5216                  UVRQ
+5217                  htension
+5218                  HEART
+5219                  rel_1d_cancer
+5220                  coffee_c
+5221                  TV_comb
+5222                  nap_comb
+5223                  marriage_comb
+5224                  utilizer_m
+5225                  utilizer_w)*shebl_type
+5226      /missing;
+5227  run;
+
+NOTE: There were 280066 observations read from the data set WORK.MELAN_USE.
+NOTE: PROCEDURE FREQ used (Total process time):
+      real time           1.04 seconds
+      cpu time            1.03 seconds
+
+
+5228  title;
+5229  ods html;
