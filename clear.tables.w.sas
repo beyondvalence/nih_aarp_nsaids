@@ -1,13 +1,13 @@
 /******************************/
 /** NSAIDS clearance tables ***/
 ** created: 20151223WED WTL ***;
-** updated: 20160513FRI WTL ***;
+** updated: 20160516MON WTL ***;
 /******************************/
 
 ** added shebl coded NSAID checks;
 
 ods html close; ods html;
-title1 'RFQ clearance tables 20160510TUE';
+title1 'RFQ clearance tables 20160516MON';
 title2 'from special UVR dataset';
 title3 'file: clear.tables.w.sas';
 proc means data=melan_use missing;
@@ -148,9 +148,9 @@ run;
 proc freq data=melan_use;
 	title2 'shebl cross checks';
 	table 
-		(shebl_asp_f
-		shebl_non_f
-		shebl_type)*melanoma_c
+		(shebl_type
+		shebl_asp_f
+		shebl_non_f)*melanoma_c
 	/missing nocol norow nopercent;
 run;
 title;

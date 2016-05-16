@@ -903,7 +903,7 @@ ods html close; ods html;
 **************************************************************************;
 ods html close; ods html;
 proc phreg data = melan_use multipass;
-	title 'NSAID, ptrend using wald type3 tests, physic_c';
+	title 'NSAID, ptrend using wald type3 tests, physic_1518_c';
 	class 
 				SEX
 				

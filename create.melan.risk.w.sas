@@ -10,7 +10,7 @@
 # note: using new rexp dataset above
 #
 # Created: April 13 2015
-# Updated: v20160513FRI WTL
+# Updated: v20160516MON WTL
 # Under git version control
 # Used IMS: anchovy server
 # Warning: original IMS datasets are in LINUX latin1 encoding
