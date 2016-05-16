@@ -28,6 +28,7 @@ libname conv 'C:\REB\NSAIDS melanoma AARP\Data\converted';
 ********* 			IN SITU			***********;
 ***********************************************;
 ods html close; ods html;
+title1 'in situ unadjusted';
 proc phreg data = melan_use;
 class shebl_type (ref='1. Neither NSAID use') ;
 model exit_age*melanoma_ins(0)=shebl_type  / entry = entry_age RL type3(LR); *** The RL option requests risk limits ***;
@@ -60,7 +61,7 @@ run;
 ***********************************************;
 ********* 	   Malignant melanoma	***********;
 ***********************************************;
-
+title1 'malignant unadjusted';
 proc phreg data = melan_use;
 class shebl_type (ref='1. Neither NSAID use') ;
 model exit_age*melanoma_mal(0)=shebl_type  / entry = entry_age RL type3(LR); *** The RL option requests risk limits ***;
