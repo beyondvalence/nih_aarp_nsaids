@@ -10,7 +10,7 @@
 # note: using new rexp dataset above
 #
 # Created: April 13 2015
-# Updated: v20160516MON WTL
+# Updated: v20160517TUE WTL
 # Under git version control
 # Used IMS: anchovy server
 # Warning: original IMS datasets are in LINUX latin1 encoding
@@ -239,28 +239,41 @@ proc freq data= melan_r;
 	tables 	excl_1_race
 			excl_1_race*melanoma_c /missing;
 run;
-data melan_r;
-	set melan_r;
-	where excl_1_race=0;
-run;
 
 /***************************************************************************************/ 
-/*   Exclude if person-years <= 0                                                       */
+/*   Exclude if person-years <= 0                                                      */
 /***************************************************************************************/      
 title 'exclusion person years <=0';
 data melan_r;
     set melan_r;
     excl_2_pyr=0;
     if rf_personyrs <= 0 then excl_2_pyr=1;
+	where excl_1_race=0;
 run;
 proc freq data= melan_r ;
 	title 'excl_2_pyr: exclude 0 or negative person years';
-	tables 	excl_2_pyr
+	tables 	excl_1_race*excl_2_pyr
 			excl_2_pyr*melanoma_c /missing;
+run;
+
+/***************************************************************************************/ 
+/*   Exclude if UVR <= 0                                                               */
+/***************************************************************************************/      
+title 'exclusion UVR missing';
+data melan_r;
+    set melan_r;
+    excl_3_exposure=0;
+    if exposure_jul_78_05 <= 0 then excl_3_exposure=1;
+	where excl_2_pyr=0;
+run;
+proc freq data= melan_r ;
+	title 'excl_2_pyr: exclude 0 or negative person years';
+	tables 	excl_2_pyr*excl_3_exposure
+			excl_3_exposure*melanoma_c /missing;
 run;
 data melan_r;
 	set melan_r;
-	where excl_2_pyr=0;
+	where excl_3_exposure=0;
 run;
 
 proc freq data= melan_r;
@@ -366,9 +379,21 @@ data melan_use;
 	else if rf_Q10_1='1' and rf_Q11_1='0'					then shebl_type=2; /* apsirin use only */
 	else if rf_Q10_1='0' and rf_Q11_1='1'					then shebl_type=3; /* nonaspirin use only */
 	else if rf_Q10_1='1' and rf_Q11_1='1'					then shebl_type=4; /* both aspirin and nonaspirin use */
+
 	** shebl type main effect;
 	shebl_type_me=shebl_type;
 	if shebl_type_me=9										then shebl_type_me=.; /* unknown to missing */	
+
+	** nsaid gamba type;
+	** http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3880825/ ;
+	gamba_asp=9;
+	if 		rf_Q10_1='0' and rf_Q11_1='0'					then gamba_asp=1; /* NSAID non-user */
+	else if rf_Q10_1='0' and rf_Q11_1='1'					then gamba_asp=2; /* NSAID non-aspirin user */
+	else if rf_Q10_1='1'									then gamba_asp=3; /* NSAID aspirin user */
+
+	** gamba_asp main effect;
+	gamba_asp_me=gamba_asp;
+	if gamba_asp_me=9										then gamba_asp_me=.; /* unknown to missing value */
 
 	** aspirin use frequency;
 	shebl_asp_f=9; 
