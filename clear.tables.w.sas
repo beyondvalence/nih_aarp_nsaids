@@ -1,7 +1,7 @@
 /******************************/
 /** NSAIDS clearance tables ***/
 ** created: 20151223WED WTL ***;
-** updated: 20160516MON WTL ***;
+** updated: 20160517TUE WTL ***;
 /******************************/
 
 ** added shebl coded NSAID checks;
