@@ -1,0 +1,87 @@
+7616  /******************************************/
+7617  /**** NSAIDs test file ********************/
+7618  /**** contains various checks *************/
+7619  /**** now only SHEBL type NSAID coding ****/
+7620  /**** updated: 20160517TUE WTL ************/
+7621  /******************************************/
+7622
+7623  ods html close; ods html;
+NOTE: Writing HTML Body file: sashtml31.htm
+7624  title1 'NSAID table1 checks';
+7625  title2 '';
+7626  title3 'file: shebl_check.sas';
+7627
+7628  proc means data=melan_use;
+7629      title2 'RF age at entry mean (SD)';
+7630      var rf_entry_age;
+7631  run;
+
+NOTE: There were 279715 observations read from the data set WORK.MELAN_USE.
+NOTE: PROCEDURE MEANS used (Total process time):
+      real time           0.16 seconds
+      cpu time            0.15 seconds
+
+
+7632  proc means data=melan_use;
+7633      class shebl_type;
+7634      var rf_entry_age;
+7635  run;
+
+NOTE: There were 279715 observations read from the data set WORK.MELAN_USE.
+NOTE: PROCEDURE MEANS used (Total process time):
+      real time           0.12 seconds
+      cpu time            0.21 seconds
+
+
+7636  proc univariate data=melan_use;
+7637      title2 'RF follow up median (IQR)';
+7638      var rf_personyrs;
+7639  run;
+
+NOTE: PROCEDURE UNIVARIATE used (Total process time):
+      real time           0.37 seconds
+      cpu time            0.21 seconds
+
+
+7640  proc univariate data=melan_use;
+7641      class shebl_type;
+7642      var rf_personyrs;
+7643  run;
+
+NOTE: PROCEDURE UNIVARIATE used (Total process time):
+      real time           0.31 seconds
+      cpu time            0.29 seconds
+
+
+7644
+7645  proc freq data=melan_use;
+7646      title2 'variables by shebl type';
+7647      table
+7648                  (SEX
+7649                  educm_comb
+7650                  SMOKE_FORMER
+7651                  alcohol_comb
+7652                  bmi_c
+7653                  physic_c
+7654                  physic_1518_c
+7655                  UVRQ
+7656                  htension
+7657                  HEART
+7658                  rel_1d_cancer
+7659                  coffee_c
+7660                  TV_comb
+7661                  nap_comb
+7662                  marriage_comb
+7663                  utilizer_m
+7664                  utilizer_w)*shebl_type
+7665      /missing;
+7666  run;
+
+NOTE: There were 279715 observations read from the data set WORK.MELAN_USE.
+NOTE: PROCEDURE FREQ used (Total process time):
+      real time           1.05 seconds
+      cpu time            1.02 seconds
+
+
+7667  title;
+7668  ods html;

@@ -1,0 +1,271 @@
+7669  /******************************/
+7670  /** NSAIDS clearance tables ***/
+7671  ** created: 20151223WED WTL ***;
+7672  ** updated: 20160517TUE WTL ***;
+7673  /******************************/
+7674
+7675  ** added shebl coded NSAID checks;
+7676
+7677  ods html close; ods html;
+NOTE: Writing HTML Body file: sashtml32.htm
+7678  title1 'RFQ clearance tables 20160516MON';
+7679  title2 'from special UVR dataset';
+7680  title3 'file: clear.tables.w.sas';
+7681  proc means data=melan_use missing;
+7682      class UVRQ;
+7683      var exposure_jul_78_05;
+7684  run;
+
+NOTE: There were 279715 observations read from the data set WORK.MELAN_USE.
+NOTE: PROCEDURE MEANS used (Total process time):
+      real time           0.14 seconds
+      cpu time            0.18 seconds
+
+
+7685  proc freq data=melan_use;
+7686      tables
+7687          UVRQ*melanoma_c
+7688          UVRQ*sex
+7689          UVRQ*shebl_type
+7690      /missing  norow ;
+7691  run;
+
+NOTE: There were 279715 observations read from the data set WORK.MELAN_USE.
+NOTE: PROCEDURE FREQ used (Total process time):
+      real time           0.18 seconds
+      cpu time            0.17 seconds
+
+
+7692  title2 'from baseline dataset';
+7693  proc freq data=melan_use;
+7694      tables
+7695          educm_comb*EDUCM
+7696          educm_comb*melanoma_c
+7697          educm_comb*sex
+7698          educm_comb*shebl_type
+7699          SMOKE_FORMER*shebl_type
+7700      /missing  norow ;
+7701  run;
+
+NOTE: There were 279715 observations read from the data set WORK.MELAN_USE.
+NOTE: PROCEDURE FREQ used (Total process time):
+      real time           0.21 seconds
+      cpu time            0.21 seconds
+
+
+7702  proc means data=melan_use missing;
+7703      class alcohol_comb;
+7704      var mped_a_bev;
+7705  run;
+
+NOTE: There were 279715 observations read from the data set WORK.MELAN_USE.
+NOTE: PROCEDURE MEANS used (Total process time):
+      real time           0.12 seconds
+      cpu time            0.20 seconds
+
+
+7706  proc freq data=melan_use;
+7707      tables
+7708          alcohol_comb*melanoma_c
+7709          alcohol_comb*sex
+7710          alcohol_comb*shebl_type
+7711      /missing  norow ;
+7712  run;
+
+NOTE: There were 279715 observations read from the data set WORK.MELAN_USE.
+NOTE: PROCEDURE FREQ used (Total process time):
+      real time           0.17 seconds
+      cpu time            0.17 seconds
+
+
+7713  proc means data=melan_use missing;
+7714      class bmi_c;
+7715      var bmi_cur;
+7716  run;
+
+NOTE: There were 279715 observations read from the data set WORK.MELAN_USE.
+NOTE: PROCEDURE MEANS used (Total process time):
+      real time           0.12 seconds
+      cpu time            0.14 seconds
+
+
+7717  proc freq data=melan_use;
+7718      tables
+7719          bmi_c*melanoma_c
+7720          bmi_c*sex
+7721          bmi_c*shebl_type
+7722      /missing  norow ;
+7723
+
+NOTE: There were 279715 observations read from the data set WORK.MELAN_USE.
+NOTE: PROCEDURE FREQ used (Total process time):
+      real time           0.17 seconds
+      cpu time            0.17 seconds
+
+
+7724  proc freq data=melan_use;
+7725      tables
+7726          physic_c*physic
+7727          physic_c*melanoma_c
+7728          physic_c*sex
+7729          physic_c*shebl_type
+7730          physic_1518_c*physic_1518
+7731          physic_1518_c*melanoma_c
+7732          physic_1518_c*sex
+7733          physic_1518_c*shebl_type
+7734          HEART*shebl_type
+7735          rf_1d_cancer*shebl_type
+7736          coffee_c*qp12b
+7737          coffee_c*melanoma_c
+7738          coffee_c*sex
+7739          coffee_c*shebl_type
+7740          marriage_comb*MARRIAGE
+7741          marriage_comb*melanoma_c
+7742          marriage_comb*sex
+7743          marriage_comb*shebl_type
+7744      /missing  norow ;
+7745  run;
+
+NOTE: There were 279715 observations read from the data set WORK.MELAN_USE.
+NOTE: PROCEDURE FREQ used (Total process time):
+      real time           0.52 seconds
+      cpu time            0.51 seconds
+
+
+7746  title2 'from RF dataset';
+7747  proc freq data=melan_use;
+7748      title3'nsaid exposures';
+7749      tables
+7750          shebl_type*rf_Q10_1*rf_Q11_1
+7751          shebl_asp_f*rf_Q10_1*rf_Q10_2
+7752          shebl_non_f*rf_Q11_1*rf_Q11_2
+7753      /missing nocol norow nopercent list;
+7754  run;
+
+NOTE: There were 279715 observations read from the data set WORK.MELAN_USE.
+NOTE: PROCEDURE FREQ used (Total process time):
+      real time           0.21 seconds
+      cpu time            0.20 seconds
+
+
+7755  proc freq data=melan_use;
+7756      tables
+7757          shebl_type*melanoma_c
+7758          shebl_type*sex
+7759          shebl_asp_f*melanoma_c
+7760          shebl_asp_f*sex
+7761          shebl_non_f*melanoma_c
+7762          shebl_non_f*sex
+7763          TV_comb*RF_PHYS_TV
+7764          TV_comb*melanoma_c
+7765          TV_comb*sex
+7766          TV_comb*shebl_type
+7767          nap_comb*RF_PHYS_NAP
+7768          nap_comb*melanoma_c
+7769          nap_comb*sex
+7770          nap_comb*shebl_type
+7771          htension*rf_Q47_1
+7772          htension*melanoma_c
+7773          htension*sex
+7774          htension*shebl_type
+7775      /missing ;
+7776  run;
+
+NOTE: There were 279715 observations read from the data set WORK.MELAN_USE.
+NOTE: PROCEDURE FREQ used (Total process time):
+      real time           0.37 seconds
+      cpu time            0.35 seconds
+
+
+7776!      title3;
+7777  proc freq data=melan_use;
+7778      title2 'Had any procedure on colon or rectum in past 3 years?';
+7779      tables
+7780          utilizer_m*rf_Q15A*rf_Q15B*rf_Q15C*rf_Q15D*rf_Q15E
+7781      /missing nocol norow nopercent list;
+7782  run;
+
+NOTE: There were 279715 observations read from the data set WORK.MELAN_USE.
+NOTE: PROCEDURE FREQ used (Total process time):
+      real time           0.17 seconds
+      cpu time            0.15 seconds
+
+
+7783  proc freq data=melan_use;
+7784      title2;
+7785      tables
+7786          utilizer_m*melanoma_c
+7787          utilizer_m*sex
+7788          utilizer_m*shebl_type
+7789          utilizer_w*rf_Q44
+7790          utilizer_w*melanoma_c
+7791          utilizer_w*sex
+7792          utilizer_w*shebl_type
+7793      /missing  norow ;
+7794  run;
+
+NOTE: There were 279715 observations read from the data set WORK.MELAN_USE.
+NOTE: PROCEDURE FREQ used (Total process time):
+      real time           0.23 seconds
+      cpu time            0.20 seconds
+
+
+7795
+7796  **************************;
+7797  *check shebl freq, aspirin;
+7798  proc freq data=melan_use;
+7799      title2 'shebl aspirin freq';
+7800      table rf_Q10_1*shebl_asp_f*rf_Q10_2
+7801      /missing nocol norow nopercent;
+7802  run;
+
+NOTE: There were 279715 observations read from the data set WORK.MELAN_USE.
+NOTE: PROCEDURE FREQ used (Total process time):
+      real time           0.18 seconds
+      cpu time            0.18 seconds
+
+
+7803  *check shebl freq, non-aspirin;
+7804  proc freq data=melan_use;
+7805      title2 'shebl nonaspirin freq';
+7806      table rf_Q11_1*shebl_non_f*rf_Q11_2
+7807      /missing nocol norow nopercent;
+7808  run;
+
+NOTE: There were 279715 observations read from the data set WORK.MELAN_USE.
+NOTE: PROCEDURE FREQ used (Total process time):
+      real time           0.18 seconds
+      cpu time            0.18 seconds
+
+
+7809  *check shebl type, aspirin, non-aspirin;
+7810  proc freq data=melan_use;
+7811      title2 'shebl nsaid type';
+7812      table shebl_type*rf_Q10_1*rf_Q11_1
+7813      /missing nocol norow nopercent;
+7814  run;
+
+NOTE: There were 279715 observations read from the data set WORK.MELAN_USE.
+NOTE: PROCEDURE FREQ used (Total process time):
+      real time           0.16 seconds
+      cpu time            0.17 seconds
+
+
+7815
+7816  proc freq data=melan_use;
+7817      title2 'shebl cross checks';
+7818      table
+7819          (shebl_type
+7820          shebl_asp_f
+7821          shebl_non_f)*melanoma_c
+7822      /missing nocol norow nopercent;
+7823  run;
+
+NOTE: There were 279715 observations read from the data set WORK.MELAN_USE.
+NOTE: PROCEDURE FREQ used (Total process time):
+      real time           0.16 seconds
+      cpu time            0.15 seconds
+
+
+7824  title;
+
