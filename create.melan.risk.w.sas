@@ -268,7 +268,7 @@ data melan_r;
 	where excl_2_pyr=0;
 run;
 proc freq data= melan_r ;
-	title 'excl_2_pyr: exclude 0 or negative person years';
+	title 'excl_3_exposure: exclude 0 or less and missing UVR';
 	tables 	excl_2_pyr*excl_3_exposure
 			excl_3_exposure*melanoma_c /missing;
 run;
