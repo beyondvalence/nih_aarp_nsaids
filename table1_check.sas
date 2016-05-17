@@ -2,7 +2,7 @@
 /**** NSAIDs test file ********************/
 /**** contains various checks *************/
 /**** now only SHEBL type NSAID coding ****/
-/**** updated: 20160516MON WTL ************/
+/**** updated: 20160517TUE WTL ************/
 /******************************************/
 
 ods html close; ods html;
