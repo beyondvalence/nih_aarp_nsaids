@@ -38,7 +38,7 @@ proc phreg data = use multipass;
 	where uvrq=1;
 	ods output ParameterEstimates=stype_uvrq1;
 run;
-data bin_stype_uvrq1; set stype_uvrq1;
+data rin_stype_uvrq1; set stype_uvrq1;
 	where Parameter='shebl_type_me';
 	variable="bin_stype_uvrq1     ";
 run;
@@ -58,7 +58,7 @@ proc phreg data = use multipass;
 	where uvrq=1;
 	ods output ParameterEstimates=stype_uvrq1;
 run;
-data bma_stype_uvrq1; set stype_uvrq1;
+data rma_stype_uvrq1; set stype_uvrq1;
 	where Parameter='shebl_type_me';
 	variable="bma_stype_uvrq1    ";
 	uvr = 'UVRQ 1';
@@ -80,7 +80,7 @@ proc phreg data = use multipass;
 	where uvrq=2;
 	ods output ParameterEstimates=stype_uvrq2;
 run;
-data bin_stype_uvrq2; set stype_uvrq2;
+data rin_stype_uvrq2; set stype_uvrq2;
 	where Parameter='shebl_type_me';
 	variable="bin_stype_uvrq2    ";
 run;
@@ -100,7 +100,7 @@ proc phreg data = use multipass;
 	where uvrq=2;
 	ods output ParameterEstimates=stype_uvrq2;
 run;
-data bma_stype_uvrq2; set stype_uvrq2;
+data rma_stype_uvrq2; set stype_uvrq2;
 	where Parameter='shebl_type_me';
 	variable="bma_stype_uvrq2    ";
 	uvr = 'UVRQ 2';
@@ -122,7 +122,7 @@ proc phreg data = use multipass;
 	where uvrq=3;
 	ods output ParameterEstimates=stype_uvrq3;
 run;
-data bin_stype_uvrq3; set stype_uvrq3;
+data rin_stype_uvrq3; set stype_uvrq3;
 	where Parameter='shebl_type_me';
 	variable="bin_stype_uvrq3    ";
 run;
@@ -193,13 +193,13 @@ run;
 ods _all_ close; ods html;
 *Combine and output to Excel;
 data base_stype_uvrq (rename=(HazardRatio=A_HR HRLowerCL=A_LL HRUpperCL=A_UL)); 
-	set bin_stype_uvrq1  
-		bma_stype_uvrq1
-		bin_stype_uvrq2
-		bma_stype_uvrq2
-		bin_stype_uvrq3
-		bma_stype_uvrq3
-		bin_stype_uvrq4
+	set rin_stype_uvrq1  
+		rma_stype_uvrq1
+		rin_stype_uvrq2
+		rma_stype_uvrq2
+		rin_stype_uvrq3
+		rma_stype_uvrq3
+		rin_stype_uvrq4
 		rma_stype_uvrq4
 	; 
 run;
