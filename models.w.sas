@@ -9,7 +9,7 @@
 # uses melan_use dataset
 # 
 # Created: July 30, 2015
-# Updated: v20160510TUE WTL
+# Updated: v20160518WED WTL
 # Under git version control
 #
 *******************************************************************/
@@ -127,7 +127,7 @@ proc phreg data = melan_use multipass;
 				bmi_c
 				
 				physic_c
-				UVRQ
+				
 				htension
 				HEART 
 				rel_1d_cancer
@@ -172,7 +172,7 @@ proc phreg data = melan_use multipass;
 				bmi_c
 				
 				physic_c
-				UVRQ
+				
 				htension
 				HEART 
 				rel_1d_cancer
@@ -217,7 +217,7 @@ proc phreg data = melan_use multipass;
 				bmi_c
 				
 				physic_c
-				UVRQ
+				
 				htension
 				HEART 
 				rel_1d_cancer
@@ -269,7 +269,7 @@ proc phreg data = melan_use multipass;
 				bmi_c
 				
 				physic_c
-				UVRQ
+				
 				htension
 				HEART 
 				rel_1d_cancer
@@ -314,7 +314,7 @@ proc phreg data = melan_use multipass;
 				bmi_c
 				
 				physic_c
-				UVRQ
+				
 				htension
 				HEART 
 				rel_1d_cancer
@@ -359,7 +359,7 @@ proc phreg data = melan_use multipass;
 				bmi_c
 				
 				physic_c
-				UVRQ
+				
 				htension
 				HEART 
 				rel_1d_cancer
@@ -429,7 +429,7 @@ proc phreg data = melan_use multipass;
 				bmi_c
 				
 				physic_c
-				UVRQ
+				
 				htension
 				HEART 
 				rel_1d_cancer
@@ -472,7 +472,7 @@ proc phreg data = melan_use multipass;
 				bmi_c
 				
 				physic_c
-				UVRQ
+				
 				htension
 				HEART 
 				rel_1d_cancer
@@ -516,7 +516,7 @@ proc phreg data = melan_use multipass;
 				bmi_c
 				
 				physic_c
-				UVRQ
+				
 				htension
 				HEART 
 				rel_1d_cancer
@@ -559,7 +559,7 @@ proc phreg data = melan_use multipass;
 				bmi_c
 				
 				physic_c
-				UVRQ
+				
 				htension
 				HEART 
 				rel_1d_cancer
@@ -612,7 +612,7 @@ proc phreg data = melan_use multipass;
 				bmi_c
 				
 				physic_1518_c
-				UVRQ
+				
 				htension
 				HEART 
 				rel_1d_cancer
@@ -657,7 +657,7 @@ proc phreg data = melan_use multipass;
 				bmi_c
 				
 				physic_1518_c
-				UVRQ
+				
 				htension
 				HEART 
 				rel_1d_cancer
@@ -702,7 +702,7 @@ proc phreg data = melan_use multipass;
 				bmi_c
 				
 				physic_1518_c
-				UVRQ
+				
 				htension
 				HEART 
 				rel_1d_cancer
@@ -754,7 +754,7 @@ proc phreg data = melan_use multipass;
 				bmi_c
 				
 				physic_1518_c
-				UVRQ
+				
 				htension
 				HEART 
 				rel_1d_cancer
@@ -799,7 +799,7 @@ proc phreg data = melan_use multipass;
 				bmi_c
 				
 				physic_1518_c
-				UVRQ
+				
 				htension
 				HEART 
 				rel_1d_cancer
@@ -844,7 +844,7 @@ proc phreg data = melan_use multipass;
 				bmi_c
 				
 				physic_1518_c
-				UVRQ
+				
 				htension
 				HEART 
 				rel_1d_cancer
@@ -914,7 +914,7 @@ proc phreg data = melan_use multipass;
 				bmi_c
 				
 				physic_1518_c
-				UVRQ
+				
 				htension
 				HEART 
 				rel_1d_cancer
@@ -957,7 +957,7 @@ proc phreg data = melan_use multipass;
 				bmi_c
 				
 				physic_1518_c
-				UVRQ
+				
 				htension
 				HEART 
 				rel_1d_cancer
@@ -1001,7 +1001,7 @@ proc phreg data = melan_use multipass;
 				bmi_c
 				
 				physic_1518_c
-				UVRQ
+				
 				htension
 				HEART 
 				rel_1d_cancer
@@ -1044,7 +1044,7 @@ proc phreg data = melan_use multipass;
 				bmi_c
 				
 				physic_1518_c
-				UVRQ
+				
 				htension
 				HEART 
 				rel_1d_cancer
