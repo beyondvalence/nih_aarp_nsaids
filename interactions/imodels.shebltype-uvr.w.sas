@@ -40,6 +40,7 @@ run;
 data rin_stype_uvrq1; set stype_uvrq1;
 	where Parameter='shebl_type_me';
 	variable="bin_stype_uvrq1     ";
+	melanoma = 'in_situ';
 run;
 
 ** uvrq_c * shebl_type;
@@ -60,7 +61,7 @@ run;
 data rma_stype_uvrq1; set stype_uvrq1;
 	where Parameter='shebl_type_me';
 	variable="bma_stype_uvrq1    ";
-	uvr = 'UVRQ 1';
+	melanoma = 'malignant';
 run;
 
 ** UVRQ = 2 ****************************;
@@ -82,6 +83,7 @@ run;
 data rin_stype_uvrq2; set stype_uvrq2;
 	where Parameter='shebl_type_me';
 	variable="bin_stype_uvrq2    ";
+	melanoma = 'in_situ';
 run;
 
 ** uvrq_c * shebl_type;
@@ -102,7 +104,7 @@ run;
 data rma_stype_uvrq2; set stype_uvrq2;
 	where Parameter='shebl_type_me';
 	variable="bma_stype_uvrq2    ";
-	uvr = 'UVRQ 2';
+	melanoma = 'malignant';
 run;
 
 ** UVRQ = 3 ****************************;
@@ -124,6 +126,7 @@ run;
 data rin_stype_uvrq3; set stype_uvrq3;
 	where Parameter='shebl_type_me';
 	variable="bin_stype_uvrq3    ";
+	melanoma = 'in_situ';
 run;
 
 ** uvrq_c * shebl_type;
@@ -144,7 +147,7 @@ run;
 data rma_stype_uvrq3; set stype_uvrq3;
 	where Parameter='shebl_type_me';
 	variable="rma_stype_uvrq3    ";
-	uvr = 'UVRQ 3';
+	melanoma = 'malignant';
 run;
 
 ** UVRQ = 4 ****************************;
@@ -166,6 +169,7 @@ run;
 data rin_stype_uvrq4; set stype_uvrq4;
 	where Parameter='shebl_type_me';
 	variable="rin_stype_uvrq4    ";
+	melanoma = 'in_situ';
 run;
 
 ** uvrq_c * shebl_type;
@@ -186,7 +190,7 @@ run;
 data rma_stype_uvrq4; set stype_uvrq4;
 	where Parameter='shebl_type_me';
 	variable="rma_stype_uvrq4    ";
-	uvr = 'UVRQ 4';
+	melanoma = 'in_situ';
 run;
 
 ods _all_ close; ods html;
@@ -214,7 +218,7 @@ data base_stype_uvrqt (keep=Parameter ClassVal0 A_HR A_LL A_UL uvr);
 	title1 'AARP Melanoma NSAID Riskfactor';
 	title2 'Hazard Ratios for NSAID use type';
 	title3 'By UVQR quartile';
-	title4 '20160518WED WTL';
+	title4 '20160523MON WTL';
 	set base_stype_uvrq; 
 	*where ClassVal0=' ';
 run;
@@ -246,6 +250,7 @@ run;
 data rin_stype_uvrq1; set stype_uvrq1;
 	where Parameter='shebl_type_me';
 	variable="bin_stype_uvrq1     ";
+	melanoma = 'in_situ';
 run;
 
 ** uvrq_5c * shebl_type;
@@ -266,7 +271,7 @@ run;
 data rma_stype_uvrq1; set stype_uvrq1;
 	where Parameter='shebl_type_me';
 	variable="bma_stype_uvrq1    ";
-	uvr = 'UVRQ 1';
+	melanoma = 'malignant';
 run;
 
 ** UVRQ = 2 ****************************;
@@ -288,6 +293,7 @@ run;
 data rin_stype_uvrq2; set stype_uvrq2;
 	where Parameter='shebl_type_me';
 	variable="bin_stype_uvrq2    ";
+	melanoma = 'in_situ';
 run;
 
 ** uvrq_5c * shebl_type;
@@ -308,7 +314,7 @@ run;
 data rma_stype_uvrq2; set stype_uvrq2;
 	where Parameter='shebl_type_me';
 	variable="bma_stype_uvrq2    ";
-	uvr = 'UVRQ 2';
+	melanoma = 'malignant';
 run;
 
 ** UVRQ = 3 ****************************;
@@ -330,6 +336,7 @@ run;
 data rin_stype_uvrq3; set stype_uvrq3;
 	where Parameter='shebl_type_me';
 	variable="bin_stype_uvrq3    ";
+	melanoma = 'in_situ';
 run;
 
 ** uvrq_5c * shebl_type;
@@ -350,7 +357,7 @@ run;
 data rma_stype_uvrq3; set stype_uvrq3;
 	where Parameter='shebl_type_me';
 	variable="rma_stype_uvrq3    ";
-	uvr = 'UVRQ 3';
+	melanoma = 'malignant';
 run;
 
 ** UVRQ = 4 ****************************;
@@ -372,6 +379,7 @@ run;
 data rin_stype_uvrq4; set stype_uvrq4;
 	where Parameter='shebl_type_me';
 	variable="rin_stype_uvrq4    ";
+	melanoma = 'in_situ';
 run;
 
 ** uvrq_5c * shebl_type;
@@ -392,7 +400,7 @@ run;
 data rma_stype_uvrq4; set stype_uvrq4;
 	where Parameter='shebl_type_me';
 	variable="rma_stype_uvrq4    ";
-	uvr = 'UVRQ 4';
+	melanoma = 'malignant';
 run;
 
 ** UVRQ = 5 ****************************;
@@ -414,6 +422,7 @@ run;
 data rin_stype_uvrq5; set stype_uvrq5;
 	where Parameter='shebl_type_me';
 	variable="rin_stype_uvrq5    ";
+	melanoma = 'in_situ';
 run;
 
 ** uvrq_5c * shebl_type;
@@ -434,7 +443,7 @@ run;
 data rma_stype_uvrq5; set stype_uvrq5;
 	where Parameter='shebl_type_me';
 	variable="rma_stype_uvrq5    ";
-	uvr = 'UVRQ 5';
+	melanoma = 'malignant';
 run;
 
 ods _all_ close; ods html;
