@@ -7,7 +7,7 @@
 # with SAS output to MS Excel
 # uses melan and melan_r datasets
 # 
-# Created: May 18, 2016
+# Created: May 23, 2016
 # Updated: v20160523MON WTL
 #
 *******************************************************************/
@@ -372,7 +372,7 @@ run;
 run;*/
 data base_uvrqc_Saspt (keep=Parameter ClassVal0 A_HR A_LL A_UL variable); 
 	title1 'AARP Melanoma NSAID Riskfactor';
-	title2 'Hazard Ratios for NSAID use type';
+	title2 'Hazard Ratios for NSAID aspirin duration';
 	title3 'By UVQR quartile';
 	title4 '20160523MON WTL';
 	set base_uvrqc_Sasp; 
@@ -390,12 +390,12 @@ ods _all_ close; ods html;
 ** shebl_asp = 0 ****************************;
 ** uvrq_5 * shebl_asp;
 proc phreg data = use multipass;
-	class uvrq_5 (ref='1. >176 and <=186.225')
+	class uvrq (ref='1. >176 and <=186.225')
 				SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
 				HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 				utilizer_m utilizer_w;
 	model exit_age*melanoma_ins(0)= 
-			uvrq_5
+			uvrq
 			SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
 			HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 			utilizer_m utilizer_w
@@ -414,7 +414,7 @@ proc phreg data = use multipass;
 				HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 				utilizer_m utilizer_w;
 	model exit_age*melanoma_ins(0)= 
-			uvrq_5
+			uvrq
 			SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
 			HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 			utilizer_m utilizer_w
@@ -429,12 +429,12 @@ run;
 
 ** uvrq_5 * shebl_asp;
 proc phreg data = use multipass;
-	class uvrq_5 (ref='1. >176 and <=186.225')
+	class uvrq (ref='1. >176 and <=186.225')
 				SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
 				HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 				utilizer_m utilizer_w;
 	model exit_age*melanoma_mal(0)= 
-			uvrq_5
+			uvrq
 			SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
 			HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 			utilizer_m utilizer_w
@@ -454,7 +454,7 @@ proc phreg data = use multipass;
 				HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 				utilizer_m utilizer_w;
 	model exit_age*melanoma_mal(0)= 
-			uvrq_5
+			uvrq
 			SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
 			HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 			utilizer_m utilizer_w
@@ -470,12 +470,12 @@ run;
 ** shebl_asp = 1 ****************************;
 ** uvrq_5 * shebl_asp;
 proc phreg data = use multipass;
-	class uvrq_5 (ref='1. >176 and <=186.225')
+	class uvrq (ref='1. >176 and <=186.225')
 				SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
 				HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 				utilizer_m utilizer_w;
 	model exit_age*melanoma_ins(0)= 
-			uvrq_5
+			uvrq
 			SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
 			HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 			utilizer_m utilizer_w
@@ -494,7 +494,7 @@ proc phreg data = use multipass;
 				HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 				utilizer_m utilizer_w;
 	model exit_age*melanoma_ins(0)= 
-			uvrq_5
+			uvrq
 			SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
 			HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 			utilizer_m utilizer_w
@@ -509,12 +509,12 @@ run;
 
 ** uvrq_5 * shebl_asp;
 proc phreg data = use multipass;
-	class uvrq_5 (ref='1. >176 and <=186.225')
+	class uvrq (ref='1. >176 and <=186.225')
 				SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
 				HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 				utilizer_m utilizer_w;
 	model exit_age*melanoma_mal(0)= 
-			uvrq_5
+			uvrq
 			SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
 			HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 			utilizer_m utilizer_w
@@ -533,7 +533,7 @@ proc phreg data = use multipass;
 				HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 				utilizer_m utilizer_w;
 	model exit_age*melanoma_mal(0)= 
-			uvrq_5
+			uvrq
 			SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
 			HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 			utilizer_m utilizer_w
@@ -549,12 +549,12 @@ run;
 ** shebl_asp = 2 ****************************;
 ** uvrq_5 * shebl_asp;
 proc phreg data = use multipass;
-	class uvrq_5 (ref='1. >176 and <=186.225')
+	class uvrq (ref='1. >176 and <=186.225')
 				SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
 				HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 				utilizer_m utilizer_w;
 	model exit_age*melanoma_ins(0)= 
-			uvrq_5
+			uvrq
 			SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
 			HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 			utilizer_m utilizer_w
@@ -573,7 +573,7 @@ proc phreg data = use multipass;
 				HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 				utilizer_m utilizer_w;
 	model exit_age*melanoma_ins(0)= 
-			uvrq_5
+			uvrq
 			SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
 			HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 			utilizer_m utilizer_w
@@ -588,12 +588,12 @@ run;
 
 ** uvrq_5 * shebl_asp;
 proc phreg data = use multipass;
-	class uvrq_5 (ref='1. >176 and <=186.225')
+	class uvrq (ref='1. >176 and <=186.225')
 				SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
 				HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 				utilizer_m utilizer_w;
 	model exit_age*melanoma_mal(0)= 
-			uvrq_5
+			uvrq
 			SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
 			HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 			utilizer_m utilizer_w
@@ -612,7 +612,7 @@ proc phreg data = use multipass;
 				HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 				utilizer_m utilizer_w;
 	model exit_age*melanoma_mal(0)= 
-			uvrq_5
+			uvrq
 			SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
 			HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 			utilizer_m utilizer_w
@@ -628,12 +628,12 @@ run;
 ** shebl_asp = 3 ****************************;
 ** uvrq_5 * shebl_asp;
 proc phreg data = use multipass;
-	class uvrq_5 (ref='1. >176 and <=186.225')
+	class uvrq (ref='1. >176 and <=186.225')
 				SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
 				HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 				utilizer_m utilizer_w;
 	model exit_age*melanoma_ins(0)= 
-			uvrq_5
+			uvrq
 			SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
 			HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 			utilizer_m utilizer_w
@@ -652,7 +652,7 @@ proc phreg data = use multipass;
 				HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 				utilizer_m utilizer_w;
 	model exit_age*melanoma_ins(0)= 
-			uvrq_5
+			uvrq
 			SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
 			HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 			utilizer_m utilizer_w
@@ -667,12 +667,12 @@ run;
 
 ** uvrq_5 * shebl_asp;
 proc phreg data = use multipass;
-	class uvrq_5 (ref='1. >176 and <=186.225')
+	class uvrq (ref='1. >176 and <=186.225')
 				SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
 				HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 				utilizer_m utilizer_w;
 	model exit_age*melanoma_mal(0)= 
-			uvrq_5
+			uvrq
 			SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
 			HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 			utilizer_m utilizer_w
@@ -691,7 +691,7 @@ proc phreg data = use multipass;
 				HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 				utilizer_m utilizer_w;
 	model exit_age*melanoma_mal(0)= 
-			uvrq_5
+			uvrq
 			SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
 			HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 			utilizer_m utilizer_w
@@ -735,7 +735,7 @@ run;
 run;*/
 data base_uvrqc_Saspt (keep=Parameter ClassVal0 A_HR A_LL A_UL variable); 
 	title1 'AARP Melanoma NSAID Riskfactor';
-	title2 'Hazard Ratios for NSAID use type';
+	title2 'Hazard Ratios for NSAID aspirin duration';
 	title3 'By UVQR quartile';
 	title4 '20160523MON WTL';
 	set base_uvrqc_Sasp; 
