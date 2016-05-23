@@ -27,7 +27,7 @@ run;
 ** shebl_asp = 0 ****************************;
 ** uvrq * shebl_asp;
 proc phreg data = use multipass;
-	class uvrq (ref='1. >176 and <=186.225')
+	class uvrq (ref='1. >176 and <=186.255')
 				SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
 				HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 				utilizer_m utilizer_w;
@@ -66,7 +66,7 @@ run;
 
 ** uvrq * shebl_asp;
 proc phreg data = use multipass;
-	class uvrq (ref='1. >176 and <=186.225')
+	class uvrq (ref='1. >176 and <=186.255')
 				SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
 				HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 				utilizer_m utilizer_w;
@@ -107,7 +107,7 @@ run;
 ** shebl_asp = 1 ****************************;
 ** uvrq * shebl_asp;
 proc phreg data = use multipass;
-	class uvrq (ref='1. >176 and <=186.225')
+	class uvrq (ref='1. >176 and <=186.255')
 				SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
 				HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 				utilizer_m utilizer_w;
@@ -146,7 +146,7 @@ run;
 
 ** uvrq * shebl_asp;
 proc phreg data = use multipass;
-	class uvrq (ref='1. >176 and <=186.225')
+	class uvrq (ref='1. >176 and <=186.255')
 				SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
 				HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 				utilizer_m utilizer_w;
@@ -186,7 +186,7 @@ run;
 ** shebl_asp = 2 ****************************;
 ** uvrq * shebl_asp;
 proc phreg data = use multipass;
-	class uvrq (ref='1. >176 and <=186.225')
+	class uvrq (ref='1. >176 and <=186.255')
 				SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
 				HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 				utilizer_m utilizer_w;
@@ -225,7 +225,7 @@ run;
 
 ** uvrq * shebl_asp;
 proc phreg data = use multipass;
-	class uvrq (ref='1. >176 and <=186.225')
+	class uvrq (ref='1. >176 and <=186.255')
 				SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
 				HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 				utilizer_m utilizer_w;
@@ -265,7 +265,7 @@ run;
 ** shebl_asp = 3 ****************************;
 ** uvrq * shebl_asp;
 proc phreg data = use multipass;
-	class uvrq (ref='1. >176 and <=186.225')
+	class uvrq (ref='1. >176 and <=186.255')
 				SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
 				HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 				utilizer_m utilizer_w;
@@ -304,7 +304,7 @@ run;
 
 ** uvrq * shebl_asp;
 proc phreg data = use multipass;
-	class uvrq (ref='1. >176 and <=186.225')
+	class uvrq (ref='1. >176 and <=186.255')
 				SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
 				HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 				utilizer_m utilizer_w;
@@ -390,7 +390,7 @@ ods _all_ close; ods html;
 ** shebl_asp = 0 ****************************;
 ** uvrq_5 * shebl_asp;
 proc phreg data = use multipass;
-	class uvrq (ref='1. >176 and <=186.225')
+	class uvrq (ref='1. >176 and <=186.255')
 				SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
 				HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 				utilizer_m utilizer_w;
@@ -429,7 +429,7 @@ run;
 
 ** uvrq_5 * shebl_asp;
 proc phreg data = use multipass;
-	class uvrq (ref='1. >176 and <=186.225')
+	class uvrq (ref='1. >176 and <=186.255')
 				SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
 				HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 				utilizer_m utilizer_w;
@@ -470,7 +470,7 @@ run;
 ** shebl_asp = 1 ****************************;
 ** uvrq_5 * shebl_asp;
 proc phreg data = use multipass;
-	class uvrq (ref='1. >176 and <=186.225')
+	class uvrq (ref='1. >176 and <=186.255')
 				SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
 				HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 				utilizer_m utilizer_w;
@@ -509,7 +509,7 @@ run;
 
 ** uvrq_5 * shebl_asp;
 proc phreg data = use multipass;
-	class uvrq (ref='1. >176 and <=186.225')
+	class uvrq (ref='1. >176 and <=186.255')
 				SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
 				HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 				utilizer_m utilizer_w;
@@ -549,7 +549,7 @@ run;
 ** shebl_asp = 2 ****************************;
 ** uvrq_5 * shebl_asp;
 proc phreg data = use multipass;
-	class uvrq (ref='1. >176 and <=186.225')
+	class uvrq (ref='1. >176 and <=186.255')
 				SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
 				HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 				utilizer_m utilizer_w;
@@ -588,7 +588,7 @@ run;
 
 ** uvrq_5 * shebl_asp;
 proc phreg data = use multipass;
-	class uvrq (ref='1. >176 and <=186.225')
+	class uvrq (ref='1. >176 and <=186.255')
 				SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
 				HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 				utilizer_m utilizer_w;
@@ -628,7 +628,7 @@ run;
 ** shebl_asp = 3 ****************************;
 ** uvrq_5 * shebl_asp;
 proc phreg data = use multipass;
-	class uvrq (ref='1. >176 and <=186.225')
+	class uvrq (ref='1. >176 and <=186.255')
 				SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
 				HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 				utilizer_m utilizer_w;
@@ -667,7 +667,7 @@ run;
 
 ** uvrq_5 * shebl_asp;
 proc phreg data = use multipass;
-	class uvrq (ref='1. >176 and <=186.225')
+	class uvrq (ref='1. >176 and <=186.255')
 				SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
 				HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 				utilizer_m utilizer_w;
