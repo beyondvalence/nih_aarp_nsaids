@@ -2,6 +2,7 @@
 /* AARP NSAIDS MELANOMA     */
 /* Format file              */
 /* Created: 20151223WED WTL */
+/* Updated: 20160523MON WTL */
 /****************************/
 
 ** set value formats ; 
@@ -34,6 +35,11 @@ proc format;
 									2='2. >186.255 and <=236.805'
 									3='3. >236.805 and <=253.731'
 									4='4. >253.731 and <290';
+	value uvrq5cfmt					1='1. >176 and <=186.255'
+									2='2. >186.255 and <=213.574'
+									3='3. >213.574 and <=242.867'
+									4='4. >242.867 and <=255.170'
+									5='5. >255.170 and < 290';
 	value alcoholfmt				9='Missing'
 									0='1. None'
 									1='2. <1 drink per week'

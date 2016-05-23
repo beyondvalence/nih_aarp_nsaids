@@ -10,7 +10,7 @@
 # note: using new rexp dataset above
 #
 # Created: April 13 2015
-# Updated: v20160517TUE WTL
+# Updated: v20160523MON WTL
 # Under git version control
 # Used IMS: anchovy server
 # Warning: original IMS datasets are in LINUX latin1 encoding
@@ -268,7 +268,7 @@ data melan_r;
 	where excl_2_pyr=0;
 run;
 proc freq data= melan_r ;
-	title 'excl_3_exposure: exclude 0 or less and missing UVR';
+	title 'excl_3_exposure: exclude missing UVR';
 	tables 	excl_2_pyr*excl_3_exposure
 			excl_3_exposure*melanoma_c /missing;
 run;
@@ -297,7 +297,8 @@ run; */
 
 	** need to change the exposure percentiles after exclusion change;
 	** uvr exposure;
-	** Quartiles: 176.095 <= Q1 <= 186.255 < Q2 <= 236.805 < Q3 <= 253.731 < Q4 <= 289.463;
+	** Quartiles: 176.095 <= Q1 <= 186.255 < Q2 <= 236.805 < Q3 <= 253.731 < Q4 <= 289.463 ;
+	** Quintiles: 176.095 <= Q1 <= 186.255 < Q2 <= 213.574 < Q3 <= 242.867 < Q4 <= 255.170 < Q5 <= 289.463 ;
 /******************************************************************************************/
 /** start3
 /** create the UVR, and confounder variables by quartile/categories
@@ -314,6 +315,14 @@ data melan_use;
 	else if 186.255 < exposure_jul_78_05 <= 236.805 	then UVRQ=2; /* Q2 */
 	else if 236.805 < exposure_jul_78_05 <= 253.731 	then UVRQ=3; /* Q3 */
 	else if 253.731 < exposure_jul_78_05 <  290			then UVRQ=4; /* Q4 highest */
+
+	** UVR TOMS quartile;
+	uvrq_5c=.;
+	if      176.000 < exposure_jul_78_05 <= 186.255 	then uvrq_5c=1; /* Q1 lowest*/
+	else if 186.255 < exposure_jul_78_05 <= 213.574 	then uvrq_5c=2; /* Q2 */
+	else if 213.574 < exposure_jul_78_05 <= 242.867 	then uvrq_5c=3; /* Q3 */
+	else if 242.867 < exposure_jul_78_05 <= 255.170 	then uvrq_5c=4; /* Q4 */
+	else if 255.170 < exposure_jul_78_05 <  290			then uvrq_5c=5; /* Q5 highest */
 
 	/* education attained */
 	educm_comb=9;
@@ -491,6 +500,7 @@ proc datasets library=work;
 
 			/* for baseline */
 			uvrq = "TOMS UVR measures in quartiles"
+			uvrq_5c ="TOMS UVR measures in quintiles"
 			/*educ_c = "education level"*/
 			physic_c = "level of physical activity"	
 			bmi_c = "bmi, rough"
@@ -525,7 +535,7 @@ proc datasets library=work;
 			smoke_quit_dose smokequitdosefmt.
 			coffee_c coffeefmt. 
 			sex sexfmt.
-			UVRQ uvrqfmt.
+			UVRQ uvrqfmt. uvrq_5c uvrq5cfmt.
 			alcohol_comb alcoholfmt.
 			smoke_former smokeformerfmt.
 			physic_c physic_1518_c physicfmt. 
