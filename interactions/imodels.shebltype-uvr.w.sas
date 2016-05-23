@@ -8,7 +8,7 @@
 # uses melan and melan_r datasets
 # 
 # Created: May 18, 2016
-# Updated: v20160518WED WTL
+# Updated: v20160523MON WTL
 # Under git version control
 #
 *******************************************************************/
@@ -20,7 +20,7 @@ data use;
 run;
 
 *******************************************************************************;
-** Base: shebl_type Analysis by UVRQ                       ***********************;
+** Base: shebl_type Analysis by UVRQ                    ***********************;
 *******************************************************************************;
 ** UVRQ = 1 ****************************;
 ** uvrq_c * shebl_type;
