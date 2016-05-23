@@ -38,7 +38,7 @@ proc phreg data = use multipass;
 	ods output ParameterEstimates=uvrq_stype1;
 run;
 data rin_uvrq_stype1; set uvrq_stype1;
-	where Parameter='uvrq';
+	where Parameter='UVRQ';
 	variable="rin_uvrq_stype1    ";
 run;
 
@@ -58,7 +58,7 @@ proc phreg data = use multipass;
 	ods output ParameterEstimates=uvrq_stype1;
 run;
 data rma_uvrq_stype1; set uvrq_stype1;
-	where Parameter='uvrq';
+	where Parameter='UVRQ';
 	variable="rma_uvrq_stype1    ";
 run;
 
@@ -79,7 +79,7 @@ proc phreg data = use multipass;
 	ods output ParameterEstimates=uvrq_stype2;
 run;
 data rin_uvrq_stype2; set uvrq_stype2;
-	where Parameter='uvrq';
+	where Parameter='UVRQ';
 	variable="rin_uvrq_stype2    ";
 	
 run;
@@ -100,7 +100,7 @@ proc phreg data = use multipass;
 	ods output ParameterEstimates=uvrq_stype2;
 run;
 data rma_uvrq_stype2; set uvrq_stype2;
-	where Parameter='uvrq';
+	where Parameter='UVRQ';
 	variable="rma_uvrq_stype2    ";
 run;
 
@@ -121,7 +121,7 @@ proc phreg data = use multipass;
 	ods output ParameterEstimates=uvrq_stype3;
 run;
 data rin_uvrq_stype3; set uvrq_stype3;
-	where Parameter='uvrq';
+	where Parameter='UVRQ';
 	variable="rin_uvrq_stype3    ";
 run;
 
@@ -141,7 +141,7 @@ proc phreg data = use multipass;
 	ods output ParameterEstimates=uvrq_stype3;
 run;
 data rma_uvrq_stype3; set uvrq_stype3;
-	where Parameter='uvrq';
+	where Parameter='UVRQ';
 	variable="rma_uvrq_stype3    ";
 run;
 
@@ -162,7 +162,7 @@ proc phreg data = use multipass;
 	ods output ParameterEstimates=uvrq_stype4;
 run;
 data rin_uvrq_stype4; set uvrq_stype4;
-	where Parameter='uvrq';
+	where Parameter='UVRQ';
 	variable="rin_uvrq_stype4     ";
 run;
 
@@ -182,7 +182,7 @@ proc phreg data = use multipass;
 	ods output ParameterEstimates=uvrq_stype4;
 run;
 data rma_uvrq_stype4; set uvrq_stype4;
-	where Parameter='uvrq';
+	where Parameter='UVRQ';
 	variable="rma_uvrq_stype4    ";
 run;
 
@@ -241,7 +241,7 @@ proc phreg data = use multipass;
 	ods output ParameterEstimates=uvrq_stype1;
 run;
 data rin_uvrq_stype1; set uvrq_stype1;
-	where Parameter='uvrq';
+	where Parameter='UVRQ';
 	variable="rin_uvrq_stype1     ";
 	
 run;
@@ -262,7 +262,7 @@ proc phreg data = use multipass;
 	ods output ParameterEstimates=uvrq_stype1;
 run;
 data rma_uvrq_stype1; set uvrq_stype1;
-	where Parameter='uvrq';
+	where Parameter='UVRQ';
 	variable="rma_uvrq_stype1    ";
 	
 run;
@@ -284,7 +284,7 @@ proc phreg data = use multipass;
 	ods output ParameterEstimates=uvrq_stype2;
 run;
 data rin_uvrq_stype2; set uvrq_stype2;
-	where Parameter='uvrq';
+	where Parameter='UVRQ';
 	variable="rin_uvrq_stype2    ";
 	
 run;
@@ -305,7 +305,7 @@ proc phreg data = use multipass;
 	ods output ParameterEstimates=uvrq_stype2;
 run;
 data rma_uvrq_stype2; set uvrq_stype2;
-	where Parameter='uvrq';
+	where Parameter='UVRQ';
 	variable="rma_uvrq_stype2    ";
 	
 run;
@@ -327,7 +327,7 @@ proc phreg data = use multipass;
 	ods output ParameterEstimates=uvrq_stype3;
 run;
 data rin_uvrq_stype3; set uvrq_stype3;
-	where Parameter='uvrq';
+	where Parameter='UVRQ';
 	variable="rin_uvrq_stype3    ";
 	
 run;
@@ -348,7 +348,7 @@ proc phreg data = use multipass;
 	ods output ParameterEstimates=uvrq_stype3;
 run;
 data rma_uvrq_stype3; set uvrq_stype3;
-	where Parameter='uvrq';
+	where Parameter='UVRQ';
 	variable="rma_uvrq_stype3    ";
 	
 run;
@@ -370,7 +370,7 @@ proc phreg data = use multipass;
 	ods output ParameterEstimates=uvrq_stype4;
 run;
 data rin_uvrq_stype4; set uvrq_stype4;
-	where Parameter='uvrq';
+	where Parameter='UVRQ';
 	variable="rin_uvrq_stype4    ";
 	
 run;
@@ -391,7 +391,7 @@ proc phreg data = use multipass;
 	ods output ParameterEstimates=uvrq_stype4;
 run;
 data rma_uvrq_stype4; set uvrq_stype4;
-	where Parameter='uvrq';
+	where Parameter='UVRQ';
 	variable="rma_uvrq_stype4    ";
 	
 run;
@@ -413,7 +413,7 @@ proc phreg data = use multipass;
 	ods output ParameterEstimates=uvrq_stype5;
 run;
 data rin_uvrq_stype5; set uvrq_stype5;
-	where Parameter='uvrq';
+	where Parameter='UVRQ';
 	variable="rin_uvrq_stype5    ";
 	
 run;
@@ -434,7 +434,7 @@ proc phreg data = use multipass;
 	ods output ParameterEstimates=uvrq_stype5;
 run;
 data rma_uvrq_stype5; set uvrq_stype5;
-	where Parameter='uvrq';
+	where Parameter='UVRQ';
 	variable="rma_uvrq_stype5    ";
 	
 run;
