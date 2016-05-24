@@ -219,6 +219,33 @@ ods html file='C:\REB\NSAIDS melanoma AARP\Results\interactions\risk.uvrq-sheblt
 proc print data= base_uvrq_stypet; run;
 ods _all_ close; ods html;
 
+** Pint for shebl_type;
+proc phreg data = use multipass;
+	class  shebl_type_me (ref='1. Neither NSAID use')
+				SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
+				HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
+				utilizer_m utilizer_w;
+	model exit_age*melanoma_ins(0)= 
+			uvrq shebl_type_me shebl_type_me*uvrq
+			SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
+			HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
+			utilizer_m utilizer_w
+			/ entry = entry_age RL; 
+	ods output ParameterEstimates=uvrq_stype_pint_ins;
+run;
+proc phreg data = use multipass;
+	class  shebl_type_me (ref='1. Neither NSAID use')
+				SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
+				HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
+				utilizer_m utilizer_w;
+	model exit_age*melanoma_mal(0)= 
+			uvrq shebl_type_me shebl_type_me*uvrq
+			SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
+			HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
+			utilizer_m utilizer_w
+			/ entry = entry_age RL; 
+	ods output ParameterEstimates=uvrq_stype_pint_mal;
+run;
 
 
 *******************************************************************************;

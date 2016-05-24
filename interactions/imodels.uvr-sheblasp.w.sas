@@ -409,7 +409,6 @@ proc phreg data = use multipass;
 			HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
 			utilizer_m utilizer_w
 			/ entry = entry_age RL; 
-
 	ods output ParameterEstimates=uvrqc_Sasp_pint_mal;
 run;
 
