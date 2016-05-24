@@ -346,18 +346,19 @@ ods _all_ close; ods html;
 data base_uvrqc_Snon (rename=(HazardRatio=A_HR HRLowerCL=A_LL HRUpperCL=A_UL)); 
 	set rin_uvrq_Snon0
 		rin_uvrqc_Snon0
-		rma_uvrq_Snon0
-		rma_uvrqc_Snon0
 		rin_uvrq_Snon1 
 		rin_uvrqc_Snon1 
-		rma_uvrq_Snon1		
-		rma_uvrqc_Snon1
 		rin_uvrq_Snon2
 		rin_uvrqc_Snon2
-		rma_uvrq_Snon2
-		rma_uvrqc_Snon2
 		rin_uvrq_Snon3
 		rin_uvrqc_Snon3
+
+		rma_uvrq_Snon0
+		rma_uvrqc_Snon0
+		rma_uvrq_Snon1		
+		rma_uvrqc_Snon1
+		rma_uvrq_Snon2
+		rma_uvrqc_Snon2
 		rma_uvrq_Snon3
 		rma_uvrqc_Snon3
 	; 
@@ -382,6 +383,33 @@ ods html file='C:\REB\NSAIDS melanoma AARP\Results\interactions\risk.sheblnon.uv
 proc print data= base_uvrqc_Snont; run;
 ods _all_ close; ods html;
 
+** Pint **;
+proc phreg data = use multipass;
+	class shebl_non_me (ref='1. Non User')
+				SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
+				HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
+				utilizer_m utilizer_w;
+	model exit_age*melanoma_ins(0)= 
+			uvrq shebl_non_me shebl_non_me*uvrq
+			SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
+			HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
+			utilizer_m utilizer_w
+			/ entry = entry_age RL; 
+	ods output ParameterEstimates=uvrq_Snon_pint_ins;
+run;
+proc phreg data = use multipass;
+	class shebl_non_me (ref='1. Non User')
+				SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
+				HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
+				utilizer_m utilizer_w;
+	model exit_age*melanoma_mal(0)= 
+			uvrq shebl_non_me shebl_non_me*uvrq
+			SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
+			HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
+			utilizer_m utilizer_w
+			/ entry = entry_age RL; 
+	ods output ParameterEstimates=uvrq_Snon_pint_mal;
+run;
 
 
 *******************************************************************************;

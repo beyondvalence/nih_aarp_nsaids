@@ -346,18 +346,19 @@ ods _all_ close; ods html;
 data base_uvrqc_Sasp (rename=(HazardRatio=A_HR HRLowerCL=A_LL HRUpperCL=A_UL)); 
 	set rin_uvrq_Sasp0
 		rin_uvrqc_Sasp0
-		rma_uvrq_Sasp0
-		rma_uvrqc_Sasp0
 		rin_uvrq_Sasp1 
 		rin_uvrqc_Sasp1 
-		rma_uvrq_Sasp1		
-		rma_uvrqc_Sasp1
 		rin_uvrq_Sasp2
 		rin_uvrqc_Sasp2
-		rma_uvrq_Sasp2
-		rma_uvrqc_Sasp2
 		rin_uvrq_Sasp3
 		rin_uvrqc_Sasp3
+
+		rma_uvrq_Sasp0
+		rma_uvrqc_Sasp0
+		rma_uvrq_Sasp1		
+		rma_uvrqc_Sasp1
+		rma_uvrq_Sasp2
+		rma_uvrqc_Sasp2
 		rma_uvrq_Sasp3
 		rma_uvrqc_Sasp3
 	; 
@@ -381,6 +382,36 @@ run;
 ods html file='C:\REB\NSAIDS melanoma AARP\Results\interactions\risk.sheblasp.uvrq.v1.xls' style=minimal;
 proc print data= base_uvrqc_Saspt; run;
 ods _all_ close; ods html;
+
+**Pinteraction**;
+proc phreg data = use multipass;
+	class shebl_asp_me (ref='1. Non User')
+				SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
+				HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
+				utilizer_m utilizer_w;
+	model exit_age*melanoma_ins(0)= 
+			uvrq shebl_asp_me shebl_asp_me*uvrq
+			SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
+			HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
+			utilizer_m utilizer_w
+			/ entry = entry_age RL; 
+
+	ods output ParameterEstimates=uvrqc_Sasp_pint_ins;
+run;
+proc phreg data = use multipass;
+	class shebl_asp_me (ref='1. Non User')
+				SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
+				HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
+				utilizer_m utilizer_w;
+	model exit_age*melanoma_mal(0)= 
+			uvrq shebl_asp_me shebl_asp_me*uvrq
+			SEX educm_comb SMOKE_FORMER alcohol_comb bmi_c physic_c htension
+			HEART rel_1d_cancer coffee_c TV_comb nap_comb marriage_comb
+			utilizer_m utilizer_w
+			/ entry = entry_age RL; 
+
+	ods output ParameterEstimates=uvrqc_Sasp_pint_mal;
+run;
 
 
 
