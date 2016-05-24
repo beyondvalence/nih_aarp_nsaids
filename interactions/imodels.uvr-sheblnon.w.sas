@@ -8,7 +8,7 @@
 # uses melan and melan_r datasets
 # 
 # Created: May 23, 2016
-# Updated: v20160523MON WTL
+# Updated: v20160524TUE WTL
 #
 *******************************************************************/
 libname conv 'C:\REB\NSAIDS melanoma AARP\Data\converted';
@@ -375,7 +375,7 @@ data base_uvrqc_Snont (keep=Parameter ClassVal0 A_HR A_LL A_UL variable);
 	title1 'AARP Melanoma NSAID Riskfactor';
 	title2 'Hazard Ratios for NSAID non-aspirin';
 	title3 'By UVQR quartile';
-	title4 '20160523MON WTL';
+	title4 '20160524TUE WTL';
 	set base_uvrqc_Snon; 
 	*where ClassVal0=' ';
 run;

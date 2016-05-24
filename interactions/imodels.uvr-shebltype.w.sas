@@ -8,7 +8,7 @@
 # uses melan and melan_r datasets
 # 
 # Created: May 18, 2016
-# Updated: v20160523MON WTL
+# Updated: v20160524TUE WTL
 #
 *******************************************************************/
 libname conv 'C:\REB\NSAIDS melanoma AARP\Data\converted';
@@ -211,7 +211,7 @@ data base_uvrq_stypet (keep=Parameter classVal0 A_HR A_LL A_UL variable);
 	title1 'AARP Melanoma NSAID Riskfactor';
 	title2 'Hazard Ratios for UVQR quartile';
 	title3 'By NSAID use type';
-	title4 '20160523MON WTL';
+	title4 '20160524TUE WTL';
 	set base_uvrq_stype; 
 	*where ClassVal0=' ';
 run;
