@@ -186,7 +186,7 @@ data &data exclusions;
 /************************************************************************************/
 /*         exclude "death only report" of cancer of interest                        */
   %if &ex_deathCOI ne %str() %then %do;
-     else if &ex_deathCOI in (2,8) and .<dod<=mdy(12,31,2006) then do;
+     else if &ex_deathCOI in (2,8) and .<dod<=mdy(12,31,2011) then do;
         ex_flag=11;
         output exclusions;
      end;
@@ -205,7 +205,7 @@ data &data exclusions;
 /************************************************************************************/
 /*         exclude subjects with death only report of any cancer                    */
   %if &ex_deathcan=1 %then %do;
-      else if cancer in (2,8) and .<dod<=mdy(12,31,2006) then do;
+      else if cancer in (2,8) and .<dod<=mdy(12,31,2011) then do;
          ex_flag=13; 
          output exclusions;  
       end;
